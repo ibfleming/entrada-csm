@@ -50,7 +50,7 @@
   {
     "username": "mikeBrown",
     "phone": "444-555-6666",
-    "phone_type": "mobile",
+    "phone_type": "office",
     "email": "mikebrown@example.com",
     "password": "password345",
     "first_name": "Mike",

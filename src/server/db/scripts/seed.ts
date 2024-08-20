@@ -1,3 +1,6 @@
+// Load .env variables as the t3 env-nextjs doesn't work in this context
+import "dotenv/config";
+
 import { db, conn } from "~/server/db";
 import { type Table, getTableName, sql } from "drizzle-orm";
 import * as schema from "~/server/db/schema";
