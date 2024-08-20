@@ -1,12 +1,26 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
+const stringBoolean = z.coerce
+  .string()
+  .transform((val) => {
+    return val === "true";
+  })
+  .default("false");
+
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars.
    */
   server: {
+    DB_NAME: z.string(),
+    DB_USER: z.string(),
+    DB_PASSWORD: z.string(),
+    DB_HOST: z.string(),
+    DB_PORT: z.string(),
+    DB_MIGRATING: stringBoolean,
+    DB_SEEDING: stringBoolean,
     DATABASE_URL: z.string().url(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -27,6 +41,13 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    DB_NAME: process.env.DB_NAME,
+    DB_USER: process.env.DB_USER,
+    DB_PASSWORD: process.env.DB_PASSWORD,
+    DB_HOST: process.env.DB_HOST,
+    DB_PORT: process.env.DB_PORT,
+    DB_MIGRATING: process.env.DB_MIGRATING,
+    DB_SEEDING: process.env.DB_SEEDING,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,

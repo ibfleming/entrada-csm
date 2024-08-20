@@ -1,0 +1,62 @@
+[
+  {
+    "username": "johnDoe",
+    "phone": "123-456-7890",
+    "phone_type": "mobile",
+    "email": "johndoe@example.com",
+    "password": "password123",
+    "first_name": "John",
+    "middle_name": "Michael",
+    "last_name": "Doe",
+    "gender": "male",
+    "birth_date": "1990-01-01"
+  },
+  {
+    "username": "janeDoe",
+    "phone": "987-654-3210",
+    "phone_type": "home",
+    "email": "janedoe@example.com",
+    "password": "password456",
+    "first_name": "Jane",
+    "middle_name": "",
+    "last_name": "Doe",
+    "gender": "female",
+    "birth_date": "1995-06-15"
+  },
+  {
+    "username": "bobSmith",
+    "phone": "555-123-4567",
+    "phone_type": "mobile",
+    "email": "bobsmith@example.com",
+    "password": "password789",
+    "first_name": "Bob",
+    "middle_name": "John",
+    "last_name": "Smith",
+    "gender": "male",
+    "birth_date": "1980-03-20"
+  },
+  {
+    "username": "aliceJohnson",
+    "phone": "111-222-3333",
+    "phone_type": "home",
+    "email": "alicejohnson@example.com",
+    "password": "password012",
+    "first_name": "Alice",
+    "middle_name": "Mary",
+    "last_name": "Johnson",
+    "gender": "female",
+    "birth_date": "1992-09-10"
+  },
+  {
+    "username": "mikeBrown",
+    "phone": "444-555-6666",
+    "phone_type": "mobile",
+    "email": "mikebrown@example.com",
+    "password": "password345",
+    "first_name": "Mike",
+    "middle_name": "",
+    "last_name": "Brown",
+    "gender": "male",
+    "birth_date": "1985-02-25"
+  }
+]
