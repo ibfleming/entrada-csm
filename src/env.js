@@ -1,13 +1,6 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
-const stringBoolean = z.coerce
-  .string()
-  .transform((val) => {
-    return val === "true";
-  })
-  .default("false");
-
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -19,8 +12,8 @@ export const env = createEnv({
     DB_PASSWORD: z.string(),
     DB_HOST: z.string(),
     DB_PORT: z.string(),
-    DB_MIGRATING: stringBoolean,
-    DB_SEEDING: stringBoolean,
+    DB_MIGRATING: z.coerce.boolean(),
+    DB_SEEDING: z.coerce.boolean(),
     DATABASE_URL: z.string().url(),
     NODE_ENV: z
       .enum(["development", "test", "production"])

@@ -1,10 +1,9 @@
 import { db, conn } from "~/server/db";
-import { env } from "~/env";
 import { type Table, getTableName, sql } from "drizzle-orm";
 import * as schema from "~/server/db/schema";
 import * as seeds from "./seeds";
 
-if (!env.DB_SEEDING) {
+if (process.env.DB_SEEDING === "false") {
   throw new Error('You must set DB_SEEDING to "true" when running seeds');
 }
 
@@ -24,3 +23,5 @@ await seeds.user();
 
 // Close the connection
 await conn.end();
+
+console.log("✅ Database seed completed succesfully!\n");
