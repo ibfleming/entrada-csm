@@ -5,6 +5,18 @@ import { users } from "~/server/db/schema";
 
 export const userRouter = createTRPCRouter({
   /*
+   * test: publicProcedure
+   * Test the tRPC API.
+   */
+  test: publicProcedure
+    .input(z.object({ text: z.string() }))
+    .query(({ input }) => {
+      return {
+        greeting: `User tRPC: ${input.text}`,
+      };
+    }),
+
+  /*
    * fetchUsers: publicProcedure
    * Fetch all the users current in the database.
    */
