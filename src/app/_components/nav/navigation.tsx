@@ -6,7 +6,7 @@ import { rubik } from "~/lib/fonts";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { CaretDownIcon } from "@radix-ui/react-icons";
-import "./nav.css";
+import "../styles/nav.css";
 
 interface MenuItemProps {
   item: NavItem;
@@ -40,9 +40,9 @@ const MenuItem = ({ item, pathname, showDropdown, setShowDropdown }: MenuItemPro
   }, [showDropdown, item.name]);
 
   return (
-    <li className="text-sm">
+    <li className={`item ${pathname === item.link ? "current" : ""}`}>
       <Link
-        className={`link ${pathname === item.link ? "bg-neutral-200 text-neutral-900" : ""} ${item.submenu ? "" : "pr-5"} ${showDropdown === item.name ? "active" : ""}`}
+        className={`link ${item.submenu ? "" : "pr-3"} ${showDropdown === item.name ? "active" : ""}`}
         href={item.link}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -61,10 +61,11 @@ const MenuItem = ({ item, pathname, showDropdown, setShowDropdown }: MenuItemPro
           onFocus={handleSubmenuMouseEnter}
         >
           <div className="content">
-            {item.submenu.map((subitem: NavSubItem, index: number) => (
+            {item.submenu?.map((subitem: NavSubItem, index: number) => (
               <li className="subitem" key={index}>
                 <Link className="sublink" href={subitem.link}>
-                  <span>{subitem.name}</span>
+                  {subitem.icon && <subitem.icon preserveAspectRatio="true" />}
+                  {subitem.name}
                 </Link>
               </li>
             ))}
@@ -75,12 +76,14 @@ const MenuItem = ({ item, pathname, showDropdown, setShowDropdown }: MenuItemPro
   );
 };
 
-export default function NavMenu() {
+export default function Navigation() {
   const [showDropdown, setShowDropdown] = useState<string | null>(null);
   const pathname = usePathname();
 
+  console.log("pathname", pathname);
+
   return (
-    <nav className={`${rubik.className} w-fit`}>
+    <nav className={`nav ${rubik.className}`}>
       <ul className="menu">
         {navItems.map((item: NavItem, index: number) => (
           <MenuItem

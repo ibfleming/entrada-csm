@@ -1,0 +1,72 @@
+.nav {
+  @apply z-10 h-9 truncate text-nowrap;
+}
+
+.menu {
+  @apply flex h-full gap-3 text-sm font-light;
+}
+
+.item {
+  @apply rounded-md border-[1px] border-neutral-200 bg-neutral-950;
+}
+
+.current {
+  @apply bg-neutral-200 text-neutral-950;
+}
+
+.link {
+  @apply inline-flex h-full w-full items-center justify-center gap-1.5 px-2;
+}
+
+.link.active {
+  @apply outline-none transition-colors duration-200;
+}
+
+.link.active .arrow {
+  transform: rotateX(180deg);
+}
+
+.item:hover,
+.item:focus-visible,
+.item:focus-within {
+  @apply bg-neutral-200 text-neutral-950 outline-none transition-colors duration-200;
+}
+
+.arrow {
+  @apply origin-center transition-transform duration-200;
+}
+
+.link:hover .arrow,
+.link:focus-visible .arrow,
+.link:focus-within .arrow {
+  transform: rotateX(180deg);
+}
+
+.wrapper {
+  @apply absolute max-h-0 animate-fadeIn overflow-hidden pt-2 transition-[max-height] duration-200;
+  z-index: 1000;
+}
+
+.content {
+  @apply flex flex-row items-center justify-center gap-3 rounded-md border-[1px] border-neutral-200 bg-neutral-950 p-3 text-neutral-200;
+}
+
+.subitem {
+  @apply text-wrap rounded-md border-[1px] border-neutral-800 text-xs transition-colors duration-200;
+}
+
+.sublink {
+  @apply flex flex-col items-center justify-center p-2 text-center;
+}
+
+.subitem:hover,
+.subitem:focus-visible,
+.subitem:focus-within {
+  @apply border-neutral-200 bg-neutral-200 text-neutral-950;
+}
+
+.subitem:hover .sublink,
+.subitem:focus-visible .sublink,
+.subitem:focus-within .sublink {
+  @apply underline outline-none;
+}

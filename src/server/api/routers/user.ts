@@ -8,13 +8,25 @@ export const userRouter = createTRPCRouter({
    * test: publicProcedure
    * Test the tRPC API.
    */
-  test: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `User tRPC: ${input.text}`,
-      };
-    }),
+  test: publicProcedure.input(z.object({ text: z.string() })).query(({ input }) => {
+    return {
+      greeting: `User tRPC: ${input.text}`,
+    };
+  }),
+
+  /*
+   * status: publicProcedure
+   * Query the database real quick to check if it's online.
+   */
+  status: publicProcedure.query(async ({ ctx }) => {
+    try {
+      await ctx.db.query.users.findFirst();
+      return { online: true };
+    } catch (error) {
+      console.error("[TRPC] user.status error: ", error);
+      return { online: false };
+    }
+  }),
 
   /*
    * fetchUsers: publicProcedure
@@ -56,9 +68,7 @@ export const userRouter = createTRPCRouter({
       });
 
       if (existingUser) {
-        throw new Error(
-          `Username '${genUsername}' OR e-mail is already taken!`,
-        );
+        throw new Error(`Username '${genUsername}' OR e-mail is already taken!`);
       } else {
         // Post to DB
         // Hash password...
