@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "~/trpc/react";
 import { inter, rubik, poppins } from "~/lib/fonts";
+import Navigation from "@/navigation";
 
 export const metadata: Metadata = {
   title: "Entrada (dev)",
@@ -10,11 +11,20 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${rubik.variable} ${poppins.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${rubik.variable} ${poppins.variable}`}
+    >
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          {" "}
+          <Navigation />
+          {children}
+        </TRPCReactProvider>
       </body>
     </html>
   );

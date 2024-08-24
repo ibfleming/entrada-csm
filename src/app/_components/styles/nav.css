@@ -1,21 +1,21 @@
 .nav {
-  @apply z-10 h-9 truncate text-nowrap;
+  @apply h-9 bg-green-700;
 }
 
 .menu {
-  @apply flex h-full gap-3 text-sm font-light;
+  @apply flex h-full text-sm font-light;
 }
 
 .item {
-  @apply rounded-md border-[1px] border-neutral-200 bg-neutral-950;
+  @apply border-r-[1px] border-neutral-50 bg-green-700 text-neutral-50;
 }
 
-.current {
-  @apply bg-neutral-200 text-neutral-950;
+.item.active {
+  @apply bg-neutral-50 text-green-700;
 }
 
 .link {
-  @apply inline-flex h-full w-full items-center justify-center gap-1.5 px-2;
+  @apply inline-flex h-full w-full items-center justify-center gap-1.5 px-4;
 }
 
 .link.active {
@@ -29,7 +29,7 @@
 .item:hover,
 .item:focus-visible,
 .item:focus-within {
-  @apply bg-neutral-200 text-neutral-950 outline-none transition-colors duration-200;
+  @apply bg-neutral-50 text-green-700 outline-none transition-colors duration-200;
 }
 
 .arrow {
@@ -43,30 +43,42 @@
 }
 
 .wrapper {
-  @apply absolute max-h-0 animate-fadeIn overflow-hidden pt-2 transition-[max-height] duration-200;
+  @apply absolute max-h-0 animate-fadeIn drop-shadow-2xl transition-[max-height] duration-200;
   z-index: 1000;
 }
 
 .content {
-  @apply flex flex-row items-center justify-center gap-3 rounded-md border-[1px] border-neutral-200 bg-neutral-950 p-3 text-neutral-200;
+  @apply grid gap-3 rounded-b-md border-neutral-50 bg-green-700 p-3 text-neutral-200;
+}
+
+.content:has(.subitem:nth-child(1)) {
+  grid-template-columns: repeat(1, 1fr);
+}
+
+.content:has(.subitem:nth-child(2)) {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.content:has(.subitem:nth-child(4)) {
+  grid-template-columns: repeat(3, auto);
 }
 
 .subitem {
-  @apply text-wrap rounded-md border-[1px] border-neutral-800 text-xs transition-colors duration-200;
+  @apply text-wrap rounded-md border-[1px] border-neutral-50 text-xs transition-colors duration-200;
 }
 
 .sublink {
-  @apply flex flex-col items-center justify-center p-2 text-center;
+  @apply flex flex-col items-center justify-center gap-1 p-2 text-center;
 }
 
 .subitem:hover,
 .subitem:focus-visible,
 .subitem:focus-within {
-  @apply border-neutral-200 bg-neutral-200 text-neutral-950;
+  @apply border-neutral-50 bg-neutral-50 text-green-700;
 }
 
 .subitem:hover .sublink,
 .subitem:focus-visible .sublink,
 .subitem:focus-within .sublink {
-  @apply underline outline-none;
+  @apply outline-none;
 }

@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { type NavItem, type NavSubItem, navItems } from "~/data/navItems";
-import { rubik } from "~/lib/fonts";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { CaretDownIcon } from "@radix-ui/react-icons";
-import "../styles/nav.css";
+import "./styles/nav.css";
 
 interface MenuItemProps {
   item: NavItem;
@@ -15,7 +14,12 @@ interface MenuItemProps {
   setShowDropdown: (itemName: string | null) => void;
 }
 
-const MenuItem = ({ item, pathname, showDropdown, setShowDropdown }: MenuItemProps) => {
+const MenuItem = ({
+  item,
+  pathname,
+  showDropdown,
+  setShowDropdown,
+}: MenuItemProps) => {
   const dropdownRef = useRef<HTMLUListElement>(null);
 
   const handleMouseEnter = () => {
@@ -40,9 +44,9 @@ const MenuItem = ({ item, pathname, showDropdown, setShowDropdown }: MenuItemPro
   }, [showDropdown, item.name]);
 
   return (
-    <li className={`item ${pathname === item.link ? "current" : ""}`}>
+    <li className={`item ${pathname === item.link ? "active" : ""}`}>
       <Link
-        className={`link ${item.submenu ? "" : "pr-3"} ${showDropdown === item.name ? "active" : ""}`}
+        className={`link ${item.submenu ? "" : "pr-5"} ${showDropdown === item.name ? "active" : ""}`}
         href={item.link}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -50,7 +54,9 @@ const MenuItem = ({ item, pathname, showDropdown, setShowDropdown }: MenuItemPro
       >
         {item.icon && <item.icon preserveAspectRatio="true" />}
         {item.name}
-        {item.submenu ? <CaretDownIcon preserveAspectRatio="true" className="arrow" /> : null}
+        {item.submenu ? (
+          <CaretDownIcon preserveAspectRatio="true" className="arrow" />
+        ) : null}
       </Link>
       {item.submenu && showDropdown === item.name && (
         <ul
@@ -83,7 +89,7 @@ export default function Navigation() {
   console.log("pathname", pathname);
 
   return (
-    <nav className={`nav ${rubik.className}`}>
+    <nav className="nav font-rubik">
       <ul className="menu">
         {navItems.map((item: NavItem, index: number) => (
           <MenuItem
