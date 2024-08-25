@@ -1,13 +1,13 @@
 .nav {
-  @apply h-9 bg-green-700;
+  @apply h-[40px] bg-green-700 font-ibm-plex;
 }
 
 .menu {
-  @apply flex h-full text-sm font-light;
+  @apply flex h-full text-sm;
 }
 
 .item {
-  @apply border-r-[1px] border-neutral-50 bg-green-700 text-neutral-50;
+  @apply border-r-2 border-neutral-50 bg-green-700 text-neutral-50;
 }
 
 .item.active {
@@ -43,12 +43,12 @@
 }
 
 .wrapper {
-  @apply absolute max-h-0 animate-fadeIn drop-shadow-2xl transition-[max-height] duration-200;
+  @apply absolute -ml-[1.5px] max-h-0 font-inter drop-shadow-2xl transition-[max-height];
   z-index: 1000;
 }
 
 .content {
-  @apply grid gap-3 rounded-b-md border-neutral-50 bg-green-700 p-3 text-neutral-200;
+  @apply grid gap-3 rounded-b-md border-2 border-t-0 border-neutral-50 bg-green-700 p-3 text-neutral-200;
 }
 
 .content:has(.subitem:nth-child(1)) {

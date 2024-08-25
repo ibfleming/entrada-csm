@@ -86,10 +86,8 @@ export default function Navigation() {
   const [showDropdown, setShowDropdown] = useState<string | null>(null);
   const pathname = usePathname();
 
-  console.log("pathname", pathname);
-
   return (
-    <nav className="nav font-rubik">
+    <nav className="nav">
       <ul className="menu">
         {navItems.map((item: NavItem, index: number) => (
           <MenuItem

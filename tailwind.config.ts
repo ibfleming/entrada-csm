@@ -14,6 +14,7 @@ const config = {
       inter: ["var(--font-inter)"],
       rubik: ["var(--font-rubik)"],
       poppins: ["var(--font-poppins)"],
+      "ibm-plex": ["var(--font-ibm-plex)"],
     },
     extend: {
       keyframes: {
@@ -69,6 +70,9 @@ const config = {
         enterFromRight: "enterFromRight 250ms ease",
         exitToLeft: "exitToLeft 250ms ease",
         exitToRight: "exitToRight 250ms ease",
+      },
+      transitionProperty: {
+        "max-height": "max-height",
       },
     },
   },

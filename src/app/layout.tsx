@@ -1,7 +1,7 @@
 import "~/styles/globals.css";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "~/trpc/react";
-import { inter, rubik, poppins } from "~/lib/fonts";
+import { inter, rubik, poppins, ibmPlex } from "~/lib/fonts";
 import Navigation from "@/navigation";
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${rubik.variable} ${poppins.variable}`}
+      className={`${inter.variable} ${rubik.variable} ${poppins.variable} ${ibmPlex.variable}`}
     >
       <body>
         <TRPCReactProvider>

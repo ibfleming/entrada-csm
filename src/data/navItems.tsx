@@ -39,7 +39,7 @@ export type NavItem = {
 export const navItems = [
   {
     name: "Dashboard",
-    icon: DashboardIcon,
+    icon: undefined,
     link: "/",
     submenu: [
       {
@@ -56,7 +56,7 @@ export const navItems = [
   },
   {
     name: "Residents",
-    icon: HomeIcon,
+    icon: undefined,
     link: "/residents",
     submenu: [
       {
@@ -93,17 +93,17 @@ export const navItems = [
   },
   {
     name: "Applicants",
-    icon: Pencil1Icon,
+    icon: undefined,
     link: "/applicants",
   },
   {
     name: "Leads",
-    icon: PersonIcon,
+    icon: undefined,
     link: "/leads",
   },
   {
     name: "Tools",
-    icon: CubeIcon,
+    icon: undefined,
     link: "/tools",
     submenu: [
       {
@@ -120,7 +120,7 @@ export const navItems = [
   },
   {
     name: "Data & Reports",
-    icon: GlobeIcon,
+    icon: undefined,
     link: "/reports",
     submenu: [
       {
