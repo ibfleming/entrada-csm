@@ -52,11 +52,9 @@ const MenuItem = ({
         onMouseLeave={handleMouseLeave}
         onFocus={handleMouseEnter}
       >
-        {item.icon && <item.icon preserveAspectRatio="true" />}
+        {item.icon && <item.icon size="1.5em" />}
         {item.name}
-        {item.submenu ? (
-          <CaretDownIcon preserveAspectRatio="true" className="arrow" />
-        ) : null}
+        {item.submenu ? <CaretDownIcon className="arrow" /> : null}
       </Link>
       {item.submenu && showDropdown === item.name && (
         <ul

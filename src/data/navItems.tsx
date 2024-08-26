@@ -1,12 +1,12 @@
+import { GoHome as ResidentsIcon } from "react-icons/go";
+import { HiOutlinePencilSquare as ApplicantsIcon } from "react-icons/hi2";
+import { LiaToolsSolid as ToolsIcon } from "react-icons/lia";
+import { MdOutlineSpaceDashboard as DashboardIcon } from "react-icons/md";
 import {
-  DashboardIcon,
-  PersonIcon,
-  Pencil1Icon,
-  HomeIcon,
-  GlobeIcon,
-  CubeIcon,
-} from "@radix-ui/react-icons";
-import { type IconProps } from "@radix-ui/react-icons/dist/types";
+  TbReportSearch as DataReportsIcon,
+  TbUsers as LeadsIcon,
+} from "react-icons/tb";
+import { type IconType } from "react-icons/lib";
 import {
   type Icon,
   IconBuildingCommunity,
@@ -21,17 +21,16 @@ import {
   IconReport,
   IconUsers,
 } from "@tabler/icons-react";
-import { type ForwardRefExoticComponent, type RefAttributes } from "react";
 
 export type NavSubItem = {
   name: string;
-  icon?: Icon;
+  icon: Icon;
   link: string;
 };
 
 export type NavItem = {
   name: string;
-  icon?: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>;
+  icon: IconType;
   link: string;
   submenu?: NavSubItem[];
 };
@@ -39,7 +38,7 @@ export type NavItem = {
 export const navItems = [
   {
     name: "Dashboard",
-    icon: undefined,
+    icon: DashboardIcon,
     link: "/",
     submenu: [
       {
@@ -56,7 +55,7 @@ export const navItems = [
   },
   {
     name: "Residents",
-    icon: undefined,
+    icon: ResidentsIcon,
     link: "/residents",
     submenu: [
       {
@@ -65,7 +64,7 @@ export const navItems = [
         link: "/",
       },
       {
-        name: "Unit Assigmnents",
+        name: "Assign Units",
         icon: IconHomeEdit,
         link: "/",
       },
@@ -93,17 +92,17 @@ export const navItems = [
   },
   {
     name: "Applicants",
-    icon: undefined,
+    icon: ApplicantsIcon,
     link: "/applicants",
   },
   {
     name: "Leads",
-    icon: undefined,
+    icon: LeadsIcon,
     link: "/leads",
   },
   {
     name: "Tools",
-    icon: undefined,
+    icon: ToolsIcon,
     link: "/tools",
     submenu: [
       {
@@ -120,7 +119,7 @@ export const navItems = [
   },
   {
     name: "Data & Reports",
-    icon: undefined,
+    icon: DataReportsIcon,
     link: "/reports",
     submenu: [
       {
