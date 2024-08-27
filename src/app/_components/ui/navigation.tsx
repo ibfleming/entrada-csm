@@ -5,7 +5,7 @@ import { type NavItem, type NavSubItem, navItems } from "~/data/navItems";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { CaretDownIcon } from "@radix-ui/react-icons";
-import "./styles/nav.css";
+import "../styles/nav.css";
 
 interface MenuItemProps {
   item: NavItem;
@@ -80,23 +80,26 @@ const MenuItem = ({
   );
 };
 
-export default function Navigation() {
+export default function Navigation(props: { children: React.ReactNode }) {
   const [showDropdown, setShowDropdown] = useState<string | null>(null);
   const pathname = usePathname();
 
   return (
-    <nav className="nav">
-      <ul className="menu">
-        {navItems.map((item: NavItem, index: number) => (
-          <MenuItem
-            key={index}
-            item={item}
-            pathname={pathname}
-            showDropdown={showDropdown}
-            setShowDropdown={setShowDropdown}
-          />
-        ))}
-      </ul>
-    </nav>
+    <>
+      <nav className="nav">
+        <ul className="menu">
+          {navItems.map((item: NavItem, index: number) => (
+            <MenuItem
+              key={index}
+              item={item}
+              pathname={pathname}
+              showDropdown={showDropdown}
+              setShowDropdown={setShowDropdown}
+            />
+          ))}
+        </ul>
+      </nav>
+      {props.children}
+    </>
   );
 }

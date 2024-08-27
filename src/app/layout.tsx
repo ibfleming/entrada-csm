@@ -2,7 +2,9 @@ import "~/styles/globals.css";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "~/trpc/react";
 import { inter, rubik, poppins, ibmPlex } from "~/lib/fonts";
-import Navigation from "@/navigation";
+import Navigation from "@/ui/navigation";
+import Breadcrumbs from "@/ui/breadcrumbs";
+import { HydrateClient } from "~/trpc/server";
 
 export const metadata: Metadata = {
   title: "Entrada (dev)",
@@ -21,9 +23,20 @@ export default async function RootLayout({
     >
       <body>
         <TRPCReactProvider>
-          {" "}
-          <Navigation />
-          {children}
+          <div className="px-1">
+            <header className="h-14 font-poppins text-2xl font-semibold text-green-700">
+              <span className="flex h-full w-full items-center justify-start pl-4">
+                entrada
+              </span>
+            </header>
+            <Navigation>
+              <Breadcrumbs />
+            </Navigation>
+            <div className="h-1.5 w-full bg-green-700"></div>
+          </div>
+          <HydrateClient>
+            <div className="px-1">{children}</div>
+          </HydrateClient>
         </TRPCReactProvider>
       </body>
     </html>

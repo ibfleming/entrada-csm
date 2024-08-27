@@ -38,6 +38,6 @@
     "**/*.cjs",
     "**/*.js",
     ".next/types/**/*.ts"
-  ],
+, "src/app/_error.jsx"  ],
   "exclude": ["node_modules"]
 }

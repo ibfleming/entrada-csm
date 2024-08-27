@@ -1,0 +1,12 @@
+td,
+th {
+  @apply text-wrap p-3 text-center;
+}
+
+td {
+  @apply border-b-[1px] border-neutral-700 font-inter text-xs;
+}
+
+th {
+  @apply text-xs font-light uppercase;
+}

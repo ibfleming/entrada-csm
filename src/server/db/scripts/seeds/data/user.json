@@ -58,5 +58,65 @@
     "last_name": "Brown",
     "gender": "male",
     "birth_date": "1985-02-25"
+  },
+  {
+    "username": "sarahLee",
+    "phone": "777-888-9999",
+    "phone_type": "mobile",
+    "email": "sarahlee@example.com",
+    "password": "password678",
+    "first_name": "Sarah",
+    "middle_name": "Elizabeth",
+    "last_name": "Lee",
+    "gender": "female",
+    "birth_date": "1998-04-12"
+  },
+  {
+    "username": "emilyDavis",
+    "phone": "222-333-4444",
+    "phone_type": "home",
+    "email": "emilydavis@example.com",
+    "password": "password901",
+    "first_name": "Emily",
+    "middle_name": "Rose",
+    "last_name": "Davis",
+    "gender": "female",
+    "birth_date": "1990-08-20"
+  },
+  {
+    "username": "davidHall",
+    "phone": "666-777-8888",
+    "phone_type": "office",
+    "email": "davidhall@example.com",
+    "password": "password234",
+    "first_name": "David",
+    "middle_name": "James",
+    "last_name": "Hall",
+    "gender": "male",
+    "birth_date": "1982-11-15"
+  },
+  {
+    "username": "lisaWalker",
+    "phone": "999-000-1111",
+    "phone_type": "mobile",
+    "email": "lisawalker@example.com",
+    "password": "password567",
+    "first_name": "Lisa",
+    "middle_name": "Marie",
+    "last_name": "Walker",
+    "gender": "female",
+    "birth_date": "1996-02-28"
+  },
+  {
+    "username": "kevinWhite",
+    "phone": "333-444-5555",
+    "phone_type": "home",
+    "email": "kevinwhite@example.com",
+    "password": "password890",
+    "first_name": "Kevin",
+    "middle_name": "",
+    "last_name": "White",
+    "gender": "male",
+    "birth_date": "1988-05-01"
   }
 ]
