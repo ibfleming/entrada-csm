@@ -2,8 +2,8 @@ import "~/styles/globals.css";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "~/trpc/react";
 import { inter, rubik, poppins, ibmPlex } from "~/lib/fonts";
-import Navigation from "@/ui/navigation";
-import Breadcrumbs from "@/ui/breadcrumbs";
+import Navigation from "~/components/ui/navigation";
+import Breadcrumbs from "~/components/ui/breadcrumbs";
 import { HydrateClient } from "~/trpc/server";
 
 export const metadata: Metadata = {

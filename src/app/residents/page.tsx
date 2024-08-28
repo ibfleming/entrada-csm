@@ -1,4 +1,4 @@
-import ResidentsView from "@/views/residents";
+import ResidentsView from "~/components/views/residents";
 
 export default function Residents() {
   return (
