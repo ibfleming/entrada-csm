@@ -1,22 +1,22 @@
 .nav {
-  @apply h-[40px] rounded-t-md border-stone-50 bg-green-700 font-inter;
+  @apply h-[36px] text-nowrap border-white font-ibm-plex font-normal;
 }
 
 .menu {
-  @apply flex h-full text-sm;
+  @apply flex h-full rounded-tl-lg rounded-tr-sm bg-green-700 text-sm;
 }
 
 .item {
-  @apply border-r-2 border-stone-50 bg-green-700 text-stone-50;
+  @apply border-r-2 border-white bg-green-700 text-white;
 }
 
 .item:first-child {
-  @apply rounded-tl-md;
+  @apply rounded-tl-sm;
 }
 
-.item.active {
-  @apply bg-stone-50 text-green-700;
-}
+/* .item.active {
+  @apply bg-white text-green-700;
+} */
 
 .link {
   @apply inline-flex h-full w-full items-center justify-center gap-1.5 text-nowrap px-4 align-middle transition-colors duration-300;
@@ -33,7 +33,7 @@
 .item:hover,
 .item:focus-visible,
 .item:focus-within {
-  @apply bg-stone-50 text-green-700 outline-none transition-colors duration-300;
+  @apply bg-white text-green-700 outline-none transition-colors duration-300;
 }
 
 .arrow {
@@ -47,12 +47,12 @@
 }
 
 .wrapper {
-  @apply absolute max-h-0 animate-fadeIn pt-2 font-inter drop-shadow-lg duration-500;
+  @apply absolute max-h-0 animate-fadeIn pt-1.5 font-inter drop-shadow-lg duration-500;
   z-index: 1000;
 }
 
 .content {
-  @apply grid gap-3 rounded-md border-2 border-stone-50 bg-green-700 p-3 text-stone-50;
+  @apply grid gap-3 rounded-sm border-2 border-white bg-green-700 p-3 text-white;
 }
 
 .content:has(.subitem:nth-child(1)) {
@@ -68,7 +68,7 @@
 }
 
 .subitem {
-  @apply text-wrap rounded-md border-[1px] border-stone-50 text-xs transition-colors duration-200;
+  @apply text-wrap rounded-md border-[1px] border-white text-xs transition-colors duration-200;
 }
 
 .sublink {
@@ -78,7 +78,7 @@
 .subitem:hover,
 .subitem:focus-visible,
 .subitem:focus-within {
-  @apply border-stone-50 bg-stone-50 text-green-700;
+  @apply border-white bg-white text-green-700;
 }
 
 .subitem:hover .sublink,

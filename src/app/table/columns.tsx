@@ -4,6 +4,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { LuMoreHorizontal } from "react-icons/lu";
 import { Button } from "@/ui/button";
+import { Checkbox } from "@/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +24,28 @@ export type Payment = {
 };
 
 export const columns: ColumnDef<Payment>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "status",
     header: "Status",

@@ -8,9 +8,10 @@ export default function Breadcrumbs() {
   const name = pathname.split("/").pop();
   if (!name) {
     return (
-      <div className="bg-stone-50 font-rubik text-xs">
-        <ol className="flex items-center justify-start gap-3 p-2 pl-4 text-neutral-500">
+      <div className="bg-white font-rubik text-xs">
+        <ol className="flex items-center justify-start gap-3 p-1.5 pl-4 text-neutral-500">
           <Link href="/">/</Link>
+          <Link href="/">Home</Link>
         </ol>
       </div>
     );
@@ -18,8 +19,8 @@ export default function Breadcrumbs() {
   const capitalized = name.charAt(0).toUpperCase() + name.slice(1);
 
   return (
-    <div className="bg-stone-50 font-rubik text-xs">
-      <ol className="flex items-center justify-start gap-3 p-2 pl-4 text-neutral-500">
+    <div className="bg-white font-rubik text-xs">
+      <ol className="flex items-center justify-start gap-3 p-1.5 pl-4 text-neutral-500">
         <Link href="/">/</Link>
         <Link href={pathname}>{capitalized}</Link>
       </ol>

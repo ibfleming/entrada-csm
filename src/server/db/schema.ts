@@ -47,7 +47,7 @@ export const users = createTable("user", {
   middle_name: varchar("middle_name", { length: 256 }),
   last_name: varchar("last_name", { length: 256 }).notNull(),
   gender: varchar("gender").notNull(),
-  birth_date: date("birth_date", { mode: "string" }),
+  birth_date: date("birth_date", { mode: "string" }).notNull(),
   created_at: timestamp("created_at", { withTimezone: true, mode: "date" })
     .notNull()
     .defaultNow(),
