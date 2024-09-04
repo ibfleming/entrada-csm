@@ -13,7 +13,7 @@
     --primary: 142 72% 29%;
     --primary-foreground: 0 0% 100%;
     --hover: 146 100% 23%;
-    --secondary: 0 0% 100%;
+    --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 142 72% 29%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
@@ -57,5 +57,8 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+  }
+  .input {
+    @apply border-2 font-inter text-neutral-800 shadow-md focus-visible:ring-2;
   }
 }

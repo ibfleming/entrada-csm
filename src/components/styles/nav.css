@@ -18,6 +18,10 @@
   @apply bg-white text-green-700;
 } */
 
+.item.active {
+  @apply underline;
+}
+
 .link {
   @apply inline-flex h-full w-full items-center justify-center gap-1.5 text-nowrap px-4 align-middle transition-colors duration-300;
 }

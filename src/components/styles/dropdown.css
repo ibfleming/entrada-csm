@@ -1,0 +1,19 @@
+.menu-trigger {
+  @apply focus-visible:outline-none;
+}
+
+.menu-button {
+  @apply inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 font-inter text-sm font-medium text-primary-foreground shadow transition-colors focus-within:ring-transparent hover:bg-hover focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
+}
+
+.menu-content {
+  @apply font-rubik text-primary shadow-lg;
+}
+
+.menu-label {
+  @apply text-xs;
+}
+
+.menu-item {
+  @apply text-xs hover:cursor-pointer hover:text-primary focus:text-primary;
+}
