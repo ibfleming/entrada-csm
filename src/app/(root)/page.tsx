@@ -19,9 +19,9 @@ import {
 } from "@/custom/buttons";
 import { Input } from "@/ui/input";
 import { Checkbox, CheckboxWithText } from "@/custom/checkbox";
-import { ResidentTable } from "@/custom/tables/resident";
+import ResidentsTable from "~/components/custom/tables/residents";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div>
       <div className="flex items-center justify-start gap-4 p-4">
@@ -71,8 +71,8 @@ export default function Home() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <ResidentTable />
       </div>
+      <ResidentsTable />
     </div>
   );
 }

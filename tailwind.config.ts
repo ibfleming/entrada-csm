@@ -25,7 +25,10 @@ const config = {
         "ibm-plex": ["var(--font-ibm-plex)", "sans-serif"],
       },
       colors: {
-        border: "hsl(var(--border))",
+        border: {
+          DEFAULT: "hsl(var(--border))",
+          background: "hsl(var(--border-background))",
+        },
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",

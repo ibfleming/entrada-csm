@@ -13,20 +13,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
-
-import { Button } from "@/ui/button";
-import { Checkbox as RadixCheckbox } from "@/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/ui/dropdown-menu";
-import { Input } from "@/ui/input";
 import {
   Table,
   TableBody,
@@ -35,9 +21,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/ui/table";
-import { Checkbox } from "@/custom/checkbox";
+import "@/styles/dropdown.css";
 
-const data: Payment[] = [
+/* const data: Payment[] = [
   {
     id: "m5gr84i9",
     amount: 316,
@@ -75,84 +61,156 @@ export type Payment = {
   amount: number;
   status: "pending" | "processing" | "success" | "failed";
   email: string;
-};
+}; */
 
-export type Resident = {
-  id: string;
-  username: string;
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  createdAt: string;
-};
+interface ResidentDataTableProps<Resident> {
+  columns: ColumnDef<Resident>[];
+  data: Resident[];
+}
 
-export const columns: ColumnDef<Resident>[] = [
-  // SELECT COLUMN
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  // NAME COLUMN
-  {
-    accessorKey: "residentName",
-    header: "Resident Name",
-    cell: ({ row }) => {
-      const lastName: string = row.getValue("lastName");
-      const firstName: string = row.getValue("firstName");
-      const middleName: string | undefined = row.getValue("middleName");
+export function ResidentDataTable<Resident>({
+  columns,
+  data,
+}: ResidentDataTableProps<Resident>) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
-      let fullName = `${lastName}, ${firstName}`;
-
-      if (middleName) {
-        fullName = `${lastName}, ${firstName} ${middleName.charAt(0).toUpperCase()}${middleName.slice(1)}`;
-      }
-
-      return <div className="capitalize">{fullName}</div>;
+  const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
     },
-  },
-  // EMAIL COLUMN
-  {
-    accessorKey: "email",
-    header: "Email",
-  },
-  // PHONE COLUMN
-  {
-    accessorKey: "phone",
-    header: "Phone",
-  },
-  // CREATED AT COLUMN
-  {
-    accessorKey: "createdAt",
-    header: "Created At",
-  },
-  // ACTION
-  {
-    id: "actions",
-    enableHiding: false,
-  },
-];
+  });
 
-export const columnsBak: ColumnDef<Payment>[] = [
+  console.log(table);
+
+  return (
+    <div>
+      <div></div>
+      <div>
+        <Table>
+          <TableHeader className="bg-border-background">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow
+                key={headerGroup.id}
+                className="bg-none font-inter hover:bg-transparent"
+              >
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead
+                      key={header.id}
+                      className={`${
+                        header.id === "select"
+                          ? "p-0 pl-4 pt-[3px] align-top"
+                          : ""
+                      } text-primary`}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+        </Table>
+      </div>
+    </div>
+  );
+}
+
+/* export function ResidentTable(data: Resident[]) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
+
+  const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  });
+
+  return (
+    <div>
+      <div></div>
+      <div>
+        <Table>
+          <TableHeader className="bg-border-background">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow
+                key={headerGroup.id}
+                className="bg-none font-inter hover:bg-transparent"
+              >
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead
+                      key={header.id}
+                      className={`${
+                        header.id === "select"
+                          ? "p-0 pl-4 pt-[3px] align-top"
+                          : ""
+                      } text-primary`}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            <TableCell />
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+} */
+
+/* export const columnsBak: ColumnDef<Payment>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -241,66 +299,9 @@ export const columnsBak: ColumnDef<Payment>[] = [
       );
     },
   },
-];
+]; */
 
-export function ResidentTable() {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
-
-  return (
-    <div>
-      <div></div>
-      <div>
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-        </Table>
-      </div>
-    </div>
-  );
-}
-
-export function DataTableDemo() {
+/* export function DataTableDemo() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -442,4 +443,4 @@ export function DataTableDemo() {
       </div>
     </div>
   );
-}
+} */
