@@ -5,12 +5,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuItem,
   DropdownMenuSeparator,
-} from "@radix-ui/react-dropdown-menu";
+} from "@/ui/dropdown-menu";
 import { type ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@radix-ui/react-checkbox";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Checkbox } from "@/custom/checkbox";
+import { ArrowUpDown, MoreHorizontal, Copy, Trash2 } from "lucide-react";
 import { Button } from "@/ui/button";
 import { GhostButton } from "@/custom/buttons";
+import { formatPhoneNumber, getFullName } from "~/lib/utils";
+import "@/styles/dropdown.css";
 
 type Resident = {
   id: number;
@@ -61,6 +63,7 @@ const residentColumns: ColumnDef<Resident>[] = [
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
+        className=""
       />
     ),
     enableSorting: false,
@@ -68,7 +71,7 @@ const residentColumns: ColumnDef<Resident>[] = [
   },
   // NAME COLUMN
   {
-    accessorKey: "residentName",
+    id: "fullName",
     header: ({ column }) => {
       return (
         <GhostButton
@@ -79,18 +82,23 @@ const residentColumns: ColumnDef<Resident>[] = [
         </GhostButton>
       );
     },
+    accessorFn: (row) => getFullName(row),
     cell: ({ row }) => {
-      const lastName: string = row.getValue("lastName");
-      const firstName: string = row.getValue("firstName");
-      const middleName: string | undefined = row.getValue("middleName");
-
-      let fullName = `${lastName}, ${firstName}`;
-
-      if (middleName) {
-        fullName = `${lastName}, ${firstName} ${middleName.charAt(0).toUpperCase()}${middleName.slice(1)}`;
-      }
-
-      return <div className="capitalize">{fullName}</div>;
+      return <div className="capitalize">{row.getValue("fullName")}</div>;
+    },
+  },
+  // USERNAME COLUMN
+  {
+    accessorKey: "username",
+    header: ({ column }) => {
+      return (
+        <GhostButton
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Username
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </GhostButton>
+      );
     },
   },
   // EMAIL COLUMN
@@ -107,30 +115,49 @@ const residentColumns: ColumnDef<Resident>[] = [
       );
     },
   },
+
   // PHONE COLUMN
   {
     accessorKey: "phone",
-    header: "Phone",
+    header: "Phone Number",
+    cell: ({ row }) => {
+      const phoneNumber: string = row.getValue("phone");
+      const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+      return <div>{formattedPhoneNumber}</div>;
+    },
   },
   // CREATED AT COLUMN
   {
-    accessorKey: "createdAt",
-    header: "Created",
+    accessorKey: "created_at",
+    header: "Created At",
+    cell: ({ row }) => {
+      const date: Date = row.getValue("created_at");
+      const formattedDate = date.toLocaleString("en-US", {
+        second: "numeric",
+        minute: "numeric",
+        hour12: true,
+        hour: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        year: "2-digit",
+      });
+      return <div>{formattedDate}</div>;
+    },
   },
   // ACTION
   {
     id: "actions",
     enableHiding: false,
-    header: "Actions",
     cell: ({ row }) => {
       const resident = row.original;
+      const fullName = getFullName(resident);
 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger className="menu-trigger" asChild>
             <Button
               variant="ghost"
-              className="h-8 w-8 p-0 font-inter text-primary hover:text-primary"
+              className="h-8 w-8 p-0 font-inter text-inherit"
             >
               <span className="sr-only">Open</span>
               <MoreHorizontal className="h-4 w-4" />
@@ -140,20 +167,38 @@ const residentColumns: ColumnDef<Resident>[] = [
             className="font-rubik text-primary shadow-lg"
             align="end"
           >
-            <DropdownMenuLabel className="text-xs">Actions</DropdownMenuLabel>
+            <DropdownMenuLabel className="font-inter text-sm">
+              Actions
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(resident.id.toString())
-              }
+              className="menu-item"
+              onClick={() => navigator.clipboard.writeText(resident.username)}
             >
-              Copy Resident ID
+              <Copy className="mr-2 h-4 w-4" />
+              Copy Username
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="menu-item"
+              onClick={() => navigator.clipboard.writeText(fullName)}
+            >
+              <Copy className="mr-2 h-4 w-4" />
+              Copy Name
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="menu-item"
+              onClick={() => navigator.clipboard.writeText(resident.email)}
+            >
+              <Copy className="mr-2 h-4 w-4" />
+              Copy Email
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="menu-item">
-              View customer
-            </DropdownMenuItem>
-            <DropdownMenuItem className="menu-item">
-              View payment details
+            <DropdownMenuItem
+              className="menu-item delete"
+              onClick={() => console.log("Deleting", resident.username)}
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

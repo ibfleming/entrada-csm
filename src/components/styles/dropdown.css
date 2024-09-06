@@ -17,3 +17,7 @@
 .menu-item {
   @apply text-xs hover:cursor-pointer hover:text-primary focus:text-primary;
 }
+
+.menu-item.delete {
+  @apply text-xs text-destructive hover:cursor-pointer hover:text-destructive focus:text-destructive;
+}
