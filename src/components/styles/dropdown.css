@@ -10,14 +10,10 @@
   @apply font-rubik text-primary shadow-lg;
 }
 
-.menu-label {
-  @apply text-xs;
-}
-
 .menu-item {
-  @apply text-xs hover:cursor-pointer hover:text-primary focus:text-primary;
+  @apply hover:cursor-pointer hover:text-primary focus:text-primary;
 }
 
 .menu-item.delete {
-  @apply text-xs text-destructive hover:cursor-pointer hover:text-destructive focus:text-destructive;
+  @apply text-destructive hover:cursor-pointer hover:text-destructive focus:text-destructive;
 }

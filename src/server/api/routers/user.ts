@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
@@ -8,11 +9,13 @@ export const userRouter = createTRPCRouter({
    * test: publicProcedure
    * Test the tRPC API.
    */
-  test: publicProcedure.input(z.object({ text: z.string() })).query(({ input }) => {
-    return {
-      greeting: `User tRPC: ${input.text}`,
-    };
-  }),
+  test: publicProcedure
+    .input(z.object({ text: z.string() }))
+    .query(({ input }) => {
+      return {
+        greeting: `User tRPC: ${input.text}`,
+      };
+    }),
 
   /*
    * status: publicProcedure
@@ -38,6 +41,16 @@ export const userRouter = createTRPCRouter({
     });
     return users;
   }),
+
+  /*
+   * deleteUser: publicProcedure
+   * Delete a user from the user table by id.
+   */
+  deleteUser: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.delete(users).where(eq(users.id, input.id)).returning();
+    }),
 
   /*
    * createUser: publicProcedure
@@ -68,7 +81,9 @@ export const userRouter = createTRPCRouter({
       });
 
       if (existingUser) {
-        throw new Error(`Username '${genUsername}' OR e-mail is already taken!`);
+        throw new Error(
+          `Username '${genUsername}' OR e-mail is already taken!`,
+        );
       } else {
         // Post to DB
         // Hash password...

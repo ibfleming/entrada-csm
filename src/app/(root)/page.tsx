@@ -19,7 +19,7 @@ import {
 } from "@/custom/buttons";
 import { Input } from "@/ui/input";
 import { Checkbox, CheckboxWithText } from "@/custom/checkbox";
-import ResidentsTable from "~/components/custom/tables/residents";
+import ResidentsTable from "@/custom/tables/residents";
 
 export default async function Home() {
   return (

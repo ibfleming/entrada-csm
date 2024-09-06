@@ -4,6 +4,7 @@ import { HydrateClient } from "~/trpc/server";
 import Header from "@/header";
 import { inter, rubik, poppins, ibmPlex } from "~/lib/fonts";
 import "~/styles/globals.css";
+import { Toaster } from "@/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Entrada (dev)",
@@ -23,7 +24,10 @@ export default async function RootLayout({
       <body>
         <Header />
         <TRPCReactProvider>
-          <HydrateClient>{children}</HydrateClient>
+          <HydrateClient>
+            {children}
+            <Toaster />
+          </HydrateClient>
         </TRPCReactProvider>
       </body>
     </html>
