@@ -1,10 +1,17 @@
 # Entrada CMS v2
 
 ## Todo:
-- [ ] Implement header/banner
+
+- [x] Implement header/banner
 - [ ] Implement search bar
 - [ ] Implement a profile and settings widget
-- [ ] Implement user list view
+- [x] Implement resident table
 - [ ] Implement user create form
+- [x] Implement proper styles/theme/colors
 
-- [ ] Implement proper styles/theme/colors
+### Residen Table TODO
+
+- [ ] Add Pagination
+- [ ] Add Search bar
+- [ ] Column Visibility
+- [ ] Perhaps a few extra features

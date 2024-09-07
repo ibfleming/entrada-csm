@@ -140,8 +140,8 @@ export function ResidentDataTable<Resident>({
                 <TableCell
                   key={cell.id}
                   className={`${
-                    cell.column.id === "select" ? "pl-6 align-top" : ""
-                  } font-inter text-inherit`}
+                    cell.column.id === "select" ? "px-6 align-top" : ""
+                  } text-inheri pl-6 font-inter`}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
@@ -150,8 +150,11 @@ export function ResidentDataTable<Resident>({
           ))
         ) : (
           <TableRow>
-            <TableCell colSpan={columns.length} className="h-24 text-center">
-              No results.
+            <TableCell
+              colSpan={columns.length}
+              className="h-24 text-center font-inter font-semibold text-destructive"
+            >
+              No data.
             </TableCell>
           </TableRow>
         )}

@@ -27,7 +27,7 @@ export function Toaster() {
         return (
           <Toast key={id} {...props} variant={variant}>
             <div className="flex flex-row items-center justify-start gap-1 align-middle">
-              {variant === "copy" && <Check className="mr-2 h-4 w-4" />}
+              {variant === "custom" && <Check className="mr-2 h-4 w-4" />}
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
                 <ToastDescription>{description}</ToastDescription>
@@ -35,7 +35,7 @@ export function Toaster() {
             </div>
             {action}
             <ToastClose
-              className={`${variant === "copy" ? "text-background" : ""}`}
+              className={`${variant === "custom" ? "text-background hover:text-background" : ""}`}
             />
           </Toast>
         );

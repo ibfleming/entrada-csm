@@ -9,12 +9,24 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { type Row, type ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/custom/checkbox";
-import { ArrowUpDown, MoreHorizontal, Copy, Trash2 } from "lucide-react";
+import {
+  ArrowUpDown,
+  MoreHorizontal,
+  Copy,
+  Trash2,
+  EditIcon,
+} from "lucide-react";
 import { Button } from "@/ui/button";
 import { GhostButton } from "@/custom/buttons";
 import { formatPhoneNumber, getFullName } from "~/lib/utils";
 import "@/styles/dropdown.css";
 import { api } from "~/trpc/react";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/ui/tooltip";
 
 type Resident = {
   id: number;
@@ -24,26 +36,9 @@ type Resident = {
   last_name: string;
   email: string;
   phone: string;
-  created_at: Date;
-};
-
-/*
-type Resident = {
-  id: number;
-  created_at: Date;
-  updated_at: Date | null;
-  username: string;
-  phone: string;
-  phone_type: string;
-  email: string;
-  password: string;
-  first_name: string;
-  middle_name: string | null;
-  last_name: string;
-  gender: string;
   birth_date: string;
+  created_at: Date;
 };
-*/
 
 const residentColumns: ColumnDef<Resident>[] = [
   // SELECT COLUMN
@@ -128,6 +123,41 @@ const residentColumns: ColumnDef<Resident>[] = [
       return <div>{formattedPhoneNumber}</div>;
     },
   },
+  // BIRTH DATE COLUMN
+  {
+    accessorKey: "birth_date",
+    header: ({ column }) => {
+      return (
+        <GhostButton
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Birthday
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </GhostButton>
+      );
+    },
+    cell: ({ row }) => {
+      const birthDate = new Date(row.getValue("birth_date"));
+      const age = new Date().getFullYear() - birthDate.getFullYear();
+      const reformattedDate = `${birthDate.getMonth() + 1}/${birthDate.getDate()}/${birthDate.getFullYear()}`;
+
+      return (
+        <div className="flex items-center justify-start gap-2">
+          {reformattedDate}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="rounded-md bg-primary px-1 text-background">
+                {age}
+              </TooltipTrigger>
+              <TooltipContent className="border bg-background text-primary">
+                Age (yrs)
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      );
+    },
+  },
   // CREATED AT COLUMN
   {
     accessorKey: "created_at",
@@ -160,8 +190,19 @@ function ActionCell(row: Row<Resident>) {
   const { toast } = useToast();
   const utils = api.useUtils();
   const mutation = api.user.deleteUser.useMutation({
-    onSuccess: () => {
-      // utils.user.invalidate();
+    onSuccess: async () => {
+      const message = `Deleted resident '${resident.first_name} ${resident.last_name}'.`;
+      try {
+        await utils.user.invalidate();
+        toast({
+          variant: "custom",
+          className: "bg-destructive",
+          title: message,
+          duration: 2000,
+        });
+      } catch {
+        new Error("Failed to invalidate user table.");
+      }
     },
   });
 
@@ -174,21 +215,19 @@ function ActionCell(row: Row<Resident>) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="font-rubik text-primary shadow-lg"
+        className="font-inter text-primary shadow-lg"
         align="end"
       >
-        <DropdownMenuLabel className="font-inter text-sm">
-          Actions
-        </DropdownMenuLabel>
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="menu-item"
           onClick={() => {
             void navigator.clipboard.writeText(resident.username);
             toast({
-              variant: "copy",
+              variant: "custom",
               title: "Copied!",
-              duration: 1000,
+              duration: 2000,
             });
           }}
         >
@@ -200,7 +239,7 @@ function ActionCell(row: Row<Resident>) {
           onClick={() => {
             void navigator.clipboard.writeText(fullName);
             toast({
-              variant: "copy",
+              variant: "custom",
               title: "Copied!",
               duration: 1000,
             });
@@ -214,7 +253,7 @@ function ActionCell(row: Row<Resident>) {
           onClick={() => {
             void navigator.clipboard.writeText(resident.email);
             toast({
-              variant: "copy",
+              variant: "custom",
               title: "Copied!",
               duration: 1000,
             });
@@ -224,9 +263,14 @@ function ActionCell(row: Row<Resident>) {
           Email
         </DropdownMenuItem>
         <DropdownMenuSeparator />
+        <DropdownMenuItem className="menu-item">
+          <EditIcon className="mr-2 h-4 w-4" />
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer text-destructive hover:text-destructive focus:text-destructive"
-          onClick={async () => {
+          onClick={() => {
             mutation.mutate({ id: resident.id });
           }}
         >
@@ -237,169 +281,5 @@ function ActionCell(row: Row<Resident>) {
     </DropdownMenu>
   );
 }
-
-/* const residentColumns: ColumnDef<Resident>[] = [
-  // SELECT COLUMN
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="bg-background"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className=""
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  // NAME COLUMN
-  {
-    id: "fullName",
-    header: ({ column }) => {
-      return (
-        <GhostButton
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Resident Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </GhostButton>
-      );
-    },
-    accessorFn: (row) => getFullName(row),
-    cell: ({ row }) => {
-      return <div className="capitalize">{row.getValue("fullName")}</div>;
-    },
-  },
-  // USERNAME COLUMN
-  {
-    accessorKey: "username",
-    header: ({ column }) => {
-      return (
-        <GhostButton
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Username
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </GhostButton>
-      );
-    },
-  },
-  // EMAIL COLUMN
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <GhostButton
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </GhostButton>
-      );
-    },
-  },
-
-  // PHONE COLUMN
-  {
-    accessorKey: "phone",
-    header: "Phone Number",
-    cell: ({ row }) => {
-      const phoneNumber: string = row.getValue("phone");
-      const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
-      return <div>{formattedPhoneNumber}</div>;
-    },
-  },
-  // CREATED AT COLUMN
-  {
-    accessorKey: "created_at",
-    header: "Created At",
-    cell: ({ row }) => {
-      const date: Date = row.getValue("created_at");
-      const formattedDate = date.toLocaleString("en-US", {
-        second: "numeric",
-        minute: "numeric",
-        hour12: true,
-        hour: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        year: "2-digit",
-      });
-      return <div>{formattedDate}</div>;
-    },
-  },
-  // ACTION
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const resident = row.original;
-      const fullName = getFullName(resident);
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger className="menu-trigger" asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0 font-inter text-inherit"
-            >
-              <span className="sr-only">Open</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="font-rubik text-primary shadow-lg"
-            align="end"
-          >
-            <DropdownMenuLabel className="font-inter text-sm">
-              Actions
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="menu-item"
-              onClick={() => navigator.clipboard.writeText(resident.username)}
-            >
-              <Copy className="mr-2 h-4 w-4" />
-              Copy Username
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="menu-item"
-              onClick={() => navigator.clipboard.writeText(fullName)}
-            >
-              <Copy className="mr-2 h-4 w-4" />
-              Copy Name
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="menu-item"
-              onClick={() => navigator.clipboard.writeText(resident.email)}
-            >
-              <Copy className="mr-2 h-4 w-4" />
-              Copy Email
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="menu-item delete"
-              onClick={() => console.log("Deleting", resident.username)}
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-]; */
 
 export { type Resident, residentColumns };
