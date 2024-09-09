@@ -4,6 +4,7 @@ import { cn } from "~/lib/utils";
 
 type ButtonProps = HTMLAttributes<HTMLButtonElement> & {
   size?: "default" | "sm" | "lg" | "icon" | null | undefined;
+  disabled?: boolean;
 };
 
 interface ButtonWithIconProps {
@@ -71,6 +72,7 @@ const DestructiveButton = ({
 const OutlineButton = ({
   className,
   size = "default",
+  disabled = false,
   ...props
 }: ButtonProps) => {
   return (
@@ -78,6 +80,7 @@ const OutlineButton = ({
       size={size}
       variant="outline"
       className={cn("font-inter text-primary hover:text-primary", className)}
+      disabled={disabled}
       {...props}
     >
       {props.children}

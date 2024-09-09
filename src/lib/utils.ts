@@ -6,9 +6,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatPhoneNumber(phoneNumber: string): string {
+export function formatPhoneNumber(row: Resident): string {
   // Remove all non-digit characters from the phone number
-  const digits = phoneNumber.replace(/\D+/g, "");
+  const digits = row.phone.replace(/\D+/g, "");
 
   // Check if the phone number has exactly 10 digits
   if (digits.length !== 10) {
@@ -33,4 +33,8 @@ export const getFullName = (row: Resident) => {
   }
 
   return fullName;
+};
+
+export const getBirthDate = (birthday: Date) => {
+  return `${birthday.getMonth() + 1}/${birthday.getDate()}/${birthday.getFullYear()}`;
 };

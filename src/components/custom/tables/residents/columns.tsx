@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/ui/button";
 import { GhostButton } from "@/custom/buttons";
-import { formatPhoneNumber, getFullName } from "~/lib/utils";
+import { formatPhoneNumber, getBirthDate, getFullName } from "~/lib/utils";
 import "@/styles/dropdown.css";
 import { api } from "~/trpc/react";
 import {
@@ -68,7 +68,7 @@ const residentColumns: ColumnDef<Resident>[] = [
   },
   // NAME COLUMN
   {
-    id: "fullName",
+    id: "Resident Name",
     header: ({ column }) => {
       return (
         <GhostButton
@@ -81,11 +81,12 @@ const residentColumns: ColumnDef<Resident>[] = [
     },
     accessorFn: (row) => getFullName(row),
     cell: ({ row }) => {
-      return <div className="capitalize">{row.getValue("fullName")}</div>;
+      return <div className="capitalize">{getFullName(row.original)}</div>;
     },
   },
   // USERNAME COLUMN
   {
+    id: "Username",
     accessorKey: "username",
     header: ({ column }) => {
       return (
@@ -115,17 +116,16 @@ const residentColumns: ColumnDef<Resident>[] = [
 
   // PHONE COLUMN
   {
-    accessorKey: "phone",
+    id: "Phone Number",
     header: "Phone Number",
     cell: ({ row }) => {
-      const phoneNumber: string = row.getValue("phone");
-      const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+      const formattedPhoneNumber = formatPhoneNumber(row.original);
       return <div>{formattedPhoneNumber}</div>;
     },
   },
   // BIRTH DATE COLUMN
   {
-    accessorKey: "birth_date",
+    id: "Birthday",
     header: ({ column }) => {
       return (
         <GhostButton
@@ -136,20 +136,20 @@ const residentColumns: ColumnDef<Resident>[] = [
         </GhostButton>
       );
     },
+    accessorFn: (row) => getBirthDate(new Date(row.birth_date)),
     cell: ({ row }) => {
-      const birthDate = new Date(row.getValue("birth_date"));
+      const birthDate = new Date(row.original.birth_date);
       const age = new Date().getFullYear() - birthDate.getFullYear();
-      const reformattedDate = `${birthDate.getMonth() + 1}/${birthDate.getDate()}/${birthDate.getFullYear()}`;
 
       return (
         <div className="flex items-center justify-start gap-2">
-          {reformattedDate}
-          <TooltipProvider>
+          {getBirthDate(birthDate)}
+          <TooltipProvider delayDuration={500}>
             <Tooltip>
-              <TooltipTrigger className="rounded-md bg-primary px-1 text-background">
+              <TooltipTrigger className="cursor-default rounded-md bg-primary px-1 text-background">
                 {age}
               </TooltipTrigger>
-              <TooltipContent className="border bg-background text-primary">
+              <TooltipContent className="border bg-background font-inter text-xs text-primary">
                 Age (yrs)
               </TooltipContent>
             </Tooltip>
@@ -160,10 +160,10 @@ const residentColumns: ColumnDef<Resident>[] = [
   },
   // CREATED AT COLUMN
   {
-    accessorKey: "created_at",
+    id: "Created At",
     header: "Created At",
     cell: ({ row }) => {
-      const date: Date = row.getValue("created_at");
+      const date: Date = row.original.created_at;
       const formattedDate = date.toLocaleString("en-US", {
         second: "numeric",
         minute: "numeric",

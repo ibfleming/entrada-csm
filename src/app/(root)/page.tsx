@@ -24,6 +24,7 @@ import ResidentsTable from "@/custom/tables/residents";
 export default async function Home() {
   return (
     <div>
+      {/*
       <div className="flex items-center justify-start gap-4 p-4">
         <PrimaryButton>Primary</PrimaryButton>
         <SecondaryButton>Secondary</SecondaryButton>
@@ -72,6 +73,7 @@ export default async function Home() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      */}
       <ResidentsTable />
     </div>
   );
