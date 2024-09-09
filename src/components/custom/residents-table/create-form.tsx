@@ -4,10 +4,13 @@ import { residentSchema } from "~/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { type z } from "zod";
+import { format } from "date-fns";
 import { DestructiveButton, PrimaryButton } from "@/custom/buttons";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,9 +18,12 @@ import {
 } from "@/ui/form";
 import { Input } from "@/ui/input";
 import { DialogClose, DialogFooter } from "@/ui/dialog";
-import { AsteriskIcon } from "lucide-react";
+import { AsteriskIcon, Calendar as CalendarIcon } from "lucide-react";
+import { cn } from "~/lib/utils";
+import { Button } from "@/ui/button";
+import { Calendar } from "@/ui/calendar";
 
-const residentExample = residentSchema.parse({
+/* const residentExample = residentSchema.parse({
   phone: "000-000-0000",
   phone_type: "mobile",
   email: "default@example.com",
@@ -26,7 +32,7 @@ const residentExample = residentSchema.parse({
   last_name: "Default",
   gender: "male",
   birth_date: "2020-01-01",
-});
+}); */
 
 export default function CreateResidentForm() {
   const form = useForm<z.infer<typeof residentSchema>>({
@@ -110,18 +116,43 @@ export default function CreateResidentForm() {
             control={form.control}
             name="birth_date"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel className="flex items-center justify-start gap-1 font-inter text-primary">
                   Birth Date
                   <AsteriskIcon className="h-3 w-3 text-destructive" />
                 </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    className="font-inter text-neutral-800 shadow-md focus-visible:ring-1"
-                  />
-                </FormControl>
-                <FormMessage className="font-inter text-destructive" />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[240px] pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground",
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value ? new Date(field.value) : undefined}
+                      onSelect={field.onChange}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date("1900-01-01")
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
               </FormItem>
             )}
           />
