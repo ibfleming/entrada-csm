@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { type Resident } from "@/custom/tables/residents/columns";
+import { type Resident } from "~/components/custom/residents-table/columns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

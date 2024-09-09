@@ -13,12 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/ui/tooltip";
+
 import {
   Table,
   TableBody,
@@ -29,8 +24,7 @@ import {
 } from "@/ui/table";
 import "@/styles/dropdown.css";
 import { Input } from "@/ui/input";
-import { OutlineButton } from "@/custom/buttons";
-import { CirclePlusIcon, ArrowRightLeftIcon } from "lucide-react";
+import { ArrowRightLeftIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -41,6 +35,7 @@ import {
 } from "@/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
 import { Pagination } from "./pagination";
+import CreateResident from "./create-button";
 
 interface ResidentDataTableProps<Resident> {
   columns: ColumnDef<Resident>[];
@@ -92,19 +87,7 @@ export function ResidentDataTable<Resident>({
             }}
             className="w-[100vw] max-w-sm font-inter text-neutral-800 shadow-md focus-visible:ring-1"
           />
-
-          <TooltipProvider delayDuration={1000}>
-            <Tooltip>
-              <TooltipTrigger>
-                <OutlineButton size="icon">
-                  <CirclePlusIcon className="h-5 w-5 text-primary" />
-                </OutlineButton>
-              </TooltipTrigger>
-              <TooltipContent className="border bg-background font-inter text-xs text-primary">
-                Add a new resident
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <CreateResident />
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger className="menu-trigger shadow-md" asChild>

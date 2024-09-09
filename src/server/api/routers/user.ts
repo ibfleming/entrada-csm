@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { residentSchema } from "~/lib/types";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { users } from "~/server/db/schema";
@@ -57,18 +58,7 @@ export const userRouter = createTRPCRouter({
    * Create a new user to the user table.
    */
   createUser: publicProcedure
-    .input(
-      z.object({
-        phone: z.string().min(1),
-        phone_type: z.enum(["home", "work", "mobile"]),
-        email: z.string().email().min(1),
-        first_name: z.string().min(1),
-        middle_name: z.string().min(1).nullable(),
-        last_name: z.string().min(1),
-        gender: z.enum(["male", "female"]),
-        birth_date: z.string(),
-      }),
-    )
+    .input(residentSchema)
     .mutation(async ({ ctx, input }) => {
       const randomNumbers = Math.floor(Math.random() * 1000);
       const genUsername = `${input.first_name[0]}${input.last_name.slice(0, 4)}${randomNumbers}`;
@@ -92,7 +82,7 @@ export const userRouter = createTRPCRouter({
           phone: input.phone,
           phone_type: input.phone_type,
           email: input.email,
-          password: "12345",
+          password: "password",
           first_name: input.first_name,
           middle_name: input.middle_name,
           last_name: input.last_name,

@@ -3,26 +3,25 @@ import { Button } from "@/ui/button";
 import { cn } from "~/lib/utils";
 
 type ButtonProps = HTMLAttributes<HTMLButtonElement> & {
-  size?: "default" | "sm" | "lg" | "icon" | null | undefined;
+  icon?: React.ComponentType<React.SVGAttributes<SVGElement>>;
+  type?: "button" | "submit" | "reset";
+  children?: React.ReactNode;
+  className?: string;
+  size?: "default" | "sm" | "lg" | "icon";
+  position?: "left" | "right";
   disabled?: boolean;
 };
-
-interface ButtonWithIconProps {
-  icon: React.ComponentType<React.SVGAttributes<SVGElement>>;
-  children: React.ReactNode;
-  className?: string;
-  size?: "default" | "sm" | "lg" | "icon" | null | undefined;
-  position?: "left" | "right";
-}
 
 const PrimaryButton = ({
   className,
   size = "default",
+  type = "button",
   ...props
 }: ButtonProps) => {
   return (
     <Button
       size={size}
+      type={type}
       variant="default"
       className={cn("font-inter hover:bg-hover", className)}
       {...props}
@@ -137,10 +136,10 @@ const ButtonIconText = ({
   className,
   size = "default",
   position = "left",
-}: ButtonWithIconProps) => {
+}: ButtonProps) => {
   return (
     <Button size={size} className={cn("font-inter hover:bg-hover", className)}>
-      {position === "left" ? (
+      {IconComponent && position === "left" ? (
         <>
           <IconComponent className="mr-2 h-4 w-4" />
           {children}
@@ -148,7 +147,7 @@ const ButtonIconText = ({
       ) : (
         <>
           {children}
-          <IconComponent className="ml-2 h-4 w-4" />
+          {IconComponent && <IconComponent className="ml-2 h-4 w-4" />}
         </>
       )}
     </Button>

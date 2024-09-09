@@ -39,7 +39,7 @@ export const posts = createTable(
 export const users = createTable("user", {
   id: serial("id").primaryKey(),
   username: varchar("username", { length: 256 }).unique().notNull(),
-  phone: varchar("phone", { length: 20 }).notNull(),
+  phone: varchar("phone", { length: 15 }).notNull(),
   phone_type: varchar("phone_type").notNull().default("mobile"),
   email: varchar("email", { length: 256 }).unique().notNull(),
   password: varchar("password", { length: 256 }).notNull(),
