@@ -20,6 +20,8 @@ import {
 import { Input } from "@/ui/input";
 import { Checkbox, CheckboxWithText } from "@/custom/checkbox";
 import ResidentsTable from "~/components/custom/residents-table";
+import Calendar from "@/custom/calendar";
+import React from "react";
 
 export default async function Home() {
   return (
@@ -74,7 +76,12 @@ export default async function Home() {
         </DropdownMenu>
       </div>
       */}
-      <ResidentsTable />
+      {/* <DateInput /> */}
+      <div className="flex items-center justify-center p-16">
+        <Calendar />
+      </div>
+
+      {/* <ResidentsTable /> */}
     </div>
   );
 }

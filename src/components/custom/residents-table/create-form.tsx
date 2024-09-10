@@ -21,7 +21,6 @@ import { DialogClose, DialogFooter } from "@/ui/dialog";
 import { AsteriskIcon, Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Button } from "@/ui/button";
-import { Calendar } from "@/ui/calendar";
 
 /* const residentExample = residentSchema.parse({
   phone: "000-000-0000",
@@ -121,38 +120,29 @@ export default function CreateResidentForm() {
                   Birth Date
                   <AsteriskIcon className="h-3 w-3 text-destructive" />
                 </FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
+                <FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-[240px] pl-3 text-left font-normal",
+                          "text-left font-inter text-inherit text-neutral-800 shadow-md",
                           !field.value && "text-muted-foreground",
                         )}
                       >
                         {field.value ? (
-                          format(field.value, "PPP")
+                          format(field.value, "P")
                         ) : (
                           <span>Pick a date</span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value ? new Date(field.value) : undefined}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
+                    </PopoverTrigger>
+                    <PopoverContent></PopoverContent>
+                  </Popover>
+                  {/* <DateInput /> */}
+                </FormControl>
+                <FormMessage className="font-inter text-destructive" />
               </FormItem>
             )}
           />
