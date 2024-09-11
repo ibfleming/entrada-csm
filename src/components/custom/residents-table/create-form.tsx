@@ -21,6 +21,7 @@ import { DialogClose, DialogFooter } from "@/ui/dialog";
 import { AsteriskIcon, Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Button } from "@/ui/button";
+import { Calendar } from "@/ui/calendar";
 
 /* const residentExample = residentSchema.parse({
   phone: "000-000-0000",
@@ -115,33 +116,46 @@ export default function CreateResidentForm() {
             control={form.control}
             name="birth_date"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem>
                 <FormLabel className="flex items-center justify-start gap-1 font-inter text-primary">
                   Birth Date
                   <AsteriskIcon className="h-3 w-3 text-destructive" />
                 </FormLabel>
-                <FormControl>
-                  <Popover>
-                    <PopoverTrigger asChild>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "text-left font-inter text-inherit text-neutral-800 shadow-md",
+                          "flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 font-inter text-sm text-muted-foreground shadow-md transition-colors hover:text-muted-foreground",
                           !field.value && "text-muted-foreground",
                         )}
                       >
                         {field.value ? (
                           format(field.value, "P")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>Select a date</span>
                         )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                       </Button>
-                    </PopoverTrigger>
-                    <PopoverContent></PopoverContent>
-                  </Popover>
-                  {/* <DateInput /> */}
-                </FormControl>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent align="center" className="w-auto p-1">
+                    <Calendar
+                      mode="single"
+                      captionLayout="dropdown-buttons"
+                      defaultMonth={field.value ?? new Date()}
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      fromYear={1900}
+                      toYear={new Date().getFullYear()}
+                      classNames={{
+                        vhidden: "vhidden hidden",
+                      }}
+                      className="font-inter"
+                    />
+                  </PopoverContent>
+                </Popover>
                 <FormMessage className="font-inter text-destructive" />
               </FormItem>
             )}

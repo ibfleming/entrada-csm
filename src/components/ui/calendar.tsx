@@ -2,10 +2,17 @@
 
 import * as React from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import { DayPicker } from "react-day-picker";
-
+import { DayPicker, type DropdownProps } from "react-day-picker";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/ui/select";
+import { ScrollArea } from "@/ui/scroll-area";
+import { buttonVariants } from "@/ui/button";
 import { cn } from "~/lib/utils";
-import { buttonVariants } from "~/components/ui/button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -17,22 +24,26 @@ function Calendar({
 }: CalendarProps) {
   return (
     <DayPicker
-      captionLayout="dropdown"
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-        month: "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center",
-        caption_label: "text-sm font-medium",
-        nav: "space-x-1 flex items-center",
+        month: "space-y-2",
+        caption: "flex justify-center py-1 relative items-center px-8",
+        caption_label: "flex items-center gap-2 text-sm font-medium",
+        caption_dropdowns: "flex gap-2 [&_.rdp-vhidden]:hidden",
+        dropdown_month: "relative inline-flex items-center",
+        dropdown_year: "relative inline-flex items-center",
+        dropdown:
+          "absolute inset-0 w-full appearance-none opacity-0 z-10 cursor-pointer",
+        nav: "flex items-center space-x-1",
         nav_button: cn(
-          buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
+          buttonVariants({ variant: "outline", size: "icon" }),
+          "h-5 w-5 bg-transparent p-0 opacity-50 hover:opacity-100",
         ),
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
-        table: "w-full border-collapse space-y-1",
+        table: "flex w-full justify-center items-center flex-col",
         head_row: "flex",
         head_cell:
           "text-muted-foreground rounded-md w-8 font-normal text-[0.8rem]",
@@ -61,6 +72,43 @@ function Calendar({
         ...classNames,
       }}
       components={{
+        Dropdown: ({ value, onChange, children, ...props }: DropdownProps) => {
+          const options = React.Children.toArray(
+            children,
+          ) as React.ReactElement<React.HTMLProps<HTMLOptionElement>>[];
+          const selected = options.find((child) => child.props.value === value);
+          const handleChange = (value: string) => {
+            const changeEvent = {
+              target: { value },
+            } as React.ChangeEvent<HTMLSelectElement>;
+            onChange?.(changeEvent);
+          };
+          return (
+            <Select
+              value={value?.toString()}
+              onValueChange={(value) => {
+                handleChange(value);
+              }}
+            >
+              <SelectTrigger className="flex justify-between gap-0.5 p-0 px-1 pl-2 focus:ring-0">
+                <SelectValue>{selected?.props?.children}</SelectValue>
+              </SelectTrigger>
+              <SelectContent position="popper" align="center">
+                <ScrollArea className="h-fit px-1">
+                  {options.map((option, id: number) => (
+                    <SelectItem
+                      className="cursor-pointer font-inter text-xs"
+                      key={`${option.props.value?.toString()}-${id}`}
+                      value={option.props.value?.toString() ?? ""}
+                    >
+                      {option.props.children}
+                    </SelectItem>
+                  ))}
+                </ScrollArea>
+              </SelectContent>
+            </Select>
+          );
+        },
         IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
       }}
