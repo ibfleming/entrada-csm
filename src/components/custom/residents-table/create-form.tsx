@@ -10,7 +10,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,8 +21,15 @@ import { AsteriskIcon, Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Button } from "@/ui/button";
 import { Calendar } from "@/ui/calendar";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+} from "@/ui/select";
 
-/* const residentExample = residentSchema.parse({
+const residentExample = residentSchema.parse({
   phone: "000-000-0000",
   phone_type: "mobile",
   email: "default@example.com",
@@ -31,21 +37,20 @@ import { Calendar } from "@/ui/calendar";
   middle_name: "Default",
   last_name: "Default",
   gender: "male",
-  birth_date: "2020-01-01",
-}); */
+  birth_date: "1999-01-02",
+});
 
 export default function CreateResidentForm() {
   const form = useForm<z.infer<typeof residentSchema>>({
     resolver: zodResolver(residentSchema),
-    defaultValues: {
-      phone_type: "mobile",
-    }, // Default values for now...
+    defaultValues: residentExample, // Default values for now...
   });
 
   function onSubmit(values: z.infer<typeof residentSchema>) {
     // Submit to the server via api...
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    const date = format(values.birth_date, "P");
+    console.log(date);
   }
 
   return (
@@ -65,6 +70,7 @@ export default function CreateResidentForm() {
                 <FormControl>
                   <Input
                     {...field}
+                    value={field.value || ""}
                     className="font-inter text-neutral-800 shadow-md focus-visible:ring-1"
                   />
                 </FormControl>
@@ -144,8 +150,8 @@ export default function CreateResidentForm() {
                     <Calendar
                       mode="single"
                       captionLayout="dropdown-buttons"
-                      defaultMonth={field.value ?? new Date()}
-                      selected={field.value}
+                      defaultMonth={new Date(field.value) ?? new Date()}
+                      selected={new Date(field.value)}
                       onSelect={field.onChange}
                       fromYear={1900}
                       toYear={new Date().getFullYear()}
@@ -167,15 +173,26 @@ export default function CreateResidentForm() {
               <FormItem>
                 <FormLabel className="flex items-center justify-start gap-1 font-inter text-primary">
                   Gender
-                  <AsteriskIcon className="h-3 w-3 text-destructive" />
                 </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    className="font-inter text-neutral-800 shadow-md focus-visible:ring-1"
-                  />
-                </FormControl>
-                <FormMessage className="font-inter text-destructive" />
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl className="font-inter font-medium text-muted-foreground shadow-md">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your gender" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="font-inter text-neutral-800 shadow-md">
+                    <SelectItem className="cursor-pointer" value="male">
+                      Male
+                    </SelectItem>
+                    <SelectItem className="cursor-pointer" value="female">
+                      Female
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -207,15 +224,29 @@ export default function CreateResidentForm() {
               <FormItem>
                 <FormLabel className="flex items-center justify-start gap-1 font-inter text-primary">
                   Phone Type
-                  <AsteriskIcon className="h-3 w-3 text-destructive" />
                 </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    className="font-inter text-neutral-800 shadow-md focus-visible:ring-1"
-                  />
-                </FormControl>
-                <FormMessage className="font-inter text-destructive" />
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl className="font-inter font-medium text-muted-foreground shadow-md">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select phone type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="font-inter text-neutral-800 shadow-md">
+                    <SelectItem className="cursor-pointer" value="mobile">
+                      Mobile
+                    </SelectItem>
+                    <SelectItem className="cursor-pointer" value="home">
+                      Home
+                    </SelectItem>
+                    <SelectItem className="cursor-pointer" value="work">
+                      Work
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
               </FormItem>
             )}
           />

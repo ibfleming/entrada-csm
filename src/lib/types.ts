@@ -55,7 +55,7 @@ export const residentSchema = z.object({
       message: "Last name must be at most 256 characters.",
     }),
   gender: z.enum(genderEnum).default("male"),
-  birth_date: z.date({
-    message: "Birth date is required.",
-  }), // 0000-00-00 is valid!
+  birth_date: z.string({
+    req: "Birth date is required.",
+  }).date(), // 0000-00-00 is valid!
 });
