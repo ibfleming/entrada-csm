@@ -28,35 +28,39 @@ import {
   SelectValue,
   SelectItem,
 } from "@/ui/select";
+import { useState } from "react";
 
 const residentExample = residentSchema.parse({
-  phone: "000-000-0000",
+  phone: "2086994254",
   phone_type: "mobile",
-  email: "default@example.com",
-  first_name: "Default",
-  middle_name: "Default",
-  last_name: "Default",
-  gender: "male",
-  birth_date: "1999-01-02",
+  email: "sierragkeele@gmail.com",
+  first_name: "Sierra",
+  middle_name: "Grace",
+  last_name: "Keele",
+  gender: "female",
+  birth_date: "10/03/2002",
 });
 
 export default function CreateResidentForm() {
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const currentYear = new Date().getFullYear();
+
   const form = useForm<z.infer<typeof residentSchema>>({
     resolver: zodResolver(residentSchema),
-    defaultValues: residentExample, // Default values for now...
+    defaultValues: residentExample,
   });
 
   function onSubmit(values: z.infer<typeof residentSchema>) {
+    const date = format(values.birth_date, "MM/dd/yyyy");
     // Submit to the server via api...
     // ✅ This will be type-safe and validated.
-    const date = format(values.birth_date, "P");
-    console.log(date);
+    console.log(values, date);
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-3 gap-3 pt-4">
+        <div className="grid grid-cols-3 gap-4 py-4">
           <FormField
             rules={{ required: "First name is required" }}
             control={form.control}
@@ -74,7 +78,7 @@ export default function CreateResidentForm() {
                     className="font-inter text-neutral-800 shadow-md focus-visible:ring-1"
                   />
                 </FormControl>
-                <FormMessage className="font-inter text-destructive" />
+                <FormMessage className="font-inter text-xs text-destructive" />
               </FormItem>
             )}
           />
@@ -93,7 +97,7 @@ export default function CreateResidentForm() {
                     className="font-inter text-neutral-800 shadow-md focus-visible:ring-1"
                   />
                 </FormControl>
-                <FormMessage className="font-inter text-destructive" />
+                <FormMessage className="font-inter text-xs text-destructive" />
               </FormItem>
             )}
           />
@@ -109,15 +113,16 @@ export default function CreateResidentForm() {
                 <FormControl>
                   <Input
                     {...field}
+                    value={field.value || ""}
                     className="font-inter text-neutral-800 shadow-md focus-visible:ring-1"
                   />
                 </FormControl>
-                <FormMessage className="font-inter text-destructive" />
+                <FormMessage className="font-inter text-xs text-destructive" />
               </FormItem>
             )}
           />
         </div>
-        <div className="grid grid-cols-2 gap-3 pt-4">
+        <div className="grid grid-cols-2 gap-4 py-4">
           <FormField
             control={form.control}
             name="birth_date"
@@ -127,7 +132,7 @@ export default function CreateResidentForm() {
                   Birth Date
                   <AsteriskIcon className="h-3 w-3 text-destructive" />
                 </FormLabel>
-                <Popover>
+                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -150,11 +155,16 @@ export default function CreateResidentForm() {
                     <Calendar
                       mode="single"
                       captionLayout="dropdown-buttons"
-                      defaultMonth={new Date(field.value) ?? new Date()}
-                      selected={new Date(field.value)}
-                      onSelect={field.onChange}
+                      defaultMonth={
+                        field.value ? new Date(field.value) : undefined
+                      }
+                      selected={field.value ? new Date(field.value) : undefined}
+                      onSelect={(date) => {
+                        field.onChange(date);
+                        setIsCalendarOpen(false);
+                      }}
                       fromYear={1900}
-                      toYear={new Date().getFullYear()}
+                      toYear={currentYear}
                       classNames={{
                         vhidden: "vhidden hidden",
                       }}
@@ -162,7 +172,7 @@ export default function CreateResidentForm() {
                     />
                   </PopoverContent>
                 </Popover>
-                <FormMessage className="font-inter text-destructive" />
+                <FormMessage className="font-inter text-xs text-destructive" />
               </FormItem>
             )}
           />
@@ -173,12 +183,13 @@ export default function CreateResidentForm() {
               <FormItem>
                 <FormLabel className="flex items-center justify-start gap-1 font-inter text-primary">
                   Gender
+                  <AsteriskIcon className="h-3 w-3 text-destructive" />
                 </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <FormControl className="font-inter font-medium text-muted-foreground shadow-md">
+                  <FormControl className="font-inter font-medium text-muted-foreground shadow-md hover:bg-accent">
                     <SelectTrigger>
                       <SelectValue placeholder="Select your gender" />
                     </SelectTrigger>
@@ -192,12 +203,12 @@ export default function CreateResidentForm() {
                     </SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage className="font-inter text-xs text-destructive" />
               </FormItem>
             )}
           />
         </div>
-        <div className="grid grid-cols-2 gap-3 pt-4">
+        <div className="grid grid-cols-2 gap-4 py-4">
           <FormField
             control={form.control}
             name="phone"
@@ -210,10 +221,11 @@ export default function CreateResidentForm() {
                 <FormControl>
                   <Input
                     {...field}
+                    value={field.value || ""}
                     className="font-inter text-neutral-800 shadow-md focus-visible:ring-1"
                   />
                 </FormControl>
-                <FormMessage className="font-inter text-destructive" />
+                <FormMessage className="font-inter text-xs text-destructive" />
               </FormItem>
             )}
           />
@@ -224,12 +236,13 @@ export default function CreateResidentForm() {
               <FormItem>
                 <FormLabel className="flex items-center justify-start gap-1 font-inter text-primary">
                   Phone Type
+                  <AsteriskIcon className="h-3 w-3 text-destructive" />
                 </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <FormControl className="font-inter font-medium text-muted-foreground shadow-md">
+                  <FormControl className="font-inter font-medium text-muted-foreground shadow-md hover:bg-accent">
                     <SelectTrigger>
                       <SelectValue placeholder="Select phone type" />
                     </SelectTrigger>
@@ -246,12 +259,12 @@ export default function CreateResidentForm() {
                     </SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage className="font-inter text-xs text-destructive" />
               </FormItem>
             )}
           />
         </div>
-        <div className="grid grid-cols-1 gap-3 pt-4">
+        <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="email"
@@ -264,21 +277,21 @@ export default function CreateResidentForm() {
                 <FormControl>
                   <Input
                     {...field}
+                    value={field.value || ""}
                     className="font-inter text-neutral-800 shadow-md focus-visible:ring-1"
                   />
                 </FormControl>
-                <FormMessage className="font-inter text-destructive" />
+                <FormMessage className="font-inter text-xs text-destructive" />
               </FormItem>
             )}
           />
+          <DialogFooter className="items-end justify-end gap-4 space-x-0 sm:space-x-0">
+            <PrimaryButton type="submit">Submit</PrimaryButton>
+            <DialogClose asChild>
+              <DestructiveButton>Exit</DestructiveButton>
+            </DialogClose>
+          </DialogFooter>
         </div>
-
-        <DialogFooter className="pt-8">
-          <PrimaryButton type="submit">Submit</PrimaryButton>
-          <DialogClose asChild>
-            <DestructiveButton>Exit</DestructiveButton>
-          </DialogClose>
-        </DialogFooter>
       </form>
     </Form>
   );

@@ -17,7 +17,7 @@ export default function CreateResidentButton() {
           Add
         </Button>
       </DialogTrigger>
-      <DialogContent className="p-8 sm:min-w-[512px]">
+      <DialogContent className="p-10 sm:min-w-[512px]">
         <DialogHeader className="font-inter text-primary">
           <DialogTitle>Add a new resident</DialogTitle>
           <DialogDescription>
