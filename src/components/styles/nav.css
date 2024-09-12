@@ -41,7 +41,7 @@
 }
 
 .arrow {
-  @apply origin-center transition-transform duration-500;
+  @apply h-4 w-4 origin-center transition-transform duration-500;
 }
 
 .link:hover .arrow,

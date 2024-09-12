@@ -4,7 +4,7 @@ import Link from "next/link";
 import { type NavItem, type NavSubItem, navItems } from "~/data/navItems";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { CaretDownIcon } from "@radix-ui/react-icons";
+import { ChevronDown } from "lucide-react";
 import "../styles/nav.css";
 
 interface MenuItemProps {
@@ -54,7 +54,7 @@ const MenuItem = ({
       >
         {item.icon && <item.icon size="1.5em" />}
         {item.name}
-        {item.submenu ? <CaretDownIcon className="arrow" /> : null}
+        {item.submenu ? <ChevronDown className="arrow" /> : null}
       </Link>
       {item.submenu && showDropdown === item.name && (
         <ul

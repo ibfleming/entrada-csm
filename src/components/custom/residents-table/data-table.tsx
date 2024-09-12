@@ -35,7 +35,7 @@ import {
 } from "@/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
 import { Pagination } from "./pagination";
-import CreateResident from "./create-button";
+import ResidentForm from "./resident-form";
 
 interface ResidentDataTableProps<Resident> {
   columns: ColumnDef<Resident>[];
@@ -87,7 +87,7 @@ export function ResidentDataTable<Resident>({
             }}
             className="w-[100vw] max-w-sm font-inter text-neutral-800 shadow-md focus-visible:ring-1"
           />
-          <CreateResident />
+          <ResidentForm />
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger className="menu-trigger shadow-md" asChild>

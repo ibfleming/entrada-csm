@@ -1,36 +1,14 @@
-import { GoHome as ResidentsIcon } from "react-icons/go";
-import { HiOutlinePencilSquare as ApplicantsIcon } from "react-icons/hi2";
-import { LiaToolsSolid as ToolsIcon } from "react-icons/lia";
-import { MdOutlineSpaceDashboard as DashboardIcon } from "react-icons/md";
-import {
-  TbReportSearch as DataReportsIcon,
-  TbUsers as LeadsIcon,
-} from "react-icons/tb";
-import { type IconType } from "react-icons/lib";
-import {
-  type Icon,
-  IconBuildingCommunity,
-  IconBuildingStore,
-  IconContract,
-  IconHammer,
-  IconHomeEdit,
-  IconLayoutDashboard,
-  IconLogs,
-  IconPackage,
-  IconRecycle,
-  IconReport,
-  IconUsers,
-} from "@tabler/icons-react";
+import { type LucideIcon } from "lucide-react";
 
 export type NavSubItem = {
   name: string;
-  icon: Icon;
+  icon?: LucideIcon;
   link: string;
 };
 
 export type NavItem = {
   name: string;
-  icon: IconType;
+  icon?: LucideIcon;
   link: string;
   submenu?: NavSubItem[];
 };
@@ -38,93 +16,93 @@ export type NavItem = {
 export const navItems = [
   {
     name: "Dashboard",
-    icon: DashboardIcon,
+    icon: undefined,
     link: "/",
     submenu: [
       {
         name: "My Dashboard",
-        icon: IconLayoutDashboard,
+        icon: undefined,
         link: "/",
       },
       {
         name: "Leasing Center",
-        icon: IconContract,
+        icon: undefined,
         link: "/",
       },
     ],
   },
   {
     name: "Residents",
-    icon: ResidentsIcon,
+    icon: undefined,
     link: "/residents",
     submenu: [
       {
         name: "All Residents",
-        icon: IconUsers,
+        icon: undefined,
         link: "/",
       },
       {
         name: "Assign Units",
-        icon: IconHomeEdit,
+        icon: undefined,
         link: "/",
       },
       {
         name: "Maintenance",
-        icon: IconHammer,
+        icon: undefined,
         link: "/",
       },
       {
         name: "Renewals",
-        icon: IconRecycle,
+        icon: undefined,
         link: "/",
       },
       {
         name: "Packages",
-        icon: IconPackage,
+        icon: undefined,
         link: "/",
       },
       {
         name: "Community",
-        icon: IconBuildingCommunity,
+        icon: undefined,
         link: "/",
       },
     ],
   },
   {
     name: "Applicants",
-    icon: ApplicantsIcon,
+    icon: undefined,
     link: "/applicants",
   },
   {
     name: "Leads",
-    icon: LeadsIcon,
+    icon: undefined,
     link: "/leads",
   },
   {
     name: "Tools",
-    icon: ToolsIcon,
+    icon: undefined,
     link: "/tools",
     submenu: [
       {
         name: "Call Tracker Logs",
-        icon: IconLogs,
+        icon: undefined,
         link: "/",
       },
       {
         name: "Marketing Hub",
-        icon: IconBuildingStore,
+        icon: undefined,
         link: "/",
       },
     ],
   },
   {
     name: "Data & Reports",
-    icon: DataReportsIcon,
+    icon: undefined,
     link: "/reports",
     submenu: [
       {
         name: "Reporting",
-        icon: IconReport,
+        icon: undefined,
         link: "/",
       },
     ],

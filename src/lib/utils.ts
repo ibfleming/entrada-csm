@@ -6,22 +6,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatPhoneNumber(row: Resident): string {
-  // Remove all non-digit characters from the phone number
-  const digits = row.phone.replace(/\D+/g, "");
-
-  // Check if the phone number has exactly 10 digits
-  if (digits.length !== 10) {
-    throw new Error(
-      "Invalid phone number. Please enter a 10-digit phone number.",
-    );
-  }
-
-  // Format the phone number
-  const formattedPhoneNumber = `+1 (${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
-  return formattedPhoneNumber;
-}
-
 export const getFullName = (row: Resident) => {
   const lastName: string = row.last_name;
   const firstName: string = row.first_name;

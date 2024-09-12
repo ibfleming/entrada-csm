@@ -63,3 +63,10 @@
     @apply border-2 font-inter text-neutral-800 shadow-md focus-visible:ring-2;
   }
 }
+
+.lucide {
+  stroke-width: 1.5px;
+}
+.lucide * {
+  vector-effect: non-scaling-stroke;
+}

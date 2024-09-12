@@ -1,3 +1,5 @@
+import { TRPCError } from "@trpc/server";
+import { format } from "date-fns";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { residentSchema } from "~/lib/types";
@@ -61,8 +63,8 @@ export const userRouter = createTRPCRouter({
     .input(residentSchema)
     .mutation(async ({ ctx, input }) => {
       const randomNumbers = Math.floor(Math.random() * 1000);
-      const genUsername = `${input.first_name[0]}${input.last_name.slice(0, 4)}${randomNumbers}`;
-      console.log(genUsername);
+      const genUsername =
+        `${input.first_name[0]}${input.last_name.slice(0, 4)}${randomNumbers}`.toLowerCase();
 
       // Check for existing username, check if the username equals the generated username
       const existingUser = await ctx.db.query.users.findFirst({
@@ -71,12 +73,11 @@ export const userRouter = createTRPCRouter({
       });
 
       if (existingUser) {
-        throw new Error(
-          `Username '${genUsername}' OR e-mail is already taken!`,
-        );
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Username or email have already been taken!`,
+        });
       } else {
-        // Post to DB
-        // Hash password...
         await ctx.db.insert(users).values({
           username: genUsername,
           phone: input.phone,
@@ -87,7 +88,7 @@ export const userRouter = createTRPCRouter({
           middle_name: input.middle_name,
           last_name: input.last_name,
           gender: input.gender,
-          birth_date: input.birth_date,
+          birth_date: format(input.birth_date, "MM/dd/yyyy"),
         });
       }
     }),

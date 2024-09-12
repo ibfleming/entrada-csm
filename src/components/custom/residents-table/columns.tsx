@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/ui/button";
 import { GhostButton } from "@/custom/buttons";
-import { formatPhoneNumber, getBirthDate, getFullName } from "~/lib/utils";
+import { getBirthDate, getFullName } from "~/lib/utils";
 import "@/styles/dropdown.css";
 import { api } from "~/trpc/react";
 import {
@@ -119,8 +119,8 @@ const residentColumns: ColumnDef<Resident>[] = [
     id: "Phone Number",
     header: "Phone Number",
     cell: ({ row }) => {
-      const formattedPhoneNumber = formatPhoneNumber(row.original);
-      return <div>{formattedPhoneNumber}</div>;
+      // Format phone number!!!
+      return <div>{row.original.phone}</div>;
     },
   },
   // BIRTH DATE COLUMN
@@ -165,10 +165,6 @@ const residentColumns: ColumnDef<Resident>[] = [
     cell: ({ row }) => {
       const date: Date = row.original.created_at;
       const formattedDate = date.toLocaleString("en-US", {
-        second: "numeric",
-        minute: "numeric",
-        hour12: true,
-        hour: "numeric",
         month: "2-digit",
         day: "2-digit",
         year: "2-digit",
