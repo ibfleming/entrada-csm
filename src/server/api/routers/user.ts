@@ -75,7 +75,7 @@ export const userRouter = createTRPCRouter({
       if (existingUser) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: `Username or email have already been taken!`,
+          message: `Username or email has already been taken!`,
         });
       } else {
         await ctx.db.insert(users).values({
@@ -88,7 +88,7 @@ export const userRouter = createTRPCRouter({
           middle_name: input.middle_name,
           last_name: input.last_name,
           gender: input.gender,
-          birth_date: format(input.birth_date, "MM/dd/yyyy"),
+          birth_date: format(input.birth_date, "P"),
         });
       }
     }),

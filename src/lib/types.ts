@@ -53,7 +53,7 @@ export const residentSchema = z.object({
     .max(256, {
       message: "Middle name must be at most 256 characters.",
     })
-    .nullish(),
+    .nullable(),
   last_name: z
     .string({
       required_error: "Last name is required.",

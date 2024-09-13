@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/ui/button";
 import { GhostButton } from "@/custom/buttons";
-import { getBirthDate, getFullName } from "~/lib/utils";
+import { getFullName } from "~/lib/utils";
 import "@/styles/dropdown.css";
 import { api } from "~/trpc/react";
 import {
@@ -27,6 +27,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/ui/tooltip";
+import { format, parseISO } from "date-fns";
 
 type Resident = {
   id: number;
@@ -119,7 +120,6 @@ const residentColumns: ColumnDef<Resident>[] = [
     id: "Phone Number",
     header: "Phone Number",
     cell: ({ row }) => {
-      // Format phone number!!!
       return <div>{row.original.phone}</div>;
     },
   },
@@ -136,14 +136,15 @@ const residentColumns: ColumnDef<Resident>[] = [
         </GhostButton>
       );
     },
-    accessorFn: (row) => getBirthDate(new Date(row.birth_date)),
+    accessorFn: (row) =>
+      new Date().getFullYear() - parseISO(row.birth_date).getFullYear(),
     cell: ({ row }) => {
-      const birthDate = new Date(row.original.birth_date);
-      const age = new Date().getFullYear() - birthDate.getFullYear();
+      const date = parseISO(row.original.birth_date);
+      const age = new Date().getFullYear() - date.getFullYear();
 
       return (
         <div className="flex items-center justify-start gap-2">
-          {getBirthDate(birthDate)}
+          {format(date, "P")}
           <TooltipProvider delayDuration={500}>
             <Tooltip>
               <TooltipTrigger className="cursor-default rounded-md bg-primary px-1 text-background">
@@ -163,13 +164,7 @@ const residentColumns: ColumnDef<Resident>[] = [
     id: "Created At",
     header: "Created At",
     cell: ({ row }) => {
-      const date: Date = row.original.created_at;
-      const formattedDate = date.toLocaleString("en-US", {
-        month: "2-digit",
-        day: "2-digit",
-        year: "2-digit",
-      });
-      return <div>{formattedDate}</div>;
+      return <div>{format(row.original.created_at, "P")}</div>;
     },
   },
   // ACTION

@@ -64,6 +64,10 @@
   }
 }
 
+.form-button {
+  @apply inline-flex h-9 w-9 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background align-middle font-inter text-sm font-medium text-primary shadow-sm transition-colors hover:bg-accent hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
+}
+
 .lucide {
   stroke-width: 1.5px;
 }
