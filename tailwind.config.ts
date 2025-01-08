@@ -5,17 +5,16 @@ import type { Config } from 'tailwindcss';
 
 export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
-
 	theme: {
-		colors: {
-			primary: '#4b916e',
-			secondary: '#6cb7a0',
-			tertiary: '#8fd6c3',
-			border: '#b4e9d5',
-			background: '#ffffff'
-		},
-		extend: {}
+		extend: {
+			colors: {
+				primary: '#4b916e',
+				secondary: '#6cb7a0',
+				tertiary: '#8fd6c3',
+				border: '#b4e9d5',
+				background: '#ffffff'
+			}
+		}
 	},
-
 	plugins: [typography, forms, containerQueries]
 } satisfies Config;
