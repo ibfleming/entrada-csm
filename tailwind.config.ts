@@ -8,11 +8,17 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				primary: '#4b916e',
+				primary: { DEFAULT: '#4b916e', dark: '#376B51' },
+				'primary-hover': '#26915B',
 				secondary: '#6cb7a0',
 				tertiary: '#8fd6c3',
 				border: '#b4e9d5',
-				background: '#ffffff'
+				background: { DEFAULT: '#ffffff', card: '#D6D3D1' }
+			},
+			fontFamily: {
+				funnel: ['Funnel Display Variable', 'sans-serif'],
+				ibm: ['IBM Plex Sans', 'sans-serif'],
+				inter: ['Inter Variable', 'sans-serif']
 			}
 		}
 	},

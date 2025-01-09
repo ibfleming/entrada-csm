@@ -1,3 +1,11 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+@layer base {
+	:global(body) {
+		font-family: 'Funnel Display Variable', sans-serif, system-ui;
+		font-family: 'IBM Plex Sans', sans-serif, system-ui;
+		font-family: 'Inter Variable', sans-serif, system-ui;
+	}
+}
