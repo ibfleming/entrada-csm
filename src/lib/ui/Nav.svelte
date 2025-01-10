@@ -1,18 +1,18 @@
 <script lang="ts">
-	import Breadcrumbs from './Breadcrumbs.svelte';
 	const navItems = [
-		{ name: 'Dashboard', url: '/' },
+		{ name: 'Dashboard', url: '/dashboard' },
 		{ name: 'Residents', url: '/residents' },
 		{ name: 'Leads', url: '/leads' },
-		{ name: 'Tools', url: '/tools' }
+		{ name: 'Tools', url: '/tools' },
+		{ name: '404', url: '/404' }
 	];
 </script>
 
-<nav class="font-ibm rounded-t-md bg-primary text-white">
+<nav class="rounded-t-md bg-primary font-inter text-white">
 	<ul class="flex">
 		{#each navItems as item, index}
 			<li
-				class=" hover:bg-primary-dark border-r-2 border-background text-sm outline-none ring-0 transition-colors duration-300 ease-in-out {index ===
+				class=" border-r-2 border-background text-sm outline-none ring-0 transition-colors duration-300 ease-in-out hover:bg-primary-dark {index ===
 				0
 					? 'rounded-tl-md'
 					: ''}"

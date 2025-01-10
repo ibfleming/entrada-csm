@@ -1,7 +1,9 @@
-import type { Handle } from '@sveltejs/kit';
+import { type Handle } from '@sveltejs/kit';
 import * as auth from '$lib/server/auth.js';
 
+// Server handle for Authentication
 const handleAuth: Handle = async ({ event, resolve }) => {
+	console.log('handleAuth', event);
 	const sessionToken = event.cookies.get(auth.sessionCookieName);
 	if (!sessionToken) {
 		event.locals.user = null;
