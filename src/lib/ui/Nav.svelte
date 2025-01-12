@@ -3,8 +3,7 @@
 		{ name: 'Dashboard', url: '/dashboard' },
 		{ name: 'Residents', url: '/residents' },
 		{ name: 'Leads', url: '/leads' },
-		{ name: 'Tools', url: '/tools' },
-		{ name: '404', url: '/404' }
+		{ name: 'Tools', url: '/tools' }
 	];
 </script>
 

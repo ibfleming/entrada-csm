@@ -1,13 +1,20 @@
 import { type Handle } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
+
 import * as auth from '$lib/server/auth.js';
 
 // Server handle for Authentication
 const handleAuth: Handle = async ({ event, resolve }) => {
-	console.log('handleAuth', event);
 	const sessionToken = event.cookies.get(auth.sessionCookieName);
 	if (!sessionToken) {
 		event.locals.user = null;
 		event.locals.session = null;
+
+		// Redirect to login if accessing a protected route
+		if (!event.url.pathname.startsWith('/auth')) {
+			throw redirect(302, '/auth/login');
+		}
+
 		return resolve(event);
 	}
 
