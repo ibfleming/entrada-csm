@@ -1,21 +1,29 @@
 <script lang="ts">
 	import type { Lead } from '$lib/types';
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
-	import { addPagination } from 'svelte-headless-table/plugins';
+	import { addPagination, addSortBy } from 'svelte-headless-table/plugins';
 	import { Button } from '$lib/components/ui/button';
 	import DataTableActions from './data-table-actions.svelte';
 	import * as Table from '$lib/components/ui/table';
 	import { readable } from 'svelte/store';
+	import { ArrowUpDown } from 'lucide-svelte';
 
 	let { leads }: { leads: Lead[] } = $props();
 
 	const table = createTable(readable(leads), {
-		page: addPagination() /* { initialPageSize: 20 } */
+		page: addPagination() /* { initialPageSize: 20 } */,
+		sort: addSortBy()
 	});
+
 	const columns = table.createColumns([
 		table.column({
 			accessor: 'id',
-			header: 'ID'
+			header: 'ID',
+			plugins: {
+				sort: {
+					disable: true
+				}
+			}
 		}),
 		table.column({
 			id: 'fullName',
@@ -32,11 +40,21 @@
 			cell: ({ value }) => {
 				const val = String(value);
 				return `+1 (${val.slice(0, 3)}) ${val.slice(3, 6)}-${val.slice(6)}`;
+			},
+			plugins: {
+				sort: {
+					disable: true
+				}
 			}
 		}),
 		table.column({
 			accessor: 'floorPlan',
-			header: 'Floor Plan'
+			header: 'Floor Plan',
+			plugins: {
+				sort: {
+					disable: true
+				}
+			}
 		}),
 		table.column({
 			id: 'actions',
@@ -44,11 +62,18 @@
 			header: '',
 			cell: ({ value }) => {
 				return createRender(DataTableActions, { id: value });
+			},
+			plugins: {
+				sort: {
+					disable: true
+				}
 			}
 		})
 	]);
+
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates } =
 		table.createViewModel(columns);
+
 	const { hasNextPage, hasPreviousPage, pageIndex, pageCount } = pluginStates.page;
 </script>
 
@@ -66,9 +91,16 @@
 						<Subscribe rowAttrs={headerRow.attrs()}>
 							<Table.Row>
 								{#each headerRow.cells as cell (cell.id)}
-									<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
+									<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
 										<Table.Head {...attrs}>
-											<Render of={cell.render()} />
+											{#if cell.id === 'fullName' || cell.id === 'email'}
+												<Button variant="ghost" on:click={props.sort.toggle}>
+													<Render of={cell.render()} />
+													<ArrowUpDown class="ml-2 size-4" />
+												</Button>
+											{:else}
+												<Render of={cell.render()} />
+											{/if}
 										</Table.Head>
 									</Subscribe>
 								{/each}
