@@ -1,14 +1,17 @@
 <script lang="ts">
-	import type { _ } from '$env/static/private';
 	import type { Lead } from '$lib/types';
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
+	import { addPagination } from 'svelte-headless-table/plugins';
+	import { Button } from '$lib/components/ui/button';
 	import DataTableActions from './data-table-actions.svelte';
 	import * as Table from '$lib/components/ui/table';
 	import { readable } from 'svelte/store';
 
 	let { leads }: { leads: Lead[] } = $props();
 
-	const table = createTable(readable(leads));
+	const table = createTable(readable(leads), {
+		page: addPagination() /* { initialPageSize: 20 } */
+	});
 	const columns = table.createColumns([
 		table.column({
 			accessor: 'id',
@@ -17,7 +20,7 @@
 		table.column({
 			id: 'fullName',
 			accessor: (row) => `${row.firstName} ${row.lastName}`,
-			header: 'Full Name'
+			header: 'Lead Name'
 		}),
 		table.column({
 			accessor: 'email',
@@ -36,6 +39,7 @@
 			header: 'Floor Plan'
 		}),
 		table.column({
+			id: 'actions',
 			accessor: ({ id }) => id,
 			header: '',
 			cell: ({ value }) => {
@@ -43,44 +47,96 @@
 			}
 		})
 	]);
-	const { headerRows, pageRows, tableAttrs, tableBodyAttrs } = table.createViewModel(columns);
+	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates } =
+		table.createViewModel(columns);
+	const { hasNextPage, hasPreviousPage, pageIndex, pageCount } = pluginStates.page;
 </script>
 
-<div class="rounded-md border">
-	<Table.Root {...$tableAttrs}>
-		<Table.Header>
-			{#each $headerRows as headerRow}
-				<Subscribe rowAttrs={headerRow.attrs()}>
-					<Table.Row>
-						{#each headerRow.cells as cell (cell.id)}
-							<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
-								<Table.Head {...attrs}>
-									<Render of={cell.render()} />
-								</Table.Head>
-							</Subscribe>
-						{/each}
-					</Table.Row>
-				</Subscribe>
-			{/each}
-		</Table.Header>
-		<Table.Body {...$tableBodyAttrs}>
-			{#each $pageRows as row (row.id)}
-				<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-					<Table.Row {...rowAttrs}>
-						{#each row.cells as cell (cell.id)}
-							<Subscribe attrs={cell.attrs()} let:attrs>
-								<Table.Cell {...attrs}>
-									{#if cell.column.id === 'fullName'}
-										<div class="font-medium"><Render of={cell.render()} /></div>
-									{:else}
-										<Render of={cell.render()} />
-									{/if}
-								</Table.Cell>
-							</Subscribe>
-						{/each}
-					</Table.Row>
-				</Subscribe>
-			{/each}
-		</Table.Body>
-	</Table.Root>
-</div>
+{#if leads.length === 0 || leads === undefined}
+	<div>
+		<p class="text-center text-sm text-red-500">No leads found.</p>
+	</div>
+{:else}
+	<div class="space-y-4">
+		<!-- Data Table -->
+		<div class="rounded-md border shadow-md">
+			<Table.Root {...$tableAttrs}>
+				<Table.Header>
+					{#each $headerRows as headerRow}
+						<Subscribe rowAttrs={headerRow.attrs()}>
+							<Table.Row>
+								{#each headerRow.cells as cell (cell.id)}
+									<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
+										<Table.Head {...attrs}>
+											<Render of={cell.render()} />
+										</Table.Head>
+									</Subscribe>
+								{/each}
+							</Table.Row>
+						</Subscribe>
+					{/each}
+				</Table.Header>
+				<Table.Body {...$tableBodyAttrs}>
+					{#each $pageRows as row (row.id)}
+						<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
+							<Table.Row
+								{...rowAttrs}
+								class="transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+							>
+								{#each row.cells as cell (cell.id)}
+									<Subscribe attrs={cell.attrs()} let:attrs>
+										<Table.Cell class="p-4" {...attrs}>
+											{#if cell.column.id === 'fullName'}
+												<div class="font-medium text-primary">
+													<Render of={cell.render()} />
+												</div>
+											{:else if cell.column.id === 'email'}
+												<div class="text-sm text-muted-foreground">
+													<Render of={cell.render()} />
+												</div>
+											{:else if cell.column.id === 'phoneNumber'}
+												<div class="text-sm font-light"><Render of={cell.render()} /></div>
+											{:else if cell.column.id === 'floorPlan'}
+												<div
+													class="inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
+												>
+													<Render of={cell.render()} />
+												</div>
+											{:else if cell.column.id === 'actions'}
+												<div class="flex gap-2 outline-none ring-0">
+													<Render of={cell.render()} />
+												</div>
+											{:else}
+												<Render of={cell.render()} />
+											{/if}
+										</Table.Cell>
+									</Subscribe>
+								{/each}
+							</Table.Row>
+						</Subscribe>
+					{/each}
+				</Table.Body>
+			</Table.Root>
+		</div>
+		<!-- Pagination -->
+		<div class="flex items-center justify-between px-2">
+			<div class="text-sm text-muted-foreground">
+				Page {$pageIndex + 1} of {$pageCount}
+			</div>
+			<div class="flex items-center justify-end space-x-4 text-primary">
+				<Button
+					variant="outline"
+					size="sm"
+					on:click={() => ($pageIndex = $pageIndex - 1)}
+					disabled={!$hasPreviousPage}>Previous</Button
+				>
+				<Button
+					variant="outline"
+					size="sm"
+					disabled={!$hasNextPage}
+					on:click={() => ($pageIndex = $pageIndex + 1)}>Next</Button
+				>
+			</div>
+		</div>
+	</div>
+{/if}

@@ -25,7 +25,7 @@ async function main() {
 						values: ['1 BED 1 BATH', '2 BED 2 BATH', '3 BED 2 BATH', '4 BED 4 BATH']
 					})
 				},
-				count: 50
+				count: 256
 			}
 		}));
 

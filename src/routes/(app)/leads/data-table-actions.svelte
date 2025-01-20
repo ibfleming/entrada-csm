@@ -12,10 +12,10 @@
 			variant="ghost"
 			builders={[builder]}
 			size="icon"
-			class="default-ring relative outline-none"
+			class="default-ring relative rounded-full outline-none focus:ring-offset-4"
 		>
 			<span class="sr-only">Open menu</span>
-			<Ellipsis class="size-4" />
+			<Ellipsis class="size-4 outline-none ring-0" />
 		</Button>
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content>
