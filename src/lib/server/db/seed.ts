@@ -1,6 +1,6 @@
 import { reset, seed } from 'drizzle-seed';
 import { drizzle } from 'drizzle-orm/postgres-js';
-import { schema } from '$lib';
+import * as schema from '$lib/server/db/schema';
 import { env } from '$env/dynamic/private';
 import { exit } from 'process';
 import { lead } from './schema';
@@ -8,7 +8,7 @@ import { lead } from './schema';
 async function main() {
 	try {
 		// Establish database connection
-		const db = drizzle(env.DATABASE_URL);
+		const db = drizzle(env.DATABASE_URL!);
 
 		// Reset tables
 		await reset(db, schema);
