@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import { CircleUser, Search } from 'lucide-svelte';
 	let { title = 'Company Name', user = null } = $props();
 	let inputRef: HTMLInputElement;
 	function focusInput() {
@@ -8,37 +9,21 @@
 	}
 </script>
 
-<header class="flex items-center justify-between px-8 py-4">
-	<a class="outline-none ring-0" href="/dashboard">
-		<h1 class="flex items-center gap-4">
-			<span class="text-2xl font-bold uppercase text-primary">{title}</span>
-			<span class="mt-2 text-xs text-neutral-600">by Ian Fleming</span>
-		</h1>
+<header class="grid grid-cols-2 items-center justify-between p-4 px-8">
+	<a class="w-fit outline-none ring-0" href="/dashboard">
+		<h1 class="text-2xl font-black lowercase text-primary">{title}</h1>
 	</a>
 	<div class="flex items-center justify-end gap-4">
 		<div
 			role="button"
 			tabindex="0"
 			aria-label="Search input"
-			class="flex h-8 w-full flex-1 items-center justify-items-start gap-1.5 rounded-md border border-gray-300 px-2 text-gray-600 shadow-md outline-none focus-within:ring-1 focus-within:ring-primary hover:cursor-text"
+			class="flex h-8 max-w-2xl flex-1 items-center justify-items-start gap-1.5 rounded-md border border-gray-300 px-2 text-gray-600 shadow-md outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-opacity-50 focus-within:ring-offset-2 hover:cursor-text focus:outline-none"
 			onclick={focusInput}
 			onfocus={focusInput}
 			onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && focusInput()}
 		>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="2"
-				stroke="#4b916e"
-				class="size-5"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-				/>
-			</svg>
+			<Search class="size-5 text-primary" />
 			<input
 				type="text"
 				id="search"
@@ -53,27 +38,13 @@
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild let:builder>
 				<Button
-					size="icon"
 					variant="ghost"
-					class="hover:text-primary-dark size-7 text-primary hover:bg-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-opacity-50 focus-visible:ring-offset-2"
 					builders={[builder]}
+					size="icon"
+					class="default-ring relative rounded-full focus:outline-none"
 				>
-					<svg
-						data-slot="icon"
-						aria-hidden="true"
-						fill="none"
-						stroke-width="2"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
-						xmlns="http://www.w3.org/2000/svg"
-						class="size-7"
-					>
-						<path
-							d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						></path>
-					</svg>
+					<span class="sr-only">Open menu</span>
+					<CircleUser class="size-7 text-primary" />
 				</Button>
 			</DropdownMenu.Trigger>
 

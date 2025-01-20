@@ -29,6 +29,9 @@ importers:
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
+      svelte-headless-table:
+        specifier: ^0.18.3
+        version: 0.18.3(svelte@5.19.0)
       vite-node:
         specifier: ^3.0.2
         version: 3.0.2(@types/node@22.10.7)
@@ -2058,6 +2061,26 @@ packages:
       svelte:
         optional: true
 
+  svelte-headless-table@0.18.3:
+    resolution: {integrity: sha512-1zVnqXW0dvn6ZceYa94k+ziK+w5Dj9nlWYTQGXBv2JhM0resj9w7CWpclZK1TJwAALfEeH4InPBPO87L5fr+nQ==}
+    peerDependencies:
+      svelte: ^4.0.0
+
+  svelte-keyed@2.0.0:
+    resolution: {integrity: sha512-7TeEn+QbJC2OJrHiuM0T8vMBkms3DNpTE+Ir+NtnVBnBMA78aL4f1ft9t0Hn/pBbD/TnIXi4YfjFRAgtN+DZ5g==}
+    peerDependencies:
+      svelte: ^4.0.0
+
+  svelte-render@2.0.1:
+    resolution: {integrity: sha512-RpB0SurwXm4xhjvHHtjeqMmvd645FURb79GFOotScOSqnKK5vpqBgoBPGC0pp+E/eZgDSQ9rRAdn/+N4ys1mXQ==}
+    peerDependencies:
+      svelte: ^4.0.0
+
+  svelte-subscribe@2.0.1:
+    resolution: {integrity: sha512-eKXIjLxB4C7eQWPqKEdxcGfNXm2g/qJ67zmEZK/GigCZMfrTR3m7DPY93R6MX+5uoqM1FRYxl8LZ1oy4URWi2A==}
+    peerDependencies:
+      svelte: ^4.0.0
+
   svelte@5.19.0:
     resolution: {integrity: sha512-qvd2GvvYnJxS/MteQKFSMyq8cQrAAut28QZ39ySv9k3ggmhw4Au4Rfcsqva74i0xMys//OhbhVCNfXPrDzL/Bg==}
     engines: {node: '>=18'}
@@ -3810,6 +3833,26 @@ snapshots:
       postcss: 8.5.1
       postcss-scss: 4.0.9(postcss@8.5.1)
     optionalDependencies:
+      svelte: 5.19.0
+
+  svelte-headless-table@0.18.3(svelte@5.19.0):
+    dependencies:
+      svelte: 5.19.0
+      svelte-keyed: 2.0.0(svelte@5.19.0)
+      svelte-render: 2.0.1(svelte@5.19.0)
+      svelte-subscribe: 2.0.1(svelte@5.19.0)
+
+  svelte-keyed@2.0.0(svelte@5.19.0):
+    dependencies:
+      svelte: 5.19.0
+
+  svelte-render@2.0.1(svelte@5.19.0):
+    dependencies:
+      svelte: 5.19.0
+      svelte-subscribe: 2.0.1(svelte@5.19.0)
+
+  svelte-subscribe@2.0.1(svelte@5.19.0):
+    dependencies:
       svelte: 5.19.0
 
   svelte@5.19.0:

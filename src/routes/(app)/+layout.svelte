@@ -7,7 +7,7 @@
 
 <main class="font-inter">
 	<div class="px-4">
-		<Header title="Zion Residential" user={data.user} />
+		<Header title="Zion" user={data.user} />
 		<Navigation />
 		<Breadcrumbs />
 		<div class="h-4 w-full rounded-b-md bg-primary drop-shadow-md"></div>

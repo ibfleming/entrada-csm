@@ -1,4 +1,5 @@
 <script lang="ts">
+	import DataTable from './data-table.svelte';
 	import type { Lead } from '$lib/types.js';
 
 	let { data } = $props();
@@ -9,14 +10,6 @@
 	<title>Leads</title>
 </svelte:head>
 
-<div class="container">
-	<h1>Leads</h1>
-	{#each leads as lead}
-		<div class="card">
-			<h2>{lead.firstName} {lead.lastName}</h2>
-			<p>{lead.email}</p>
-			<p>{lead.phoneNumber}</p>
-			<p>{lead.floorPlan}</p>
-		</div>
-	{/each}
+<div class="p-8">
+	<DataTable {leads} />
 </div>

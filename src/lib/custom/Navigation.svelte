@@ -17,7 +17,7 @@
 					: ''}"
 			>
 				<a
-					class="block px-8 py-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-opacity-50 focus-visible:ring-offset-2
+					class="default-ring block px-8 py-2.5 focus:outline-none focus:ring-offset-1
 							{index === 0 ? 'focus:rounded-tl-md' : ''}"
 					href={item.url}
 				>
