@@ -1,8 +1,9 @@
 <script lang="ts">
 	import type { Lead } from '$lib/types';
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
-	import { addPagination, addSortBy } from 'svelte-headless-table/plugins';
+	import { addPagination, addSortBy, addTableFilter } from 'svelte-headless-table/plugins';
 	import { Button } from '$lib/components/ui/button';
+	import { Input } from '$lib/components/ui/input';
 	import DataTableActions from './data-table-actions.svelte';
 	import * as Table from '$lib/components/ui/table';
 	import { readable } from 'svelte/store';
@@ -12,7 +13,10 @@
 
 	const table = createTable(readable(leads), {
 		page: addPagination() /* { initialPageSize: 20 } */,
-		sort: addSortBy()
+		sort: addSortBy(),
+		filter: addTableFilter({
+			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
+		})
 	});
 
 	const columns = table.createColumns([
@@ -22,6 +26,9 @@
 			plugins: {
 				sort: {
 					disable: true
+				},
+				filter: {
+					exclude: true
 				}
 			}
 		}),
@@ -44,6 +51,9 @@
 			plugins: {
 				sort: {
 					disable: true
+				},
+				filter: {
+					exclude: true
 				}
 			}
 		}),
@@ -53,6 +63,9 @@
 			plugins: {
 				sort: {
 					disable: true
+				},
+				filter: {
+					exclude: true
 				}
 			}
 		}),
@@ -66,6 +79,9 @@
 			plugins: {
 				sort: {
 					disable: true
+				},
+				filter: {
+					exclude: true
 				}
 			}
 		})
@@ -75,6 +91,7 @@
 		table.createViewModel(columns);
 
 	const { hasNextPage, hasPreviousPage, pageIndex, pageCount } = pluginStates.page;
+	const { filterValue } = pluginStates.filter;
 </script>
 
 {#if leads.length === 0 || leads === undefined}
@@ -82,7 +99,15 @@
 		<p class="text-center text-sm text-red-500">No leads found.</p>
 	</div>
 {:else}
-	<div class="space-y-4">
+	<div>
+		<div class="flex items-center py-4">
+			<Input
+				class="max-w-sm"
+				placeholder="Filter emails or full name..."
+				type="text"
+				bind:value={$filterValue}
+			/>
+		</div>
 		<!-- Data Table -->
 		<div class="rounded-md border shadow-md">
 			<Table.Root {...$tableAttrs}>
@@ -94,7 +119,11 @@
 									<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
 										<Table.Head {...attrs}>
 											{#if cell.id === 'fullName' || cell.id === 'email'}
-												<Button variant="ghost" on:click={props.sort.toggle}>
+												<Button
+													variant="ghost"
+													class="default-ring inline-flex items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium outline-none transition-colors disabled:pointer-events-none disabled:opacity-50"
+													on:click={props.sort.toggle}
+												>
 													<Render of={cell.render()} />
 													<ArrowUpDown class="ml-2 size-4" />
 												</Button>
@@ -151,7 +180,7 @@
 			</Table.Root>
 		</div>
 		<!-- Pagination -->
-		<div class="flex items-center justify-between px-2">
+		<div class="flex items-center justify-between px-2 py-4">
 			<div class="text-sm text-muted-foreground">
 				Page {$pageIndex + 1} of {$pageCount}
 			</div>

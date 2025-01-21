@@ -11,7 +11,7 @@
 	<ul class="flex">
 		{#each navItems as item, index}
 			<li
-				class=" border-r-2 border-background text-sm outline-none ring-0 transition-colors duration-300 ease-in-out hover:bg-green-700 {index ===
+				class=" border-r-2 border-background text-sm outline-none ring-0 transition-colors duration-300 ease-in-out hover:bg-[#509a75] {index ===
 				0
 					? 'rounded-tl-md'
 					: ''}"
