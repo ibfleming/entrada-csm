@@ -1,5 +1,8 @@
 import { fontFamily } from 'tailwindcss/defaultTheme';
 import type { Config } from 'tailwindcss';
+import containerQueries from '@tailwindcss/container-queries';
+import typography from '@tailwindcss/typography';
+import forms from '@tailwindcss/forms';
 
 const config: Config = {
 	darkMode: ['class'],
@@ -59,7 +62,8 @@ const config: Config = {
 				inter: ['Inter Variable', ...fontFamily.sans]
 			}
 		}
-	}
+	},
+	plugins: [containerQueries, typography, forms]
 };
 
 export default config;

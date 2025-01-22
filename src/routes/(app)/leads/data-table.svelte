@@ -1,13 +1,19 @@
 <script lang="ts">
 	import type { Lead } from '$lib/types';
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
-	import { addPagination, addSortBy, addTableFilter } from 'svelte-headless-table/plugins';
+	import {
+		addPagination,
+		addSortBy,
+		addTableFilter,
+		addHiddenColumns
+	} from 'svelte-headless-table/plugins';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import DataTableActions from './data-table-actions.svelte';
 	import * as Table from '$lib/components/ui/table';
 	import { readable } from 'svelte/store';
-	import { ArrowUpDown } from 'lucide-svelte';
+	import { ArrowUpDown, Eye, ChevronDown } from 'lucide-svelte';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 
 	let { leads }: { leads: Lead[] } = $props();
 
@@ -16,7 +22,8 @@
 		sort: addSortBy(),
 		filter: addTableFilter({
 			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
-		})
+		}),
+		hide: addHiddenColumns()
 	});
 
 	const columns = table.createColumns([
@@ -87,11 +94,23 @@
 		})
 	]);
 
-	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates } =
+	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates, flatColumns } =
 		table.createViewModel(columns);
 
 	const { hasNextPage, hasPreviousPage, pageIndex, pageCount } = pluginStates.page;
 	const { filterValue } = pluginStates.filter;
+	let { hiddenColumnIds } = pluginStates.hide;
+
+	const ids = flatColumns.map((col) => col.id);
+	let hideForId = $state(Object.fromEntries(ids.map((id) => [id, true])));
+
+	const hidableCols = ['id', 'fullName', 'email', 'phoneNumber', 'floorPlan'];
+
+	$effect(() => {
+		$hiddenColumnIds = Object.entries(hideForId)
+			.filter(([, hide]) => !hide)
+			.map(([id]) => id);
+	});
 </script>
 
 {#if leads.length === 0 || leads === undefined}
@@ -100,13 +119,38 @@
 	</div>
 {:else}
 	<div>
-		<div class="flex items-center py-4">
+		<div class="flex items-center justify-between pb-4">
 			<Input
-				class="max-w-sm"
+				class="input-focus-visible max-w-sm"
 				placeholder="Filter emails or full name..."
 				type="text"
 				bind:value={$filterValue}
 			/>
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger asChild let:builder>
+					<Button
+						variant="outline"
+						size="sm"
+						builders={[builder]}
+						class="button-focus-visible text-primary hover:text-primary"
+					>
+						<Eye class="mr-1.5 size-5" strokeWidth={2} />
+						Columns
+					</Button>
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content align="end" class="border-2">
+					{#each flatColumns as col}
+						{#if hidableCols.includes(col.id)}
+							<DropdownMenu.CheckboxItem
+								bind:checked={hideForId[col.id]}
+								class="cursor-pointer font-semibold text-muted-foreground"
+							>
+								{col.header}
+							</DropdownMenu.CheckboxItem>
+						{/if}
+					{/each}
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
 		</div>
 		<!-- Data Table -->
 		<div class="rounded-md border shadow-md">
@@ -121,7 +165,7 @@
 											{#if cell.id === 'fullName' || cell.id === 'email'}
 												<Button
 													variant="ghost"
-													class="default-ring inline-flex items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium outline-none transition-colors disabled:pointer-events-none disabled:opacity-50"
+													class="button-focus-visible"
 													on:click={props.sort.toggle}
 												>
 													<Render of={cell.render()} />
@@ -147,7 +191,11 @@
 								{#each row.cells as cell (cell.id)}
 									<Subscribe attrs={cell.attrs()} let:attrs>
 										<Table.Cell class="p-4" {...attrs}>
-											{#if cell.column.id === 'fullName'}
+											{#if cell.column.id === 'id'}
+												<div class="font-mono text-muted-foreground">
+													<Render of={cell.render()} />
+												</div>
+											{:else if cell.column.id === 'fullName'}
 												<div class="font-medium text-primary">
 													<Render of={cell.render()} />
 												</div>
@@ -156,7 +204,9 @@
 													<Render of={cell.render()} />
 												</div>
 											{:else if cell.column.id === 'phoneNumber'}
-												<div class="text-sm font-light"><Render of={cell.render()} /></div>
+												<div class="text-sm font-light">
+													<Render of={cell.render()} />
+												</div>
 											{:else if cell.column.id === 'floorPlan'}
 												<div
 													class="inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
@@ -187,13 +237,13 @@
 			<div class="flex items-center justify-end space-x-4 text-primary">
 				<Button
 					variant="outline"
-					size="sm"
+					class="button-focus-visible"
 					on:click={() => ($pageIndex = $pageIndex - 1)}
 					disabled={!$hasPreviousPage}>Previous</Button
 				>
 				<Button
 					variant="outline"
-					size="sm"
+					class="button-focus-visible"
 					disabled={!$hasNextPage}
 					on:click={() => ($pageIndex = $pageIndex + 1)}>Next</Button
 				>

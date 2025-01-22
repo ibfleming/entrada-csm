@@ -31,7 +31,7 @@ export const actions: Actions = {
 		let results;
 		try {
 			results = await db.select().from(table.user).where(eq(table.user.username, username));
-		} catch (e) {
+		} catch {
 			return fail(500, { message: 'An error has occurred' });
 		}
 
@@ -83,7 +83,7 @@ export const actions: Actions = {
 			const sessionToken = auth.generateSessionToken();
 			const session = await auth.createSession(sessionToken, userId);
 			auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
-		} catch (e) {
+		} catch {
 			return fail(500, { message: 'An error has occurred' });
 		}
 

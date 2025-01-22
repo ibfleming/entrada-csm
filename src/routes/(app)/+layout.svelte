@@ -5,12 +5,12 @@
 	let { data, children } = $props();
 </script>
 
-<main class="font-inter">
-	<div class="px-4">
+<main class="font-inter @container">
+	<div class="@lg:px-4">
 		<Header title="Zion" user={data.user} />
 		<Navigation />
 		<Breadcrumbs />
-		<div class="h-4 w-full rounded-b-md bg-primary drop-shadow-md"></div>
+		<div class="h-4 w-full bg-primary drop-shadow-md @lg:rounded-b-md"></div>
 	</div>
 	{@render children()}
 </main>

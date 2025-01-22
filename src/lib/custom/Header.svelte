@@ -9,7 +9,7 @@
 	}
 </script>
 
-<header class="grid grid-cols-2 items-center justify-between p-4 px-8">
+<header class="grid grid-cols-2 items-center justify-between p-4 @lg:px-8">
 	<a class="w-fit outline-none ring-0" href="/dashboard">
 		<h1 class="text-2xl font-black lowercase text-primary">{title}</h1>
 	</a>
@@ -18,33 +18,36 @@
 			role="button"
 			tabindex="0"
 			aria-label="Search input"
-			class="flex h-8 max-w-2xl flex-1 items-center justify-items-start gap-1.5 rounded-md border border-gray-300 px-2 text-gray-600 shadow-md outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-opacity-50 focus-within:ring-offset-2 hover:cursor-text focus:outline-none"
+			class="zion-search-focus-visible flex h-8 max-w-sm flex-1 items-center justify-items-start gap-1.5 rounded-md border border-gray-300 px-2 text-gray-600 shadow-md"
 			onclick={focusInput}
 			onfocus={focusInput}
 			onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && focusInput()}
 		>
-			<Search class="size-5 text-primary" />
+			<Search strokeWidth={2.5} class="size-6 text-primary" />
 			<input
 				type="text"
 				id="search"
+				placeholder="Search all residents and leads..."
 				autocomplete="off"
 				autocorrect="off"
 				spellcheck="false"
-				class="m-0 w-full border-0 border-none p-0 text-sm shadow-none transition duration-200 ease-in-out focus:outline-none focus:ring-0"
+				class="w-full text-ellipsis border-none p-0 text-sm text-muted-foreground shadow-none transition duration-200 ease-in-out placeholder:text-[12px] placeholder:text-xs placeholder:italic focus:outline-none focus:ring-0"
 				bind:this={inputRef}
 			/>
+			<kbd
+				class="mono pointer-events-none rounded-sm bg-muted px-1 text-[12px] font-medium opacity-100"
+				>Ctrl+K</kbd
+			>
 		</div>
 
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild let:builder>
 				<Button
-					variant="ghost"
 					builders={[builder]}
-					size="icon"
-					class="default-ring relative rounded-full focus:outline-none"
+					class="button-focus-visible rounded-full bg-transparent p-2 shadow-none hover:bg-accent focus-visible:ring-offset-0"
 				>
 					<span class="sr-only">Open menu</span>
-					<CircleUser class="size-7 text-primary" />
+					<CircleUser class="text-primary" />
 				</Button>
 			</DropdownMenu.Trigger>
 
