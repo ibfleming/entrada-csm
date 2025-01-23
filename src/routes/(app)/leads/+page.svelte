@@ -10,6 +10,4 @@
 	<title>Leads</title>
 </svelte:head>
 
-<div class="p-8">
-	<DataTable {leads} />
-</div>
+<DataTable {leads} />

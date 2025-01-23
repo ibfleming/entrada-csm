@@ -7,7 +7,7 @@
 
 <main class="font-inter @container">
 	<div class="@lg:px-4">
-		<Header title="Zion" user={data.user} />
+		<Header title="Zion Leasing LLC" user={data.user} />
 		<Navigation />
 		<Breadcrumbs />
 		<div class="h-4 w-full bg-primary drop-shadow-md @lg:rounded-b-md"></div>

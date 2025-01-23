@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { CircleUser, Search } from 'lucide-svelte';
+	import { CircleUser, Search, LogOut } from 'lucide-svelte';
 	let { title = 'Company Name', user = null } = $props();
 	let inputRef: HTMLInputElement;
 	function focusInput() {
@@ -11,14 +11,22 @@
 
 <header class="grid grid-cols-2 items-center justify-between p-4 @lg:px-8">
 	<a class="w-fit outline-none ring-0" href="/dashboard">
-		<h1 class="text-2xl font-black lowercase text-primary">{title}</h1>
+		<h1
+			class="relative bg-gradient-to-r from-primary via-purple-500 to-blue-500 bg-clip-text text-2xl font-black lowercase text-transparent"
+		>
+			{title}
+			<span class="absolute left-0 top-0 -z-10 text-black text-opacity-20 blur-[1px]">
+				{title}
+			</span>
+		</h1>
 	</a>
+
 	<div class="flex items-center justify-end gap-4">
 		<div
 			role="button"
 			tabindex="0"
 			aria-label="Search input"
-			class="zion-search-focus-visible flex h-8 max-w-sm flex-1 items-center justify-items-start gap-1.5 rounded-md border border-gray-300 px-2 text-gray-600 shadow-md"
+			class="zion-search-focus-visible flex h-8 max-w-sm flex-1 cursor-text items-center justify-items-start gap-1.5 rounded-md border border-gray-300 px-2 text-gray-600 shadow-md"
 			onclick={focusInput}
 			onfocus={focusInput}
 			onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && focusInput()}
@@ -43,30 +51,31 @@
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild let:builder>
 				<Button
+					title={user.username}
 					builders={[builder]}
-					class="button-focus-visible rounded-full bg-transparent p-2 shadow-none hover:bg-accent focus-visible:ring-offset-0"
+					class="button-focus-visible rounded-full bg-transparent p-2 drop-shadow-none hover:bg-accent focus-visible:ring-offset-0"
 				>
 					<span class="sr-only">Open menu</span>
-					<CircleUser class="text-primary" />
+					<CircleUser class="rounded-full text-primary shadow-md" />
 				</Button>
 			</DropdownMenu.Trigger>
 
-			<DropdownMenu.Content align="end" side="bottom" class="border-2 border-gray-600 font-inter">
-				<DropdownMenu.Label class="text-primary">
-					{#if user}
-						{user.username}
-					{:else}
-						N/A
-					{/if}
-				</DropdownMenu.Label>
-				<DropdownMenu.Separator />
-				<DropdownMenu.Item class="m-0 cursor-pointer p-0">
-					<form method="POST" action="/api/auth/logout" class="h-full w-full">
-						<button type="submit" class="h-full w-full p-1.5 text-left text-gray-600" tabIndex="-1"
-							>Logout</button
-						>
-					</form>
-				</DropdownMenu.Item>
+			<!-- Profile -->
+			<DropdownMenu.Content align="end" class="border-2">
+				<DropdownMenu.Group>
+					<DropdownMenu.Item asChild>
+						<form method="POST" action="/api/auth/logout">
+							<Button
+								class="w-full items-center justify-center bg-destructive font-semibold hover:bg-destructive/90"
+								type="submit"
+								size="sm"
+							>
+								Logout
+								<LogOut class="ml-2 size-4" />
+							</Button>
+						</form>
+					</DropdownMenu.Item>
+				</DropdownMenu.Group>
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 	</div>

@@ -5,15 +5,17 @@
 		addPagination,
 		addSortBy,
 		addTableFilter,
-		addHiddenColumns
+		addHiddenColumns,
+		addSelectedRows
 	} from 'svelte-headless-table/plugins';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
-	import DataTableActions from './data-table-actions.svelte';
 	import * as Table from '$lib/components/ui/table';
-	import { readable } from 'svelte/store';
-	import { ArrowUpDown, Eye, ChevronDown } from 'lucide-svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import DataTableActions from './data-table-actions.svelte';
+	import DataTableCheckbox from './data-table-checkbox.svelte';
+	import { readable } from 'svelte/store';
+	import { ArrowUpDown, Eye } from 'lucide-svelte';
 
 	let { leads }: { leads: Lead[] } = $props();
 
@@ -23,13 +25,27 @@
 		filter: addTableFilter({
 			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
 		}),
-		hide: addHiddenColumns()
+		hide: addHiddenColumns(),
+		select: addSelectedRows()
 	});
 
 	const columns = table.createColumns([
 		table.column({
 			accessor: 'id',
-			header: 'ID',
+			header: (_, { pluginStates }) => {
+				const { allPageRowsSelected } = pluginStates.select;
+				return createRender(DataTableCheckbox, {
+					checked: allPageRowsSelected
+				});
+			},
+			cell: ({ row }, { pluginStates }) => {
+				const { getRowState } = pluginStates.select;
+				const { isSelected } = getRowState(row);
+
+				return createRender(DataTableCheckbox, {
+					checked: isSelected
+				});
+			},
 			plugins: {
 				sort: {
 					disable: true
@@ -78,10 +94,10 @@
 		}),
 		table.column({
 			id: 'actions',
-			accessor: ({ id }) => id,
+			accessor: ({ id, firstName, lastName }) => ({ id, fullName: `${firstName} ${lastName}` }),
 			header: '',
 			cell: ({ value }) => {
-				return createRender(DataTableActions, { id: value });
+				return createRender(DataTableActions, { id: value.id, fullName: value.fullName });
 			},
 			plugins: {
 				sort: {
@@ -94,11 +110,12 @@
 		})
 	]);
 
-	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates, flatColumns } =
+	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates, flatColumns, rows } =
 		table.createViewModel(columns);
 
 	const { hasNextPage, hasPreviousPage, pageIndex, pageCount } = pluginStates.page;
 	const { filterValue } = pluginStates.filter;
+	const { selectedDataIds } = pluginStates.select;
 	let { hiddenColumnIds } = pluginStates.hide;
 
 	const ids = flatColumns.map((col) => col.id);
@@ -110,6 +127,7 @@
 		$hiddenColumnIds = Object.entries(hideForId)
 			.filter(([, hide]) => !hide)
 			.map(([id]) => id);
+		console.log($selectedDataIds);
 	});
 </script>
 
@@ -118,10 +136,10 @@
 		<p class="text-center text-sm text-red-500">No leads found.</p>
 	</div>
 {:else}
-	<div>
-		<div class="flex items-center justify-between pb-4">
+	<div class="space-y-4 px-16 py-8">
+		<div class="flex items-center justify-between">
 			<Input
-				class="input-focus-visible max-w-sm"
+				class="input-focus-visible max-w-sm shadow-md"
 				placeholder="Filter emails or full name..."
 				type="text"
 				bind:value={$filterValue}
@@ -132,18 +150,18 @@
 						variant="outline"
 						size="sm"
 						builders={[builder]}
-						class="button-focus-visible text-primary hover:text-primary"
+						class="button-focus-visible text-primary shadow-md hover:text-primary"
 					>
 						<Eye class="mr-1.5 size-5" strokeWidth={2} />
 						Columns
 					</Button>
 				</DropdownMenu.Trigger>
-				<DropdownMenu.Content align="end" class="border-2">
+				<DropdownMenu.Content align="end" class="border-2 font-inter">
 					{#each flatColumns as col}
 						{#if hidableCols.includes(col.id)}
 							<DropdownMenu.CheckboxItem
 								bind:checked={hideForId[col.id]}
-								class="cursor-pointer font-semibold text-muted-foreground"
+								class="cursor-pointer font-medium text-foreground"
 							>
 								{col.header}
 							</DropdownMenu.CheckboxItem>
@@ -161,11 +179,15 @@
 							<Table.Row>
 								{#each headerRow.cells as cell (cell.id)}
 									<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
-										<Table.Head {...attrs}>
+										<Table.Head
+											{...attrs}
+											class="[&:has([role=checkbox])]:pt-1
+										[&:has([role=checkbox])]:text-center"
+										>
 											{#if cell.id === 'fullName' || cell.id === 'email'}
 												<Button
 													variant="ghost"
-													class="button-focus-visible"
+													class="button-focus-visible  hover:text-muted-foreground"
 													on:click={props.sort.toggle}
 												>
 													<Render of={cell.render()} />
@@ -186,17 +208,18 @@
 						<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
 							<Table.Row
 								{...rowAttrs}
+								data-state={$selectedDataIds[row.id] && 'selected'}
 								class="transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
 							>
 								{#each row.cells as cell (cell.id)}
 									<Subscribe attrs={cell.attrs()} let:attrs>
 										<Table.Cell class="p-4" {...attrs}>
 											{#if cell.column.id === 'id'}
-												<div class="font-mono text-muted-foreground">
+												<div class="pt-1 text-center font-mono text-muted-foreground">
 													<Render of={cell.render()} />
 												</div>
 											{:else if cell.column.id === 'fullName'}
-												<div class="font-medium text-primary">
+												<div class="pl-4 text-left font-medium text-primary">
 													<Render of={cell.render()} />
 												</div>
 											{:else if cell.column.id === 'email'}
@@ -230,7 +253,7 @@
 			</Table.Root>
 		</div>
 		<!-- Pagination -->
-		<div class="flex items-center justify-between px-2 py-4">
+		<div class="flex items-center justify-between px-4">
 			<div class="text-sm text-muted-foreground">
 				Page {$pageIndex + 1} of {$pageCount}
 			</div>
