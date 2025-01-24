@@ -1,4 +1,4 @@
-import { lead, db } from '$lib';
+import { lead, db, resident } from '$lib';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async (event) => {
@@ -7,6 +7,7 @@ export const load = async (event) => {
 	}
 
 	const leads = await db.select().from(lead);
+	const residents = await db.select().from(resident);
 
-	return { user: event.locals.user, leads };
+	return { user: event.locals.user, leads, residents };
 };

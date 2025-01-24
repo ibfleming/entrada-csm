@@ -135,7 +135,7 @@
 		<p class="text-center text-sm text-red-500">No leads found.</p>
 	</div>
 {:else}
-	<div class="space-y-4 px-16 py-8">
+	<div class="space-y-4 p-8">
 		<div class="flex items-center justify-between">
 			<Input
 				class="input-focus-visible max-w-sm shadow-md"
