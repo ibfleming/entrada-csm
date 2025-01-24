@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
-	import { MenuIcon, CopyIcon, Trash2Icon } from 'lucide-svelte';
+	import { MenuIcon, CopyIcon, Trash2Icon, HousePlusIcon } from 'lucide-svelte';
 
 	export let id: string;
 	export let fullName: string;
@@ -28,13 +28,20 @@
 				Copy ID
 			</DropdownMenu.Item>
 			<DropdownMenu.Item
-				class="cursor-pointer"
 				on:click={() => navigator.clipboard.writeText(fullName)}
+				class="cursor-pointer"
 			>
 				<CopyIcon class="mr-2 size-5" />
 				Copy Name
 			</DropdownMenu.Item>
 			<DropdownMenu.Separator />
+			<DropdownMenu.Item
+				on:click={() => alert('Move In' + ' ' + fullName + '?')}
+				class="cursor-pointer text-yellow-600 data-[highlighted]:text-yellow-600"
+			>
+				<HousePlusIcon class="mr-2 size-5" />
+				Move In
+			</DropdownMenu.Item>
 			<DropdownMenu.Item
 				on:click={() => alert('Delete' + ' ' + fullName + '?')}
 				class="cursor-pointer text-destructive data-[highlighted]:text-destructive"

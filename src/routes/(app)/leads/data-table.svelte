@@ -69,14 +69,14 @@
 			header: 'Phone Number',
 			cell: ({ value }) => {
 				const val = String(value);
-				return `+1 (${val.slice(0, 3)}) ${val.slice(3, 6)}-${val.slice(6)}`;
+				return `+${val.slice(0, 1)} (${val.slice(1, 4)}) ${val.slice(4, 7)}-${val.slice(7)}`;
 			},
 			plugins: {
 				sort: {
 					disable: true
 				},
 				filter: {
-					exclude: true
+					exclude: false
 				}
 			}
 		}),
@@ -88,7 +88,7 @@
 					disable: true
 				},
 				filter: {
-					exclude: true
+					exclude: false
 				}
 			}
 		}),
@@ -110,29 +110,28 @@
 		})
 	]);
 
-	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates, flatColumns, rows } =
+	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates, flatColumns } =
 		table.createViewModel(columns);
 
 	const { hasNextPage, hasPreviousPage, pageIndex, pageCount } = pluginStates.page;
 	const { filterValue } = pluginStates.filter;
 	const { selectedDataIds } = pluginStates.select;
-	let { hiddenColumnIds } = pluginStates.hide;
+	const { hiddenColumnIds } = pluginStates.hide;
 
 	const ids = flatColumns.map((col) => col.id);
 	let hideForId = $state(Object.fromEntries(ids.map((id) => [id, true])));
 
-	const hidableCols = ['id', 'fullName', 'email', 'phoneNumber', 'floorPlan'];
+	const hidableCols = ['fullName', 'email', 'phoneNumber', 'floorPlan'];
 
 	$effect(() => {
 		$hiddenColumnIds = Object.entries(hideForId)
 			.filter(([, hide]) => !hide)
 			.map(([id]) => id);
-		console.log($selectedDataIds);
 	});
 </script>
 
 {#if leads.length === 0 || leads === undefined}
-	<div>
+	<div class="p-16">
 		<p class="text-center text-sm text-red-500">No leads found.</p>
 	</div>
 {:else}
@@ -187,7 +186,7 @@
 											{#if cell.id === 'fullName' || cell.id === 'email'}
 												<Button
 													variant="ghost"
-													class="button-focus-visible  hover:text-muted-foreground"
+													class="button-focus-visible hover:text-muted-foreground"
 													on:click={props.sort.toggle}
 												>
 													<Render of={cell.render()} />
@@ -254,21 +253,41 @@
 		</div>
 		<!-- Pagination -->
 		<div class="flex items-center justify-between px-4">
-			<div class="text-sm text-muted-foreground">
+			<div class="flex gap-2 text-sm text-muted-foreground">
 				Page {$pageIndex + 1} of {$pageCount}
+				<div class="text-sm text-muted-foreground/50">
+					{#if $selectedDataIds !== undefined}
+						({Object.keys($selectedDataIds).length} of {$pageRows.length} rows selected)
+					{:else}
+						(No rows selected)
+					{/if}
+				</div>
 			</div>
+
 			<div class="flex items-center justify-end space-x-4 text-primary">
 				<Button
 					variant="outline"
-					class="button-focus-visible"
-					on:click={() => ($pageIndex = $pageIndex - 1)}
-					disabled={!$hasPreviousPage}>Previous</Button
+					class="button-focus-visible hover:text-primary"
+					disabled={!$hasPreviousPage}
+					on:click={() => ($pageIndex = 0)}>First</Button
 				>
 				<Button
 					variant="outline"
-					class="button-focus-visible"
+					class="button-focus-visible hover:text-primary"
+					disabled={!$hasPreviousPage}
+					on:click={() => ($pageIndex = $pageIndex - 1)}>Previous</Button
+				>
+				<Button
+					variant="outline"
+					class="button-focus-visible hover:text-primary"
 					disabled={!$hasNextPage}
 					on:click={() => ($pageIndex = $pageIndex + 1)}>Next</Button
+				>
+				<Button
+					variant="outline"
+					class="button-focus-visible hover:text-primary"
+					disabled={!$hasNextPage}
+					on:click={() => ($pageIndex = $pageCount - 1)}>Last</Button
 				>
 			</div>
 		</div>
