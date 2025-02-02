@@ -14,28 +14,12 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableActions from './data-table-actions.svelte';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
-	import { writable, type Writable } from 'svelte/store';
+	import { readable } from 'svelte/store';
 	import { ArrowUpDown, Eye } from 'lucide-svelte';
 
-	let { residents, updateResidents } = $props();
-	let tableStore: Writable<Resident[]> = writable(residents);
+	let { residents }: { residents: Resident[] } = $props();
 
-	// Sync props to store
-	$effect(() => {
-		tableStore.set(residents);
-	});
-
-	// Subscribe to store changes and update parent
-	$effect(() => {
-		const unsubscribe = tableStore.subscribe((value) => {
-			if (value !== residents) {
-				updateResidents(value);
-			}
-		});
-		return unsubscribe;
-	});
-
-	const table = createTable(tableStore, {
+	const table = createTable(readable(residents), {
 		page: addPagination() /* { initialPageSize: 20 } */,
 		sort: addSortBy(),
 		filter: addTableFilter({
@@ -137,11 +121,7 @@
 			accessor: ({ id, firstName, lastName }) => ({ id, fullName: `${firstName} ${lastName}` }),
 			header: '',
 			cell: ({ value }) => {
-				return createRender(DataTableActions, {
-					id: value.id,
-					fullName: value.fullName,
-					tableData: tableStore
-				});
+				return createRender(DataTableActions, { id: value.id, fullName: value.fullName });
 			},
 			plugins: {
 				sort: {

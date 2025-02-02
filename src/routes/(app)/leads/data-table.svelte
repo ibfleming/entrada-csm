@@ -14,12 +14,28 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import DataTableActions from './data-table-actions.svelte';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
-	import { readable } from 'svelte/store';
+	import { writable, type Writable } from 'svelte/store';
 	import { ArrowUpDown, Eye } from 'lucide-svelte';
 
-	let { leads }: { leads: Lead[] } = $props();
+	let { leads, updateLeads } = $props();
+	let tableStore: Writable<Lead[]> = writable(leads);
 
-	const table = createTable(readable(leads), {
+	// Sync props to store
+	$effect(() => {
+		tableStore.set(leads);
+	});
+
+	// Subscribe to store changes and update parent
+	$effect(() => {
+		const unsubscribe = tableStore.subscribe((value) => {
+			if (value !== leads) {
+				updateLeads(value);
+			}
+		});
+		return unsubscribe;
+	});
+
+	const table = createTable(tableStore, {
 		page: addPagination() /* { initialPageSize: 20 } */,
 		sort: addSortBy(),
 		filter: addTableFilter({
@@ -94,10 +110,15 @@
 		}),
 		table.column({
 			id: 'actions',
-			accessor: ({ id, firstName, lastName }) => ({ id, fullName: `${firstName} ${lastName}` }),
+			accessor: (lead) => ({ id: lead.id, fullName: `${lead.firstName} ${lead.lastName}`, lead }),
 			header: '',
 			cell: ({ value }) => {
-				return createRender(DataTableActions, { id: value.id, fullName: value.fullName });
+				return createRender(DataTableActions, {
+					id: value.id,
+					fullName: value.fullName,
+					tableData: tableStore,
+					lead: value.lead
+				});
 			},
 			plugins: {
 				sort: {
