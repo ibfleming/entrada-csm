@@ -12,12 +12,9 @@
 <header class="grid grid-cols-2 items-center justify-between p-4 @lg:px-8">
 	<a class="w-fit outline-none ring-0" href="/dashboard">
 		<h1
-			class="relative bg-gradient-to-r from-primary via-purple-500 to-blue-500 bg-clip-text text-2xl font-black lowercase text-transparent"
+			class="relative bg-gradient-to-r from-primary via-purple-500 to-blue-500 bg-clip-text font-black lowercase text-transparent @xs:text-base @sm:text-xl @md:text-2xl"
 		>
 			{title}
-			<span class="absolute left-0 top-0 -z-10 text-black text-opacity-20 blur-[1px]">
-				{title}
-			</span>
 		</h1>
 	</a>
 

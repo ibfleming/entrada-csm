@@ -2,26 +2,9 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import { MenuIcon, CopyIcon, Trash2Icon, HousePlusIcon } from 'lucide-svelte';
-	import { invalidateAll } from '$app/navigation';
 
 	export let id: string;
 	export let fullName: string;
-
-	async function deleteLead(id: string) {
-		try {
-			const response = await fetch(`/api/leads/${id}`, {
-				method: 'DELETE'
-			});
-
-			if (!response.ok) {
-				throw new Error('Failed to delete lead');
-			}
-
-			await invalidateAll();
-		} catch (error) {
-			console.error('Error deleting lead:', error);
-		}
-	}
 </script>
 
 <DropdownMenu.Root>
@@ -60,7 +43,7 @@
 				Move In
 			</DropdownMenu.Item>
 			<DropdownMenu.Item
-				on:click={() => deleteLead(id)}
+				on:click={() => alert('Delete' + ' ' + fullName + '?')}
 				class="cursor-pointer text-destructive data-[highlighted]:text-destructive"
 			>
 				<Trash2Icon class="mr-2 size-5" />

@@ -1,4 +1,4 @@
-import { db, lead, resident } from '$lib';
+import { db, resident } from '$lib';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async (event) => {
@@ -6,8 +6,7 @@ export const load = async (event) => {
 		return redirect(302, '/api/auth/login');
 	}
 
-	const leads = await db.select().from(lead);
 	const residents = await db.select().from(resident);
 
-	return { leads, residents };
+	return { residents };
 };

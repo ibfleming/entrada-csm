@@ -1,9 +1,17 @@
 <script lang="ts">
 	import DataTable from './data-table.svelte';
 	import type { Lead } from '$lib/types.js';
+	import { invalidate, invalidateAll } from '$app/navigation';
 
 	let { data } = $props();
-	const leads: Lead[] = data.leads;
+
+	let leads = $state(data.leads);
+
+	$effect(() => {
+		setInterval(() => {
+			invalidateAll();
+		}, 1000);
+	});
 </script>
 
 <svelte:head>
