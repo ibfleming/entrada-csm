@@ -16,6 +16,7 @@
 	import DataTableCheckbox from './data-table-checkbox.svelte';
 	import { writable, type Writable } from 'svelte/store';
 	import { ArrowUpDown, Eye } from 'lucide-svelte';
+	import CreateResidentModal from './CreateResidentModal.svelte';
 
 	let { residents, updateResidents } = $props();
 	let tableStore: Writable<Resident[]> = writable(residents);
@@ -181,12 +182,15 @@
 {:else}
 	<div class="space-y-4 p-8">
 		<div class="flex items-center justify-between">
-			<Input
-				class="input-focus-visible max-w-sm shadow-md"
-				placeholder="Filter emails or full name..."
-				type="text"
-				bind:value={$filterValue}
-			/>
+			<div class="flex gap-4">
+				<Input
+					class="input-focus-visible max-w-sm shadow-md"
+					placeholder="Filter emails or full name..."
+					type="text"
+					bind:value={$filterValue}
+				/>
+				<CreateResidentModal />
+			</div>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger asChild let:builder>
 					<Button

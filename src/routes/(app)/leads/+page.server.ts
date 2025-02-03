@@ -10,3 +10,11 @@ export const load = async (event) => {
 
 	return { leads };
 };
+
+import type { Actions } from './$types';
+
+export const actions = {
+	createLead: async (event) => {
+		// ...
+	}
+} satisfies Actions;

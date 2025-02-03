@@ -1,6 +1,12 @@
 <script lang="ts">
 	import type { Lead } from '$lib/types';
-	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
+	import {
+		createTable,
+		Render,
+		Subscribe,
+		createRender,
+		type DataLabel
+	} from 'svelte-headless-table';
 	import {
 		addPagination,
 		addSortBy,
@@ -16,6 +22,7 @@
 	import DataTableCheckbox from './data-table-checkbox.svelte';
 	import { writable, type Writable } from 'svelte/store';
 	import { ArrowUpDown, Eye } from 'lucide-svelte';
+	import CreateLeadModal from './CreateLeadModal.svelte';
 
 	let { leads, updateLeads } = $props();
 	let tableStore: Writable<Lead[]> = writable(leads);
@@ -158,12 +165,15 @@
 {:else}
 	<div class="space-y-4 p-8">
 		<div class="flex items-center justify-between">
-			<Input
-				class="input-focus-visible max-w-sm shadow-md"
-				placeholder="Filter emails or full name..."
-				type="text"
-				bind:value={$filterValue}
-			/>
+			<div class="flex gap-4">
+				<Input
+					class="input-focus-visible max-w-sm shadow-md"
+					placeholder="Filter emails or full name..."
+					type="text"
+					bind:value={$filterValue}
+				/>
+				<CreateLeadModal />
+			</div>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger asChild let:builder>
 					<Button
