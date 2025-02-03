@@ -4,6 +4,4 @@ export const load = async (event) => {
 	if (!event.locals.user) {
 		return redirect(302, '/api/auth/login');
 	}
-
-	return { user: event.locals.user };
 };

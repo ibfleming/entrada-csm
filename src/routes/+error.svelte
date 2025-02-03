@@ -1,32 +1,26 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import * as Card from '$lib/components/ui/card';
 
 	let message = '';
-	let description = '';
 
 	$: {
 		switch (page.status) {
 			case 404:
 				message = 'Page not found';
-				description =
-					'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.';
 				break;
 			case 500:
 				message = 'Internal Server Error';
-				description =
-					'Something went wrong on our end. Please try again later or contact support if the issue persists.';
 				break;
 			case 403:
 				message = 'Forbidden';
-				description = 'You do not have permission to access this page.';
 				break;
 			case 401:
 				message = 'Unauthorized';
-				description = 'You need to log in to access this page.';
 				break;
 			default:
 				message = 'Error';
-				description = 'An unexpected error occurred. Please try again later.';
+				break;
 		}
 	}
 </script>
@@ -35,7 +29,12 @@
 	<title>{page.status}</title>
 </svelte:head>
 
-<div>
-	<h1>{page.status}</h1>
-	<h2>{message}</h2>
-</div>
+<main class="flex h-screen w-screen flex-col items-center justify-center gap-2">
+	<Card.Root class="bg-primary">
+		<Card.Content class="flex flex-col items-center justify-center gap-2 font-inter text-white">
+			<h1 class="text-8xl font-bold">{page.status}</h1>
+			<h2 class="text-xl font-bold uppercase">{message}</h2>
+		</Card.Content>
+	</Card.Root>
+	<a href="/" class="text-sky-950 underline">Go back home</a>
+</main>

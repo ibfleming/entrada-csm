@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Lead } from '$lib/types';
+	import type { Resident } from '$lib/types';
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
 	import {
 		addPagination,
@@ -17,19 +17,19 @@
 	import { writable, type Writable } from 'svelte/store';
 	import { ArrowUpDown, Eye } from 'lucide-svelte';
 
-	let { leads, updateLeads } = $props();
-	let tableStore: Writable<Lead[]> = writable(leads);
+	let { residents, updateResidents } = $props();
+	let tableStore: Writable<Resident[]> = writable(residents);
 
 	// Sync props to store
 	$effect(() => {
-		tableStore.set(leads);
+		tableStore.set(residents);
 	});
 
 	// Subscribe to store changes and update parent
 	$effect(() => {
 		const unsubscribe = tableStore.subscribe((value) => {
-			if (value !== leads) {
-				updateLeads(value);
+			if (value !== residents) {
+				updateResidents(value);
 			}
 		});
 		return unsubscribe;
@@ -74,22 +74,46 @@
 		table.column({
 			id: 'fullName',
 			accessor: (row) => `${row.firstName} ${row.lastName}`,
-			header: 'Lead Name'
+			header: 'Resident Name',
+			plugins: {
+				sort: {
+					disable: false
+				},
+				filter: {
+					exclude: false
+				}
+			}
 		}),
 		table.column({
 			accessor: 'email',
-			header: 'Email'
-		}),
-		table.column({
-			accessor: 'phoneNumber',
-			header: 'Phone Number',
-			cell: ({ value }) => {
-				const val = String(value);
-				return `+${val.slice(0, 1)} (${val.slice(1, 4)}) ${val.slice(4, 7)}-${val.slice(7)}`;
-			},
+			header: 'Email',
 			plugins: {
 				sort: {
-					disable: true
+					disable: false
+				},
+				filter: {
+					exclude: false
+				}
+			}
+		}),
+		table.column({
+			accessor: 'studentStatus',
+			header: 'Student Status',
+			plugins: {
+				sort: {
+					disable: false
+				},
+				filter: {
+					exclude: false
+				}
+			}
+		}),
+		table.column({
+			accessor: 'leaseTerm',
+			header: 'Lease Term',
+			plugins: {
+				sort: {
+					disable: false
 				},
 				filter: {
 					exclude: false
@@ -110,14 +134,13 @@
 		}),
 		table.column({
 			id: 'actions',
-			accessor: (lead) => ({ id: lead.id, fullName: `${lead.firstName} ${lead.lastName}`, lead }),
+			accessor: ({ id, firstName, lastName }) => ({ id, fullName: `${firstName} ${lastName}` }),
 			header: '',
 			cell: ({ value }) => {
 				return createRender(DataTableActions, {
 					id: value.id,
 					fullName: value.fullName,
-					tableData: tableStore,
-					lead: value.lead
+					tableData: tableStore
 				});
 			},
 			plugins: {
@@ -142,7 +165,7 @@
 	const ids = flatColumns.map((col) => col.id);
 	let hideForId = $state(Object.fromEntries(ids.map((id) => [id, true])));
 
-	const hidableCols = ['fullName', 'email', 'phoneNumber', 'floorPlan'];
+	const hidableCols = ['fullName', 'email', 'studentStatus', 'leaseTerm', 'floorPlan'];
 
 	$effect(() => {
 		$hiddenColumnIds = Object.entries(hideForId)
@@ -151,9 +174,9 @@
 	});
 </script>
 
-{#if leads.length === 0 || leads === undefined}
+{#if residents.length === 0 || residents === undefined}
 	<div class="p-16">
-		<p class="text-center text-sm text-red-500">No leads found.</p>
+		<p class="text-center text-sm text-red-500">No residents found.</p>
 	</div>
 {:else}
 	<div class="space-y-4 p-8">
@@ -204,7 +227,7 @@
 											class="[&:has([role=checkbox])]:pt-1
 										[&:has([role=checkbox])]:text-center"
 										>
-											{#if cell.id === 'fullName' || cell.id === 'email'}
+											{#if cell.id === 'fullName' || cell.id === 'email' || cell.id === 'studentStatus' || cell.id === 'leaseTerm'}
 												<Button
 													variant="ghost"
 													class="button-focus-visible hover:text-muted-foreground"
@@ -248,6 +271,18 @@
 												</div>
 											{:else if cell.column.id === 'phoneNumber'}
 												<div class="text-sm font-light">
+													<Render of={cell.render()} />
+												</div>
+											{:else if cell.column.id === 'leaseTerm'}
+												<div
+													class="inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-red-500"
+												>
+													<Render of={cell.render()} />
+												</div>
+											{:else if cell.column.id === 'studentStatus'}
+												<div
+													class="inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-sky-500"
+												>
 													<Render of={cell.render()} />
 												</div>
 											{:else if cell.column.id === 'floorPlan'}

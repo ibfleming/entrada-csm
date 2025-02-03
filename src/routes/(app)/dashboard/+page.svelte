@@ -1,35 +1,29 @@
 <script lang="ts">
-	import Chart from '$lib/custom/Chart.svelte';
-	import type { Lead, Resident } from '$lib/types.js';
+	import * as Card from '$lib/components/ui/card';
 
 	let { data } = $props();
 
-	const leads: Lead[] = data.leads;
-	const residents: Resident[] = data.residents;
-
-	const totalLeads = leads.length;
-	const totalResidents = residents.length;
+	const totalLeads: number = data.leads.length;
+	const totalResidents: number = data.residents.length;
 </script>
 
 <svelte:head>
 	<title>Dashboard</title>
 </svelte:head>
 
-<div class="flex p-8">
-	<!-- 	<div>
-		<h1 class="font-black">Leads ({totalLeads})</h1>
-		<ul>
-			{#each leads as lead}
-				<li>{lead.firstName} {lead.lastName}</li>
-			{/each}
-		</ul>
+<div class="p-4">
+	<div class="flex flex-col gap-4 sm:flex-row">
+		<Card.Root class="bg-primary">
+			<Card.Content class="flex flex-col items-center justify-center">
+				<p class="text-8xl font-bold text-white">{totalLeads}</p>
+				<p class="text-xl font-bold uppercase text-white">Total Leads</p>
+			</Card.Content>
+		</Card.Root>
+		<Card.Root class="bg-primary">
+			<Card.Content class="flex flex-col items-center justify-center">
+				<p class="text-8xl font-bold text-white">{totalResidents}</p>
+				<p class="text-xl font-bold uppercase text-white">Total Residents</p>
+			</Card.Content>
+		</Card.Root>
 	</div>
-	<div>
-		<h1 class="font-black">Residents ({totalResidents})</h1>
-		<ul>
-			{#each residents as resident}
-				<li>{resident.firstName} {resident.lastName}</li>{/each}
-		</ul>
-	</div> -->
-	<Chart />
 </div>

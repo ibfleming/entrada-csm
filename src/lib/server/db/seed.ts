@@ -14,7 +14,7 @@ async function main() {
 		await reset(db, schema);
 
 		// Seed tables
-		const seededLeads = await seed(db, { lead }).refine((f) => ({
+		await seed(db, { lead }).refine((f) => ({
 			lead: {
 				columns: {
 					phoneNumber: f.phoneNumber({

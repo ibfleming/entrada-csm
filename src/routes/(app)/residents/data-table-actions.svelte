@@ -2,52 +2,26 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import { MenuIcon, CopyIcon, Trash2Icon, HousePlusIcon } from 'lucide-svelte';
-	import type { Lead } from '$lib/types';
+	import type { Resident } from '$lib/types';
 	import type { Writable } from 'svelte/store';
 
 	export let id: string;
 	export let fullName: string;
-	export let tableData: Writable<Lead[]>;
-	export let lead: Lead;
+	export let tableData: Writable<Resident[]>;
 
-	async function deleteLead(id: string) {
+	async function deleteResident(id: string) {
 		try {
-			const resp = await fetch(`/api/leads/${id}`, {
+			const response = await fetch(`/api/residents/${id}`, {
 				method: 'DELETE'
 			});
 
-			if (!resp.ok) {
+			if (!response.ok) {
 				throw new Error('Failed to delete lead');
 			}
 
-			tableData.update((data) => data.filter((row: Lead) => row.id !== id));
+			tableData.update((data) => data.filter((row: Resident) => row.id !== id));
 		} catch (error) {
 			console.error('Error deleting lead:', error);
-		}
-	}
-
-	async function moveInLead(lead: Lead) {
-		try {
-			const resp = await fetch(`/api/leads/movein`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(lead)
-			});
-
-			if (!resp.ok) {
-				throw new Error('Failed to move in lead');
-			}
-
-			const result = await resp.json();
-			if (result.success) {
-				tableData.update((leads) => leads.filter((l) => l.id !== lead.id));
-			} else {
-				throw new Error(result.error || 'Failed to move in lead');
-			}
-		} catch (error) {
-			console.error('Error converting lead to resident:', error);
 		}
 	}
 </script>
@@ -81,14 +55,7 @@
 			</DropdownMenu.Item>
 			<DropdownMenu.Separator />
 			<DropdownMenu.Item
-				on:click={() => moveInLead(lead)}
-				class="cursor-pointer text-yellow-600 data-[highlighted]:text-yellow-600"
-			>
-				<HousePlusIcon class="mr-2 size-5" />
-				Move In
-			</DropdownMenu.Item>
-			<DropdownMenu.Item
-				on:click={() => deleteLead(id)}
+				on:click={() => deleteResident(id)}
 				class="cursor-pointer text-destructive data-[highlighted]:text-destructive"
 			>
 				<Trash2Icon class="mr-2 size-5" />
