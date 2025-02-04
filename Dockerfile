@@ -9,6 +9,9 @@ RUN pnpm install
 
 COPY . .
 
+ARG DATABASE_URL
+ENV DATABASE_URL=${DATABASE_URL}
+
 ENV PORT=3030
 ENV PROJ_ENV=production
 ENV ORIGIN=http://localhost:3030
