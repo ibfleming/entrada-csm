@@ -11,7 +11,6 @@ COPY . .
 
 ENV PORT=3030
 ENV PROJ_ENV=production
-ENV DATABASE_URL=postgres://ian:FatherSonHolySpirit@76.178.137.56:3306/dev
 ENV ORIGIN=http://localhost:3030
 
 RUN pnpm run build
