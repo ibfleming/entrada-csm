@@ -2,6 +2,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { CircleUser, Search, LogOut } from 'lucide-svelte';
+	import SearchComponent from '$lib/custom/Search.svelte';
 	let { title = 'Company Name', user = null } = $props();
 	let inputRef: HTMLInputElement;
 	function focusInput() {
@@ -17,6 +18,8 @@
 			{title}
 		</h1>
 	</a>
+
+	<SearchComponent />
 
 	<div class="flex items-center justify-end gap-4">
 		<div

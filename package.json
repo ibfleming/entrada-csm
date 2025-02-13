@@ -59,6 +59,7 @@
 		"d3": "^7.9.0",
 		"drizzle-orm": "^0.38.4",
 		"drizzle-seed": "^0.3.0",
+		"flexsearch": "^0.7.43",
 		"postgres": "^3.4.5",
 		"svelte-headless-table": "^0.18.3",
 		"vite-node": "^3.0.4"

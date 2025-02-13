@@ -9,16 +9,20 @@ RUN pnpm install
 
 COPY . .
 
+ENV PROJ_ENV=production
+
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
 
-ENV PORT=3030
-ENV PROJ_ENV=production
-ENV ORIGIN=http://localhost:3030
+ARG PORT 
+ENV PORT=${PORT}
+
+ARG ORIGIN
+ENV ORIGIN=${ORIGIN}
 
 RUN pnpm run build
 RUN pnpm prune --prod
 
-EXPOSE 3030
+EXPOSE ${PORT}
 
 CMD ["node", "build"]
