@@ -7,10 +7,10 @@
 
 <main class="font-inter @container">
 	<div class="@lg:px-4">
-		<Header title="Zion Leasing LLC" user={data.user} />
+		<Header title="Zion Leasing LLC" {...data} />
 		<Navigation />
 		<Breadcrumbs />
-		<div class="h-4 w-full bg-primary drop-shadow-md @lg:rounded-b-md"></div>
+		<div class="relative -z-10 h-4 w-full bg-primary drop-shadow-md @lg:rounded-b-md"></div>
 	</div>
 	{@render children()}
 </main>

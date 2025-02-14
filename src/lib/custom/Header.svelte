@@ -1,13 +1,9 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { CircleUser, Search, LogOut } from 'lucide-svelte';
 	import SearchComponent from '$lib/custom/Search.svelte';
-	let { title = 'Company Name', user = null } = $props();
-	let inputRef: HTMLInputElement;
-	function focusInput() {
-		inputRef.focus();
-	}
+	import { CircleUser, LogOut } from 'lucide-svelte';
+	let { title = 'Company Name', user = null, leads = null, residents = null } = $props();
 </script>
 
 <header class="grid grid-cols-2 items-center justify-between p-4 @lg:px-8">
@@ -19,10 +15,11 @@
 		</h1>
 	</a>
 
-	<SearchComponent />
-
 	<div class="flex items-center justify-end gap-4">
-		<div
+		<!-- Search -->
+		<SearchComponent {leads} {residents} />
+
+		<!-- 		<div
 			role="button"
 			tabindex="0"
 			aria-label="Search input"
@@ -39,14 +36,14 @@
 				autocomplete="off"
 				autocorrect="off"
 				spellcheck="false"
-				class="w-full text-ellipsis border-none p-0 text-sm text-muted-foreground shadow-none transition duration-200 ease-in-out placeholder:text-[12px] placeholder:text-xs placeholder:italic focus:outline-none focus:ring-0"
+				class="w-full text-ellipsis border-none p-0 text-xs text-muted-foreground shadow-none transition duration-200 ease-in-out placeholder:italic focus:outline-none focus:ring-0"
 				bind:this={inputRef}
 			/>
 			<kbd
 				class="mono pointer-events-none rounded-sm bg-muted px-1 text-[12px] font-medium opacity-100"
 				>Ctrl+K</kbd
 			>
-		</div>
+		</div> -->
 
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild let:builder>

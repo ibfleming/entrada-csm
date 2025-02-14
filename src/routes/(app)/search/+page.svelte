@@ -3,7 +3,9 @@
 	import { Search } from 'lucide-svelte';
 	import { fade } from 'svelte/transition';
 
-	let { leads, residents } = $props();
+	let { data } = $props();
+	const leads: Lead[] = data.leads;
+	const residents: Resident[] = data.residents;
 
 	let inputRef: HTMLInputElement; // Input
 	let searchBarWrapperRef: HTMLDivElement; // Search
@@ -62,14 +64,14 @@
 	<title>Search test</title>
 </svelte:head>
 
-<div id="search-wrapper" class="relative z-10 max-w-md flex-1">
+<div id="search-wrapper" class="mr-16">
 	<div id="search-bar-container" class="relative">
 		<div
 			role="button"
 			tabindex="0"
 			aria-label="Search input"
 			id="search-bar-wrapper"
-			class="zion-search-focus-visible flex h-8 cursor-text items-center justify-items-start gap-1.5 rounded-md border border-gray-300 px-2 text-gray-600 shadow-md transition-all"
+			class="zion-search-focus-visible flex h-8 w-[448px] max-w-md flex-1 cursor-text items-center justify-items-start gap-1.5 rounded-md border border-gray-300 px-2 text-gray-600 shadow-md transition-all"
 			bind:this={searchBarWrapperRef}
 			onclick={focusInput}
 			onfocus={focusInput}
@@ -97,7 +99,7 @@
 		{#if showResults}
 			<div
 				id="search-results"
-				class="absolute right-0 mt-2 flex w-max flex-col items-center justify-center rounded-md border border-gray-300 bg-accent shadow-md"
+				class={'absolute right-0 mt-2 flex w-max flex-col items-center justify-center rounded-md border border-gray-300 bg-accent shadow-md'}
 				transition:fade={{ duration: 150 }}
 			>
 				{#if filteredResults.length === 0}

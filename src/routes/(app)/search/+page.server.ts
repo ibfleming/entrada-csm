@@ -9,5 +9,5 @@ export const load = async (event) => {
 	const leads = await db.select().from(lead);
 	const residents = await db.select().from(resident);
 
-	return { user: event.locals.user, leads, residents };
+	return { leads, residents };
 };

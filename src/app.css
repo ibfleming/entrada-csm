@@ -84,4 +84,23 @@
 	.button-focus-visible {
 		@apply outline-none focus:outline-none focus-visible:border-inherit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-opacity-50 focus-visible:ring-offset-1;
 	}
+	.loader {
+		width: 36px;
+		height: 36px;
+		border: 5px solid hsl(var(--primary));
+		border-bottom-color: transparent;
+		border-radius: 50%;
+		display: inline-block;
+		box-sizing: border-box;
+		animation: rotation 1s linear infinite;
+	}
+
+	@keyframes rotation {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
 }

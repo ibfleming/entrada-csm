@@ -1,12 +1,6 @@
 <script lang="ts">
 	import type { Lead } from '$lib/types';
-	import {
-		createTable,
-		Render,
-		Subscribe,
-		createRender,
-		type DataLabel
-	} from 'svelte-headless-table';
+	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
 	import {
 		addPagination,
 		addSortBy,
