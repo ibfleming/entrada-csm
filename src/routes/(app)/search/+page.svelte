@@ -61,7 +61,7 @@
 </script>
 
 <svelte:head>
-	<title>Search test</title>
+	<title>Leasing CMS - Search test</title>
 </svelte:head>
 
 <div id="search-wrapper" class="mr-16">

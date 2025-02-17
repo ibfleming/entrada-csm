@@ -58,7 +58,7 @@
 			variant="ghost"
 			builders={[builder]}
 			size="icon"
-			class="button-focus-visible h-fit w-fit rounded-sm p-0.5"
+			class="button-focus-visible h-fit w-fit rounded-sm p-0.5 transition-all"
 		>
 			<span class="sr-only">Open menu</span>
 			<MenuIcon class="size-6" />

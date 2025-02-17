@@ -1,3 +1,3 @@
 <svelte:head>
-	<title>Tools</title>
+	<title>Leasing CMS - Tools</title>
 </svelte:head>

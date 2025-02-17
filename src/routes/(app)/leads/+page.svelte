@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>Leads</title>
+	<title>Leasing CMS - Leads</title>
 </svelte:head>
 
 <DataTable {leads} {updateLeads} />

@@ -6,7 +6,11 @@
 
 <Dialog.Root>
 	<Dialog.Trigger asChild let:builder>
-		<Button builders={[builder]} size="icon" class="px-1.5 shadow-md">
+		<Button
+			builders={[builder]}
+			size="icon"
+			class="button-focus-visible border px-1.5 shadow-sm transition-all"
+		>
 			<PlusIcon class="size-8" />
 		</Button>
 	</Dialog.Trigger>

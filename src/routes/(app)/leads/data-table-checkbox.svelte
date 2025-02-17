@@ -6,4 +6,4 @@
 	export let checked: Writable<boolean>;
 </script>
 
-<Checkbox bind:checked={$checked} />
+<Checkbox class="transition-all" bind:checked={$checked} />

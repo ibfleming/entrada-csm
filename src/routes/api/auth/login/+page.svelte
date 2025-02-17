@@ -6,11 +6,11 @@
 </script>
 
 <svelte:head>
-	<title>Login</title>
+	<title>Leasing CMS - Login</title>
 </svelte:head>
 
-<div class="flex min-h-screen items-center justify-center bg-gray-100">
-	<div class="w-full max-w-xl rounded-lg bg-white p-16 shadow-md">
+<div class="flex min-h-screen items-center justify-center bg-gray-100 @container">
+	<div class="w-full max-w-xl bg-white p-8 shadow-md @lg:rounded-lg @lg:p-16">
 		<form method="post" action="?/login" use:enhance class="space-y-4">
 			<div>
 				<label class="text-md block font-medium text-gray-600">

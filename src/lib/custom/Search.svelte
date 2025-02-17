@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { Lead, Resident } from '$lib/types';
+	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
 	import { Search } from 'lucide-svelte';
 	import { fade } from 'svelte/transition';
 
@@ -10,9 +11,26 @@
 	let showResults: boolean = $state(false);
 	let searchQuery: string = $state('');
 
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.ctrlKey && event.key === 'k') {
+			if (!showResults) {
+				event.preventDefault();
+				focusInput();
+			} else {
+				event.preventDefault();
+				unFocusInput();
+			}
+		}
+	}
+
 	function focusInput() {
 		showResults = true;
 		inputRef?.focus();
+	}
+
+	function unFocusInput() {
+		showResults = false;
+		inputRef?.blur();
 	}
 
 	function blurInput(event: FocusEvent) {
@@ -52,17 +70,19 @@
 		return [...filterEntities(leads, 'Lead'), ...filterEntities(residents, 'Resident')];
 	});
 
-	/* 	$effect(() => {
-		console.log('searchQuery:', searchQuery);
-		console.log('filteredLeads:', JSON.stringify(filteredLeads));
-	}); */
+	// Handle keyboard shortcuts listeners
+	if (browser) {
+		onMount(() => {
+			window.addEventListener('keydown', handleKeyDown);
+		});
+
+		onDestroy(() => {
+			window.removeEventListener('keydown', handleKeyDown);
+		});
+	}
 </script>
 
-<svelte:head>
-	<title>Search test</title>
-</svelte:head>
-
-<div id="search-wrapper" class="relative z-10 max-w-md flex-1">
+<div id="search-wrapper" class="relative z-10">
 	<div id="search-bar-container" class="relative">
 		<div
 			role="button"
@@ -100,7 +120,7 @@
 				class="absolute right-0 mt-2 flex w-max flex-col items-center justify-center rounded-md border border-gray-300 bg-accent shadow-md"
 				transition:fade={{ duration: 150 }}
 			>
-				{#if filteredResults.length === 0}
+				{#if filteredResults.length === 0 && searchQuery.length > 0}
 					<div class="flex w-[576px] items-center justify-center py-4 text-sm">
 						<p class="font-bold text-red-500">No results found</p>
 					</div>
@@ -124,7 +144,9 @@
 						{/each}
 					</ul>
 				{:else}
-					<span class="loader"></span>
+					<div class="flex w-[576px] items-center justify-center py-4 text-sm">
+						<span class="loader"></span>
+					</div>
 				{/if}
 			</div>
 		{/if}

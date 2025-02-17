@@ -15,7 +15,14 @@
 	import DataTableActions from './data-table-actions.svelte';
 	import DataTableCheckbox from './data-table-checkbox.svelte';
 	import { writable, type Writable } from 'svelte/store';
-	import { ArrowUpDown, Eye } from 'lucide-svelte';
+	import {
+		ArrowLeft,
+		ArrowLeftToLine,
+		ArrowRight,
+		ArrowRightToLine,
+		ArrowUpDown,
+		Eye
+	} from 'lucide-svelte';
 	import CreateResidentModal from './CreateResidentModal.svelte';
 
 	let { residents, updateResidents } = $props();
@@ -91,6 +98,22 @@
 			plugins: {
 				sort: {
 					disable: false
+				},
+				filter: {
+					exclude: false
+				}
+			}
+		}),
+		table.column({
+			accessor: 'phoneNumber',
+			header: 'Phone Number',
+			cell: ({ value }) => {
+				const val = String(value);
+				return `+${val.slice(0, 1)} (${val.slice(1, 4)}) ${val.slice(4, 7)}-${val.slice(7)}`;
+			},
+			plugins: {
+				sort: {
+					disable: true
 				},
 				filter: {
 					exclude: false
@@ -180,35 +203,37 @@
 		<p class="text-center text-sm text-red-500">No residents found.</p>
 	</div>
 {:else}
-	<div class="space-y-4 p-8">
-		<div class="flex items-center justify-between">
-			<div class="flex gap-4">
-				<Input
-					class="input-focus-visible max-w-sm shadow-md"
-					placeholder="Filter emails or full name..."
-					type="text"
-					bind:value={$filterValue}
-				/>
-				<CreateResidentModal />
-			</div>
+	<h1 class="pb-1 pt-4 text-center text-xl font-bold text-muted-foreground">Residents</h1>
+	<div class="flex flex-col gap-2 px-4 @lg:px-8">
+		<div class="flex items-center justify-start gap-4">
+			<!-- Filter -->
+			<Input
+				class="input-focus-visible max-w-xs shadow-sm placeholder:overflow-ellipsis"
+				placeholder="Filter..."
+				type="text"
+				bind:value={$filterValue}
+			/>
+
+			<!-- Hide Columns -->
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger asChild let:builder>
 					<Button
 						variant="outline"
-						size="sm"
+						size="icon"
 						builders={[builder]}
-						class="button-focus-visible text-primary shadow-md hover:text-primary"
+						class="button-focus-visible px-1.5 shadow-sm transition-all"
 					>
-						<Eye class="mr-1.5 size-5" strokeWidth={2} />
-						Columns
+						<Eye class="size-8 text-primary" strokeWidth={2} />
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content align="end" class="border-2 font-inter">
+					<DropdownMenu.Label class="text-primary">Hide Columns</DropdownMenu.Label>
+					<DropdownMenu.Separator />
 					{#each flatColumns as col}
 						{#if hidableCols.includes(col.id)}
 							<DropdownMenu.CheckboxItem
 								bind:checked={hideForId[col.id]}
-								class="cursor-pointer font-medium text-foreground"
+								class="cursor-pointer text-foreground"
 							>
 								{col.header}
 							</DropdownMenu.CheckboxItem>
@@ -216,6 +241,9 @@
 					{/each}
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
+
+			<!-- Create Resident -->
+			<CreateResidentModal />
 		</div>
 		<!-- Data Table -->
 		<div class="rounded-md border shadow-md">
@@ -234,7 +262,7 @@
 											{#if cell.id === 'fullName' || cell.id === 'email' || cell.id === 'studentStatus' || cell.id === 'leaseTerm'}
 												<Button
 													variant="ghost"
-													class="button-focus-visible hover:text-muted-foreground"
+													class="button-focus-visible transition-all hover:text-muted-foreground"
 													on:click={props.sort.toggle}
 												>
 													<Render of={cell.render()} />
@@ -312,43 +340,55 @@
 			</Table.Root>
 		</div>
 		<!-- Pagination -->
-		<div class="flex items-center justify-between px-4">
-			<div class="flex gap-2 text-sm text-muted-foreground">
-				Page {$pageIndex + 1} of {$pageCount}
+		<div class="flex items-start justify-between px-4 pb-4 pt-2">
+			<div class="flex flex-col items-start justify-start text-sm text-muted-foreground">
+				<span class="font-semibold">Page {$pageIndex + 1} of {$pageCount}</span>
 				<div class="text-sm text-muted-foreground/50">
 					{#if $selectedDataIds !== undefined}
-						({Object.keys($selectedDataIds).length} of {$pageRows.length} rows selected)
+						({Object.keys($selectedDataIds).length} of {$pageRows.length} rows)
 					{:else}
 						(No rows selected)
 					{/if}
 				</div>
 			</div>
 
-			<div class="flex items-center justify-end space-x-4 text-primary">
+			<div class="flex items-start justify-start gap-2 text-muted-foreground">
 				<Button
 					variant="outline"
-					class="button-focus-visible hover:text-primary"
+					class="button-focus-visible p-1.5 hover:text-muted-foreground"
+					size="icon"
 					disabled={!$hasPreviousPage}
-					on:click={() => ($pageIndex = 0)}>First</Button
+					on:click={() => ($pageIndex = 0)}
 				>
+					<ArrowLeftToLine class="size-8" />
+				</Button>
 				<Button
 					variant="outline"
-					class="button-focus-visible hover:text-primary"
+					class="button-focus-visible p-1.5 hover:text-muted-foreground"
+					size="icon"
 					disabled={!$hasPreviousPage}
-					on:click={() => ($pageIndex = $pageIndex - 1)}>Previous</Button
+					on:click={() => ($pageIndex = $pageIndex - 1)}
 				>
+					<ArrowLeft class="size-8" />
+				</Button>
 				<Button
 					variant="outline"
-					class="button-focus-visible hover:text-primary"
+					class="button-focus-visible p-1.5 hover:text-muted-foreground"
+					size="icon"
 					disabled={!$hasNextPage}
-					on:click={() => ($pageIndex = $pageIndex + 1)}>Next</Button
+					on:click={() => ($pageIndex = $pageIndex + 1)}
 				>
+					<ArrowRight class="size-8" />
+				</Button>
 				<Button
 					variant="outline"
-					class="button-focus-visible hover:text-primary"
+					class="button-focus-visible p-1.5 hover:text-muted-foreground"
+					size="icon"
 					disabled={!$hasNextPage}
-					on:click={() => ($pageIndex = $pageCount - 1)}>Last</Button
+					on:click={() => ($pageIndex = $pageCount - 1)}
 				>
+					<ArrowRightToLine class="size-8" />
+				</Button>
 			</div>
 		</div>
 	</div>

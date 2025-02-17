@@ -76,13 +76,13 @@
 		@apply bg-background text-foreground;
 	}
 	.input-focus-visible {
-		@apply outline-none focus:outline-none focus-visible:border-inherit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-opacity-50 focus-visible:ring-offset-2;
+		@apply outline-none transition-all focus:outline-none focus-visible:border-inherit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-opacity-50 focus-visible:ring-offset-2;
 	}
 	.zion-search-focus-visible {
-		@apply outline-none focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-opacity-50 focus-within:ring-offset-2 focus:outline-none;
+		@apply outline-none transition-all focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-opacity-50 focus-within:ring-offset-2 focus:outline-none;
 	}
 	.button-focus-visible {
-		@apply outline-none focus:outline-none focus-visible:border-inherit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-opacity-50 focus-visible:ring-offset-1;
+		@apply outline-none transition-all focus:outline-none focus-visible:border-inherit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-opacity-50 focus-visible:ring-offset-1;
 	}
 	.loader {
 		width: 36px;
