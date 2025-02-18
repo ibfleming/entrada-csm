@@ -16,7 +16,7 @@
 
 	<!-- Search -->
 	<div class="flex w-3/4 items-center justify-end gap-2 @lg:gap-4">
-		<SearchComponent {leads} {residents} />
+		<SearchComponent />
 
 		<!-- User -->
 		<div class="flex items-center justify-end">

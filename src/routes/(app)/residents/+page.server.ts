@@ -1,12 +1,12 @@
-import { db, resident } from '$lib';
-import { redirect } from '@sveltejs/kit';
+import type { Actions } from './$types';
 
 export const load = async (event) => {
-	if (!event.locals.user) {
-		return redirect(302, '/api/auth/login');
-	}
-
-	const residents = await db.select().from(resident);
-
-	return { residents };
+	const data = await event.parent();
+	return { residents: data.residents };
 };
+
+export const actions = {
+	createResident: async (event) => {
+		// ...
+	}
+} satisfies Actions;

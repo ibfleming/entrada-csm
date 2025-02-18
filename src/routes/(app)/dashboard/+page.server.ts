@@ -1,13 +1,12 @@
 import { db, lead, resident } from '$lib';
-import { redirect } from '@sveltejs/kit';
+import { count } from 'drizzle-orm';
+import type { PageServerLoad } from './$types';
 
-export const load = async (event) => {
-	if (!event.locals.user) {
-		return redirect(302, '/api/auth/login');
-	}
+export const load: PageServerLoad = async (event) => {
+	await event.parent();
 
-	const leads = await db.select().from(lead);
-	const residents = await db.select().from(resident);
+	const leadCount = await db.select({ count: count() }).from(lead);
+	const residentCount = await db.select({ count: count() }).from(resident);
 
-	return { leads, residents };
+	return { leadCount, residentCount };
 };

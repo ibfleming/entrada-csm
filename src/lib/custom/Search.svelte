@@ -3,8 +3,9 @@
 	import { browser } from '$app/environment';
 	import { Search } from 'lucide-svelte';
 	import { fade } from 'svelte/transition';
+	import { leadsStore, residentsStore } from '$lib/stores';
 
-	let { leads, residents } = $props();
+	//let { leads, residents } = $props();
 
 	let inputRef: HTMLInputElement; // Input
 	let searchBarWrapperRef: HTMLDivElement; // Search
@@ -45,6 +46,9 @@
 		if (!searchQuery.trim()) return [];
 
 		const terms = searchQuery.toLowerCase().split(/\s+/); // Split query into words
+
+		const leads = $leadsStore;
+		const residents = $residentsStore;
 
 		const filterEntities = (entities: any[], type: string) =>
 			entities

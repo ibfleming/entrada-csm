@@ -4,6 +4,7 @@
 	import { MenuIcon, CopyIcon, Trash2Icon, HousePlusIcon } from 'lucide-svelte';
 	import type { Lead } from '$lib/types';
 	import type { Writable } from 'svelte/store';
+	import { leadsStore } from '$lib/stores';
 
 	export let id: string;
 	export let fullName: string;
@@ -20,6 +21,7 @@
 				throw new Error('Failed to delete lead');
 			}
 
+			leadsStore.update((data) => data.filter((lead: Lead) => lead.id !== id));
 			tableData.update((data) => data.filter((row: Lead) => row.id !== id));
 		} catch (error) {
 			console.error('Error deleting lead:', error);
