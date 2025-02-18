@@ -11,14 +11,14 @@ COPY . .
 
 ENV PROJ_ENV=production
 
-ARG DATABASE_URL
-ENV DATABASE_URL=${DATABASE_URL}
+ARG DATABASE_URL=postgresql://username:password@localhost:5432/mydatabase
+ENV DATABASE_URL=${DATABASE_URL:-postgresql://username:password@localhost:5432/mydatabase}
 
-ARG PORT 
-ENV PORT=${PORT}
+ARG PORT=8080
+ENV PORT=${PORT:-8080}
 
-ARG ORIGIN
-ENV ORIGIN=${ORIGIN}
+ARG ORIGIN=http://localhost:${PORT}
+ENV ORIGIN=${ORIGIN:-http://localhost:${PORT}}
 
 RUN pnpm run build
 RUN pnpm prune --prod
