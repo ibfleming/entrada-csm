@@ -2,12 +2,10 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import { MenuIcon, CopyIcon, Trash2Icon, HousePlusIcon } from 'lucide-svelte';
-	import type { Lead } from '$lib/types';
+	import type { Lead, Resident } from '$lib/types';
 	import type { Writable } from 'svelte/store';
-	import { leadsStore } from '$lib/stores';
+	import { leadsStore, residentsStore } from '$lib/stores';
 
-	export let id: string;
-	export let fullName: string;
 	export let tableData: Writable<Lead[]>;
 	export let lead: Lead;
 
@@ -17,20 +15,27 @@
 				method: 'DELETE'
 			});
 
-			if (!resp.ok) {
-				throw new Error('Failed to delete lead');
+			const result = await resp.json();
+
+			if (!resp.ok || !result.success) {
+				throw new Error(result.error || 'Failed to delete lead');
 			}
 
-			leadsStore.update((data) => data.filter((lead: Lead) => lead.id !== id));
-			tableData.update((data) => data.filter((row: Lead) => row.id !== id));
+			// Remove lead from tableData
+			tableData.update((data) => data.filter((item: Lead) => item.id !== id));
+
+			// Remove lead from leadsStore
+			leadsStore.update((data) => data.filter((item: Lead) => item.id !== id));
+
+			console.log('Lead successfully deleted');
 		} catch (error) {
 			console.error('Error deleting lead:', error);
 		}
 	}
 
-	async function moveInLead(lead: Lead) {
+	async function transferLead(lead: Lead) {
 		try {
-			const resp = await fetch(`/api/leads/movein`, {
+			const resp = await fetch(`/api/leads/transfer`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -38,16 +43,24 @@
 				body: JSON.stringify(lead)
 			});
 
-			if (!resp.ok) {
-				throw new Error('Failed to move in lead');
-			}
-
 			const result = await resp.json();
-			if (result.success) {
-				tableData.update((leads) => leads.filter((l) => l.id !== lead.id));
-			} else {
+
+			if (!resp.ok || !result.success) {
 				throw new Error(result.error || 'Failed to move in lead');
 			}
+
+			// Remove lead from tableData
+			tableData.update((leads) => leads.filter((item: Lead) => item.id !== lead.id));
+
+			const newResident: Resident = result.resident;
+
+			// Add new resident to residentsStore
+			residentsStore.update((residents) => [...residents, result.resident]);
+
+			// Remove lead from leadsStore
+			leadsStore.update((data) => data.filter((item: Lead) => item.id !== lead.id));
+
+			console.log('Lead successfully moved to resident:', newResident);
 		} catch (error) {
 			console.error('Error converting lead to resident:', error);
 		}
@@ -70,12 +83,15 @@
 		<DropdownMenu.Group>
 			<DropdownMenu.Label class="text-primary">Actions</DropdownMenu.Label>
 			<DropdownMenu.Separator />
-			<DropdownMenu.Item class="cursor-pointer" on:click={() => navigator.clipboard.writeText(id)}>
+			<DropdownMenu.Item
+				class="cursor-pointer"
+				on:click={() => navigator.clipboard.writeText(lead.id)}
+			>
 				<CopyIcon class="mr-2 size-5" />
 				Copy ID
 			</DropdownMenu.Item>
 			<DropdownMenu.Item
-				on:click={() => navigator.clipboard.writeText(fullName)}
+				on:click={() => navigator.clipboard.writeText(lead.firstName + ' ' + lead.lastName)}
 				class="cursor-pointer"
 			>
 				<CopyIcon class="mr-2 size-5" />
@@ -83,14 +99,14 @@
 			</DropdownMenu.Item>
 			<DropdownMenu.Separator />
 			<DropdownMenu.Item
-				on:click={() => moveInLead(lead)}
+				on:click={() => transferLead(lead)}
 				class="cursor-pointer text-yellow-600 data-[highlighted]:text-yellow-600"
 			>
 				<HousePlusIcon class="mr-2 size-5" />
 				Move In
 			</DropdownMenu.Item>
 			<DropdownMenu.Item
-				on:click={() => deleteLead(id)}
+				on:click={() => deleteLead(lead.id)}
 				class="cursor-pointer text-destructive data-[highlighted]:text-destructive"
 			>
 				<Trash2Icon class="mr-2 size-5" />

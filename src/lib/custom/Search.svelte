@@ -116,7 +116,7 @@
 			>
 		</div>
 
-		{#if showResults}
+		{#if showResults && searchQuery.length > 0}
 			<div
 				id="search-results"
 				class="absolute right-0 mt-2 flex w-max flex-col items-center justify-center rounded-md border border-gray-300 bg-accent shadow-md"

@@ -3,7 +3,9 @@ import { text, integer, timestamp, bigint, pgTableCreator } from 'drizzle-orm/pg
 const pgTable = pgTableCreator((name) => `housing_${name}`);
 
 export const user = pgTable('user', {
-	id: text('id').primaryKey(),
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	age: integer('age'),
 	username: text('username').notNull().unique(),
 	passwordHash: text('password_hash').notNull(),
@@ -11,7 +13,9 @@ export const user = pgTable('user', {
 });
 
 export const session = pgTable('session', {
-	id: text('id').primaryKey(),
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	userId: text('user_id')
 		.notNull()
 		.references(() => user.id),
@@ -19,7 +23,9 @@ export const session = pgTable('session', {
 });
 
 export const lead = pgTable('lead', {
-	id: text('id').primaryKey(),
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	firstName: text('first_name').notNull(),
 	lastName: text('last_name').notNull(),
 	email: text('email').notNull(),
@@ -29,7 +35,9 @@ export const lead = pgTable('lead', {
 });
 
 export const resident = pgTable('residents', {
-	id: text('id').primaryKey(),
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	firstName: text('first_name').notNull(),
 	lastName: text('last_name').notNull(),
 	email: text('email').notNull(),

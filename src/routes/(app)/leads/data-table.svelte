@@ -122,10 +122,8 @@
 			header: '',
 			cell: ({ value }) => {
 				return createRender(DataTableActions, {
-					id: value.id,
-					fullName: value.fullName,
-					tableData: tableStore,
-					lead: value.lead
+					lead: value.lead,
+					tableData: tableStore
 				});
 			},
 			plugins: {
