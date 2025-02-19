@@ -5,8 +5,6 @@
 	import { fade } from 'svelte/transition';
 	import { leadsStore, residentsStore } from '$lib/stores';
 
-	//let { leads, residents } = $props();
-
 	let inputRef: HTMLInputElement; // Input
 	let searchBarWrapperRef: HTMLDivElement; // Search
 	let showResults: boolean = $state(false);

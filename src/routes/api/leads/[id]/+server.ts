@@ -7,24 +7,26 @@ export const DELETE: RequestHandler = async ({ params }) => {
 		const id = String(params.id); // Convert param to number
 
 		if (id === null || id === undefined) {
-			return new Response(JSON.stringify({ success: false, error: 'Invalid ID' }), { status: 400 });
+			return new Response(JSON.stringify({ success: false, error: 'invalid lead id' }), {
+				status: 400
+			});
 		}
 
 		// Execute DELETE operation and return affected row(s)
 		const result = await db.delete(lead).where(eq(lead.id, id)).returning({ id: lead.id });
 
 		if (result.length > 0) {
-			return new Response(JSON.stringify({ success: true, deletedId: result[0].id }), {
+			return new Response(JSON.stringify({ success: true }), {
 				status: 200
 			});
 		} else {
-			return new Response(JSON.stringify({ success: false, error: 'Lead not found' }), {
+			return new Response(JSON.stringify({ success: false, error: 'lead not found' }), {
 				status: 404
 			});
 		}
 	} catch (error) {
 		console.error('Error deleting lead:', error);
-		return new Response(JSON.stringify({ success: false, error: 'Internal Server Error' }), {
+		return new Response(JSON.stringify({ success: false, error: 'internal server error' }), {
 			status: 500
 		});
 	}

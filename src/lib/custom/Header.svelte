@@ -3,7 +3,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import SearchComponent from '$lib/custom/Search.svelte';
 	import { CircleUser, LogOut } from 'lucide-svelte';
-	let { title = 'Company Name', user = null, leads = null, residents = null } = $props();
+	let { title = 'Company Name', user } = $props();
 </script>
 
 <header class="flex items-center justify-between gap-2 p-2 @lg:p-4">
