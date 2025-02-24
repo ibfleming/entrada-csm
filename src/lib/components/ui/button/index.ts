@@ -4,7 +4,7 @@ import Root from './button.svelte';
 
 const buttonVariants = tv({
 	/* focus-visible:outline-none ring-offset-background focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 */
-	base: 'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors  disabled:pointer-events-none disabled:opacity-50',
+	base: 'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50',
 	variants: {
 		variant: {
 			default: 'bg-primary text-primary-foreground hover:bg-primary/90',

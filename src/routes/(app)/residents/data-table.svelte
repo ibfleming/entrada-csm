@@ -189,7 +189,14 @@
 	const ids = flatColumns.map((col) => col.id);
 	let hideForId = $state(Object.fromEntries(ids.map((id) => [id, true])));
 
-	const hidableCols = ['fullName', 'email', 'studentStatus', 'leaseTerm', 'floorPlan'];
+	const hidableCols = [
+		'fullName',
+		'email',
+		'studentStatus',
+		'leaseTerm',
+		'floorPlan',
+		'phoneNumber'
+	];
 
 	$effect(() => {
 		$hiddenColumnIds = Object.entries(hideForId)
@@ -302,7 +309,7 @@
 													<Render of={cell.render()} />
 												</div>
 											{:else if cell.column.id === 'phoneNumber'}
-												<div class="text-sm font-light">
+												<div class="text-nowrap text-sm font-light">
 													<Render of={cell.render()} />
 												</div>
 											{:else if cell.column.id === 'leaseTerm'}
@@ -313,13 +320,13 @@
 												</div>
 											{:else if cell.column.id === 'studentStatus'}
 												<div
-													class="inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-sky-500"
+													class="inline-block text-nowrap rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-sky-500"
 												>
 													<Render of={cell.render()} />
 												</div>
 											{:else if cell.column.id === 'floorPlan'}
 												<div
-													class="inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
+													class="inline-block text-nowrap rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
 												>
 													<Render of={cell.render()} />
 												</div>

@@ -23,9 +23,9 @@
 		ArrowRight,
 		ArrowLeft
 	} from 'lucide-svelte';
-	import CreateLeadModal from './CreateLeadModal.svelte';
+	import CreateLeadComponent from './CreateLead.svelte';
 
-	let { leads, updateLeads } = $props();
+	let { leads, form, updateLeads } = $props();
 	let tableStore: Writable<Lead[]> = writable(leads);
 
 	// Sync props to store
@@ -202,7 +202,7 @@
 			</DropdownMenu.Root>
 
 			<!-- Create Lead -->
-			<CreateLeadModal />
+			<CreateLeadComponent {...form} />
 		</div>
 		<!-- Data Table -->
 		<div class="rounded-md border shadow-md">
@@ -260,12 +260,12 @@
 													<Render of={cell.render()} />
 												</div>
 											{:else if cell.column.id === 'phoneNumber'}
-												<div class="text-sm font-light">
+												<div class="text-nowrap text-sm font-light">
 													<Render of={cell.render()} />
 												</div>
 											{:else if cell.column.id === 'floorPlan'}
 												<div
-													class="inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
+													class="inline-block text-nowrap rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
 												>
 													<Render of={cell.render()} />
 												</div>

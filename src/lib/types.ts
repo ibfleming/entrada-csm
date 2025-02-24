@@ -1,1 +1,1 @@
-export type { Session, User, Lead, Resident } from './server/db/schema';
+export type { Session, User, Lead, Resident, CreateLeadFormSchema } from './server/db/schema';
