@@ -202,7 +202,7 @@
 			</DropdownMenu.Root>
 
 			<!-- Create Lead -->
-			<CreateLeadComponent {...form} />
+			<CreateLeadComponent data={form} />
 		</div>
 		<!-- Data Table -->
 		<div class="rounded-md border shadow-md">

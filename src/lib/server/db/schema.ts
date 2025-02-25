@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { text, integer, timestamp, bigint, pgTableCreator } from 'drizzle-orm/pg-core';
 
 const pgTable = pgTableCreator((name) => `housing_${name}`);
@@ -49,16 +48,6 @@ export const resident = pgTable('residents', {
 	studentStatus: text('student_status').notNull(),
 	createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).defaultNow().notNull()
 });
-
-export const createLeadFormSchema = z.object({
-	firstName: z.string().min(1),
-	lastName: z.string().min(1),
-	email: z.string().email(),
-	phoneNumber: z.string().min(10),
-	floorPlan: z.enum(['2x2', '3x3'])
-});
-
-export type CreateLeadFormSchema = typeof createLeadFormSchema;
 
 export type Session = typeof session.$inferSelect;
 

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import DataTable from './data-table.svelte';
-	import type { CreateLeadFormSchema, Lead } from '$lib/types';
+	import type { Lead } from '$lib/types';
 
 	let { data } = $props();
 	let leads = $state(data.leads);
