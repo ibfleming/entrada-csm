@@ -1,10 +1,10 @@
 <script lang="ts">
-	import DataTable from './data-table.svelte';
+	import DataTable from './LeadDataTable.svelte';
 	import type { Lead } from '$lib/types';
+	import LeadForm from './LeadForm.svelte';
 
 	let { data } = $props();
 	let leads = $state(data.leads);
-	const form = data.form;
 
 	// Expose a function to update leads that can be called from child components
 	function updateLeads(updatedLeads: Lead[]) {
@@ -16,4 +16,4 @@
 	<title>Leasing CMS - Leads</title>
 </svelte:head>
 
-<DataTable {leads} {updateLeads} {form} />
+<DataTable {leads} {updateLeads} form={data.form} />

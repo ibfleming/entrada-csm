@@ -12,8 +12,8 @@
 	import { Input } from '$lib/components/ui/input';
 	import * as Table from '$lib/components/ui/table';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import DataTableActions from './data-table-actions.svelte';
-	import DataTableCheckbox from './data-table-checkbox.svelte';
+	import DataTableActions from './DataTableAction.svelte';
+	import DataTableCheckbox from './DataTableCheckbox.svelte';
 	import { writable, type Writable } from 'svelte/store';
 	import {
 		ArrowUpDown,
@@ -23,9 +23,9 @@
 		ArrowRight,
 		ArrowLeft
 	} from 'lucide-svelte';
-	import CreateLeadComponent from './CreateLead.svelte';
+	import LeadForm from './LeadForm.svelte';
 
-	let { leads, form, updateLeads } = $props();
+	let { leads, updateLeads, form } = $props();
 	let tableStore: Writable<Lead[]> = writable(leads);
 
 	// Sync props to store
@@ -180,9 +180,9 @@
 						variant="outline"
 						size="icon"
 						builders={[builder]}
-						class="button-focus-visible px-1.5 shadow-sm transition-all"
+						class="button-focus-visible text-primary shadow-sm transition-all hover:text-primary"
 					>
-						<Eye class="size-8 text-primary" strokeWidth={2} />
+						<Eye />
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content align="end" class="border-2 font-inter">
@@ -202,7 +202,7 @@
 			</DropdownMenu.Root>
 
 			<!-- Create Lead -->
-			<CreateLeadComponent data={form} />
+			<LeadForm data={form} />
 		</div>
 		<!-- Data Table -->
 		<div class="rounded-md border shadow-md">
