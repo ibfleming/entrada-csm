@@ -18,7 +18,7 @@
 
 	let { data, tableData }: ResidentFormProps = $props();
 
-	let open = $state(true);
+	let open = $state(false);
 
 	const form = superForm(data, {
 		validators: zodClient(residentFormSchema),
@@ -60,16 +60,6 @@
 				}
 			: undefined
 	);
-
-	$effect(() => {
-		$formData.firstName = 'Ian';
-		$formData.lastName = 'Fleming';
-		$formData.email = 'ianfleming678@gmail.com';
-		$formData.phoneNumber = '12086517617';
-		$formData.studentStatus = 'STUDENT';
-		$formData.floorPlan = '2 BED 2 BATH';
-		$formData.leaseTerm = '2024-2025';
-	});
 </script>
 
 <Dialog.Root bind:open>
@@ -130,6 +120,7 @@
 								<Input
 									type="email"
 									class="input-focus-visible"
+									placeholder="example@mail.com"
 									{...attrs}
 									bind:value={$formData.email}
 								/>
@@ -146,6 +137,7 @@
 								<Input
 									type="tel"
 									class="input-focus-visible"
+									placeholder="01112223333"
 									{...attrs}
 									bind:value={$formData.phoneNumber}
 								/>
@@ -160,6 +152,7 @@
 								<Input
 									type="text"
 									class="input-focus-visible"
+									placeholder="YYYY-MM-DD"
 									{...attrs}
 									bind:value={$formData.birthDate}
 								/>

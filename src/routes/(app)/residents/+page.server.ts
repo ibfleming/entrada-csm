@@ -30,7 +30,7 @@ export const actions = {
 						phoneNumber: Number(form.data.phoneNumber),
 						floorPlan: form.data.floorPlan,
 						leaseTerm: form.data.leaseTerm,
-						birthDate: form.data.birthDate,
+						birthDate: new Date(form.data.birthDate),
 						studentStatus: form.data.studentStatus
 					})
 					.returning();
