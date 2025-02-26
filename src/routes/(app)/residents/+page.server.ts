@@ -6,7 +6,7 @@ export const load = async (event) => {
 };
 
 export const actions = {
-	createResident: async (event) => {
+	createResident: async () => {
 		// ...
 	}
 } satisfies Actions;

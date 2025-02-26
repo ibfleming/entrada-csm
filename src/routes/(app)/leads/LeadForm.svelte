@@ -131,7 +131,9 @@
 						<Select.Root
 							selected={selectedFloorPlan}
 							onSelectedChange={(v) => {
-								v && ($formData.floorPlan = v.value);
+								if (v) {
+									$formData.floorPlan = v.value;
+								}
 							}}
 						>
 							<Select.Trigger class="button-focus-visible focus-visible:ring-primary/50" {...attrs}>

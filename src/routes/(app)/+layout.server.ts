@@ -1,5 +1,4 @@
 import { db, lead, resident } from '$lib';
-import { setLeads, setResidents } from '$lib/stores';
 import type { Lead, Resident } from '$lib/types';
 import { redirect } from '@sveltejs/kit';
 

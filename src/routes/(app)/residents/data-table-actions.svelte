@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
-	import { MenuIcon, CopyIcon, Trash2Icon, HousePlusIcon } from 'lucide-svelte';
+	import { MenuIcon, CopyIcon, Trash2Icon } from 'lucide-svelte';
 	import type { Resident } from '$lib/types';
 	import type { Writable } from 'svelte/store';
 

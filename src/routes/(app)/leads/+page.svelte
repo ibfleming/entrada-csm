@@ -1,7 +1,6 @@
 <script lang="ts">
 	import DataTable from './LeadDataTable.svelte';
 	import type { Lead } from '$lib/types';
-	import LeadForm from './LeadForm.svelte';
 
 	let { data } = $props();
 	let leads = $state(data.leads);

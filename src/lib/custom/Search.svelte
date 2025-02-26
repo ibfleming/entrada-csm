@@ -4,6 +4,18 @@
 	import { Search } from 'lucide-svelte';
 	import { fade } from 'svelte/transition';
 	import { leadsStore, residentsStore } from '$lib/stores';
+	import type { Lead, Resident } from '$lib/types';
+
+	interface SearchableEntity {
+		firstName: string;
+		lastName: string;
+		email: string;
+		phoneNumber: number | string;
+	}
+
+	interface SearchResult extends SearchableEntity {
+		type: 'Lead' | 'Resident';
+	}
 
 	let inputRef: HTMLInputElement; // Input
 	let searchBarWrapperRef: HTMLDivElement; // Search
@@ -41,33 +53,29 @@
 	}
 
 	let filteredResults = $derived.by(() => {
-		if (!searchQuery.trim()) return [];
+		if (!searchQuery.trim()) return [] as SearchResult[];
 
 		const terms = searchQuery.toLowerCase().split(/\s+/); // Split query into words
 
-		const leads = $leadsStore;
-		const residents = $residentsStore;
+		const leads = $leadsStore as Lead[];
+		const residents = $residentsStore as Resident[];
 
-		const filterEntities = (entities: any[], type: string) =>
+		const filterEntities = <T extends SearchableEntity>(
+			entities: T[],
+			type: 'Lead' | 'Resident'
+		): SearchResult[] =>
 			entities
-				.filter(
-					(entity: {
-						firstName: string;
-						lastName: string;
-						email: string;
-						phoneNumber: { toString: () => any };
-					}) => {
-						const searchableFields = [
-							entity.firstName.toLowerCase(),
-							entity.lastName.toLowerCase(),
-							entity.email.toLowerCase(),
-							entity.phoneNumber.toString()
-						];
+				.filter((entity) => {
+					const searchableFields = [
+						entity.firstName.toLowerCase(),
+						entity.lastName.toLowerCase(),
+						entity.email.toLowerCase(),
+						entity.phoneNumber.toString()
+					];
 
-						return terms.every((term) => searchableFields.some((field) => field.includes(term)));
-					}
-				)
-				.map((entity: any) => ({ ...entity, type })); // Add type to differentiate
+					return terms.every((term) => searchableFields.some((field) => field.includes(term)));
+				})
+				.map((entity) => ({ ...entity, type })); // Add type to differentiate
 
 		return [...filterEntities(leads, 'Lead'), ...filterEntities(residents, 'Resident')];
 	});
