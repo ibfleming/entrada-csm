@@ -4,10 +4,15 @@
 	import { MenuIcon, CopyIcon, Trash2Icon, HousePlusIcon } from 'lucide-svelte';
 	import type { Lead, Resident } from '$lib/types';
 	import type { Writable } from 'svelte/store';
-	import { leadsStore, residentsStore } from '$lib/stores';
+	import { addResident, leadsStore, removeLead, residentsStore } from '$lib/stores';
 
-	export let tableData: Writable<Lead[]>;
 	export let lead: Lead;
+	export let fullName: string;
+	export let tableData: Writable<Lead[]>;
+
+	function updateTableData(id: string) {
+		tableData.update((data) => data.filter((item: Lead) => item.id !== id));
+	}
 
 	async function deleteLead(id: string) {
 		try {
@@ -21,11 +26,10 @@
 				throw new Error(result.error || 'Failed to delete lead');
 			}
 
-			// Remove lead from tableData
-			tableData.update((data) => data.filter((item: Lead) => item.id !== id));
-
-			// Remove lead from leadsStore
-			leadsStore.update((data) => data.filter((item: Lead) => item.id !== id));
+			// Update the table's UI
+			updateTableData(id);
+			// Remove the lead from the global store
+			removeLead(id);
 
 			console.log('Lead successfully deleted');
 		} catch (error) {
@@ -49,20 +53,16 @@
 				throw new Error(result.error || 'Failed to move in lead');
 			}
 
-			// Remove lead from tableData
-			tableData.update((leads) => leads.filter((item: Lead) => item.id !== lead.id));
+			// Update the table's UI
+			updateTableData(lead.id);
+			// Add the resident to the global store
+			addResident(result.resident as Resident);
+			// Remove the lead from the global store
+			removeLead(lead.id);
 
-			const newResident: Resident = result.resident;
-
-			// Add new resident to residentsStore
-			residentsStore.update((residents) => [...residents, result.resident]);
-
-			// Remove lead from leadsStore
-			leadsStore.update((data) => data.filter((item: Lead) => item.id !== lead.id));
-
-			console.log('Lead successfully moved to resident:', newResident);
+			console.log('Lead successfully moved to resident:', result.resident);
 		} catch (error) {
-			console.error('Error converting lead to resident:', error);
+			console.error('Error tranferring lead to resident:', error);
 		}
 	}
 </script>
@@ -73,10 +73,10 @@
 			variant="ghost"
 			builders={[builder]}
 			size="icon"
-			class="button-focus-visible h-fit w-fit rounded-sm p-0.5 transition-all"
+			class="button-focus-visible rounded-full text-muted-foreground transition-all hover:text-muted-foreground"
 		>
 			<span class="sr-only">Open menu</span>
-			<MenuIcon class="size-6" />
+			<MenuIcon />
 		</Button>
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content class="font-inter" align="end">
@@ -91,7 +91,7 @@
 				Copy ID
 			</DropdownMenu.Item>
 			<DropdownMenu.Item
-				on:click={() => navigator.clipboard.writeText(lead.firstName + ' ' + lead.lastName)}
+				on:click={() => navigator.clipboard.writeText(fullName)}
 				class="cursor-pointer"
 			>
 				<CopyIcon class="mr-2 size-5" />

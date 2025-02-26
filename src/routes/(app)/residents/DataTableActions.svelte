@@ -4,24 +4,36 @@
 	import { MenuIcon, CopyIcon, Trash2Icon } from 'lucide-svelte';
 	import type { Resident } from '$lib/types';
 	import type { Writable } from 'svelte/store';
+	import { removeResident } from '$lib/stores';
 
 	export let id: string;
 	export let fullName: string;
 	export let tableData: Writable<Resident[]>;
 
+	function updateTableData(id: string) {
+		tableData.update((data) => data.filter((item: Resident) => item.id !== id));
+	}
+
 	async function deleteResident(id: string) {
 		try {
-			const response = await fetch(`/api/residents/${id}`, {
+			const resp = await fetch(`/api/residents/${id}`, {
 				method: 'DELETE'
 			});
 
-			if (!response.ok) {
-				throw new Error('Failed to delete lead');
+			const result = await resp.json();
+
+			if (!resp.ok || !result.success) {
+				throw new Error(result.error || 'Failed to delete lead');
 			}
 
-			tableData.update((data) => data.filter((row: Resident) => row.id !== id));
+			// Update the table's UI
+			updateTableData(id);
+			// Remove the resident from the global store
+			removeResident(id);
+
+			console.log('Resident successfully deleted');
 		} catch (error) {
-			console.error('Error deleting lead:', error);
+			console.error('Error deleting resident:', error);
 		}
 	}
 </script>
@@ -32,10 +44,10 @@
 			variant="ghost"
 			builders={[builder]}
 			size="icon"
-			class="button-focus-visible h-fit w-fit rounded-sm p-0.5"
+			class="button-focus-visible rounded-full text-muted-foreground transition-all hover:text-muted-foreground"
 		>
 			<span class="sr-only">Open menu</span>
-			<MenuIcon class="size-6" />
+			<MenuIcon />
 		</Button>
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content class="font-inter" align="end">

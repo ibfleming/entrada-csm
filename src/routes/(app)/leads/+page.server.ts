@@ -4,7 +4,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { leadFormSchema } from './schema';
 import { fail } from '@sveltejs/kit';
 import { db, lead } from '$lib';
-import { leadsStore } from '$lib/stores';
+import { addLead } from '$lib/stores';
 
 export const load: PageServerLoad = async (event) => {
 	const { leads } = await event.parent();
@@ -39,7 +39,7 @@ export const actions: Actions = {
 				return newLead[0];
 			});
 
-			leadsStore.update((leads) => [...leads, result]);
+			addLead(result);
 
 			return { form, success: true, lead: result };
 		} catch (error) {

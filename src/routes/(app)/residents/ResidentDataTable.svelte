@@ -1,20 +1,4 @@
 <script lang="ts">
-	import type { Resident } from '$lib/types';
-	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
-	import {
-		addPagination,
-		addSortBy,
-		addTableFilter,
-		addHiddenColumns,
-		addSelectedRows
-	} from 'svelte-headless-table/plugins';
-	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import * as Table from '$lib/components/ui/table';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import DataTableActions from './data-table-actions.svelte';
-	import DataTableCheckbox from './data-table-checkbox.svelte';
-	import { writable, type Writable } from 'svelte/store';
 	import {
 		ArrowLeft,
 		ArrowLeftToLine,
@@ -23,28 +7,42 @@
 		ArrowUpDown,
 		Eye
 	} from 'lucide-svelte';
-	import CreateResidentModal from './CreateResidentModal.svelte';
+	import {
+		addPagination,
+		addSortBy,
+		addTableFilter,
+		addHiddenColumns,
+		addSelectedRows
+	} from 'svelte-headless-table/plugins';
+	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import DataTableCheckbox from './DataTableCheckbox.svelte';
+	import DataTableActions from './DataTableActions.svelte';
+	import { writable, type Writable } from 'svelte/store';
+	import { Button } from '$lib/components/ui/button';
+	import * as Table from '$lib/components/ui/table';
+	import ResidentForm from './ResidentForm.svelte';
+	import { Input } from '$lib/components/ui/input';
+	import { residentsStore } from '$lib/stores';
+	import type { Resident } from '$lib/types';
 
-	let { residents, updateResidents } = $props();
+	let { residents, form } = $props();
 	let tableStore: Writable<Resident[]> = writable(residents);
 
-	// Sync props to store
 	$effect(() => {
 		tableStore.set(residents);
 	});
 
-	// Subscribe to store changes and update parent
 	$effect(() => {
-		const unsubscribe = tableStore.subscribe((value) => {
-			if (value !== residents) {
-				updateResidents(value);
-			}
+		const unsubscribe = residentsStore.subscribe((storeResidents) => {
+			tableStore.set(storeResidents);
 		});
+
 		return unsubscribe;
 	});
 
 	const table = createTable(tableStore, {
-		page: addPagination() /* { initialPageSize: 20 } */,
+		page: addPagination({ initialPageIndex: 0, initialPageSize: 12 }),
 		sort: addSortBy(),
 		filter: addTableFilter({
 			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
@@ -228,9 +226,9 @@
 						variant="outline"
 						size="icon"
 						builders={[builder]}
-						class="button-focus-visible px-1.5 shadow-sm transition-all"
+						class="button-focus-visible text-primary shadow-sm transition-all hover:text-primary"
 					>
-						<Eye class="size-8 text-primary" strokeWidth={2} />
+						<Eye />
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content align="end" class="border-2 font-inter">
@@ -250,7 +248,7 @@
 			</DropdownMenu.Root>
 
 			<!-- Create Resident -->
-			<CreateResidentModal />
+			<ResidentForm data={form} tableData={tableStore} />
 		</div>
 		<!-- Data Table -->
 		<div class="rounded-md border shadow-md">
@@ -263,8 +261,7 @@
 									<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
 										<Table.Head
 											{...attrs}
-											class="[&:has([role=checkbox])]:pt-1
-										[&:has([role=checkbox])]:text-center"
+											class="[&:has([role=checkbox])]:pt-1 [&:has([role=checkbox])]:text-center"
 										>
 											{#if cell.id === 'fullName' || cell.id === 'email' || cell.id === 'studentStatus' || cell.id === 'leaseTerm'}
 												<Button
@@ -367,7 +364,7 @@
 					disabled={!$hasPreviousPage}
 					on:click={() => ($pageIndex = 0)}
 				>
-					<ArrowLeftToLine class="size-8" />
+					<ArrowLeftToLine />
 				</Button>
 				<Button
 					variant="outline"
@@ -376,7 +373,7 @@
 					disabled={!$hasPreviousPage}
 					on:click={() => ($pageIndex = $pageIndex - 1)}
 				>
-					<ArrowLeft class="size-8" />
+					<ArrowLeft />
 				</Button>
 				<Button
 					variant="outline"
@@ -385,7 +382,7 @@
 					disabled={!$hasNextPage}
 					on:click={() => ($pageIndex = $pageIndex + 1)}
 				>
-					<ArrowRight class="size-8" />
+					<ArrowRight />
 				</Button>
 				<Button
 					variant="outline"
@@ -394,7 +391,7 @@
 					disabled={!$hasNextPage}
 					on:click={() => ($pageIndex = $pageCount - 1)}
 				>
-					<ArrowRightToLine class="size-8" />
+					<ArrowRightToLine />
 				</Button>
 			</div>
 		</div>

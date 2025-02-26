@@ -1,6 +1,12 @@
 <script lang="ts">
-	import type { Lead } from '$lib/types';
-	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
+	import {
+		ArrowLeft,
+		ArrowLeftToLine,
+		ArrowRight,
+		ArrowRightToLine,
+		ArrowUpDown,
+		Eye
+	} from 'lucide-svelte';
 	import {
 		addPagination,
 		addSortBy,
@@ -8,43 +14,35 @@
 		addHiddenColumns,
 		addSelectedRows
 	} from 'svelte-headless-table/plugins';
-	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import * as Table from '$lib/components/ui/table';
+	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import DataTableActions from './DataTableAction.svelte';
 	import DataTableCheckbox from './DataTableCheckbox.svelte';
+	import DataTableActions from './DataTableAction.svelte';
 	import { writable, type Writable } from 'svelte/store';
-	import {
-		ArrowUpDown,
-		Eye,
-		ArrowRightToLine,
-		ArrowLeftToLine,
-		ArrowRight,
-		ArrowLeft
-	} from 'lucide-svelte';
+	import { Button } from '$lib/components/ui/button';
+	import * as Table from '$lib/components/ui/table';
+	import { Input } from '$lib/components/ui/input';
 	import LeadForm from './LeadForm.svelte';
+	import { leadsStore } from '$lib/stores';
+	import type { Lead } from '$lib/types';
 
-	let { leads, updateLeads, form } = $props();
+	let { leads, form } = $props();
 	let tableStore: Writable<Lead[]> = writable(leads);
 
-	// Sync props to store
 	$effect(() => {
 		tableStore.set(leads);
 	});
 
-	// Subscribe to store changes and update parent
 	$effect(() => {
-		const unsubscribe = tableStore.subscribe((value) => {
-			if (value !== leads) {
-				updateLeads(value);
-			}
+		const unsubscribe = leadsStore.subscribe((storeLeads) => {
+			tableStore.set(storeLeads);
 		});
+
 		return unsubscribe;
 	});
 
 	const table = createTable(tableStore, {
-		page: addPagination() /* { initialPageSize: 20 } */,
+		page: addPagination({ initialPageIndex: 0, initialPageSize: 12 }),
 		sort: addSortBy(),
 		filter: addTableFilter({
 			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
@@ -82,11 +80,27 @@
 		table.column({
 			id: 'fullName',
 			accessor: (row) => `${row.firstName} ${row.lastName}`,
-			header: 'Lead Name'
+			header: 'Lead Name',
+			plugins: {
+				sort: {
+					disable: false
+				},
+				filter: {
+					exclude: false
+				}
+			}
 		}),
 		table.column({
 			accessor: 'email',
-			header: 'Email'
+			header: 'Email',
+			plugins: {
+				sort: {
+					disable: false
+				},
+				filter: {
+					exclude: false
+				}
+			}
 		}),
 		table.column({
 			accessor: 'phoneNumber',
@@ -123,6 +137,7 @@
 			cell: ({ value }) => {
 				return createRender(DataTableActions, {
 					lead: value.lead,
+					fullName: value.fullName,
 					tableData: tableStore
 				});
 			},
@@ -306,7 +321,7 @@
 					disabled={!$hasPreviousPage}
 					on:click={() => ($pageIndex = 0)}
 				>
-					<ArrowLeftToLine class="size-8" />
+					<ArrowLeftToLine />
 				</Button>
 				<Button
 					variant="outline"
@@ -315,7 +330,7 @@
 					disabled={!$hasPreviousPage}
 					on:click={() => ($pageIndex = $pageIndex - 1)}
 				>
-					<ArrowLeft class="size-8" />
+					<ArrowLeft />
 				</Button>
 				<Button
 					variant="outline"
@@ -324,7 +339,7 @@
 					disabled={!$hasNextPage}
 					on:click={() => ($pageIndex = $pageIndex + 1)}
 				>
-					<ArrowRight class="size-8" />
+					<ArrowRight />
 				</Button>
 				<Button
 					variant="outline"
@@ -333,7 +348,7 @@
 					disabled={!$hasNextPage}
 					on:click={() => ($pageIndex = $pageCount - 1)}
 				>
-					<ArrowRightToLine class="size-8" />
+					<ArrowRightToLine />
 				</Button>
 			</div>
 		</div>
