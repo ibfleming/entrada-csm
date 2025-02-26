@@ -202,7 +202,7 @@
 			</DropdownMenu.Root>
 
 			<!-- Create Lead -->
-			<LeadForm data={form} />
+			<LeadForm data={form} tableData={tableStore} />
 		</div>
 		<!-- Data Table -->
 		<div class="rounded-md border shadow-md">

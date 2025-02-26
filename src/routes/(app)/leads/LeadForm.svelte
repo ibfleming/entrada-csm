@@ -4,22 +4,30 @@
 	import { Input } from '$lib/components/ui/input';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
+	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { leadFormSchema, type LeadFormSchema } from './schema';
-	import { browser } from '$app/environment';
 	import { Button, buttonVariants } from '$lib/components/ui/button';
 	import { PlusIcon } from 'lucide-svelte';
+	import type { Writable } from 'svelte/store';
+	import type { Lead } from '$lib/types';
 
-	let { data }: { data: SuperValidated<Infer<LeadFormSchema>> } = $props();
+	type LeadFormProps = {
+		data: SuperValidated<Infer<LeadFormSchema>>;
+		tableData: Writable<Lead[]>;
+	};
 
-	let open = $state(true);
+	let { data, tableData }: LeadFormProps = $props();
+
+	let open = $state(false);
 
 	const form = superForm(data, {
 		validators: zodClient(leadFormSchema),
-		onUpdated: ({ form: f }) => {
-			if (f.valid) {
-				open = false;
-				form.reset();
+		onResult: ({ result }) => {
+			if (result.type === 'success') {
+				if (result.data) {
+					$tableData = [...$tableData, result.data.lead as Lead];
+					open = false;
+				}
 			}
 		}
 	});
@@ -34,17 +42,6 @@
 				}
 			: undefined
 	);
-
-	function wait(ms: number) {
-		return new Promise((resolve) => setTimeout(resolve, ms));
-	}
-
-	$effect(() => {
-		$formData.firstName = 'Ian';
-		$formData.lastName = 'Fleming';
-		$formData.email = 'ianfleming678@gmail.com';
-		$formData.phoneNumber = '2086517617';
-	});
 </script>
 
 <Dialog.Root bind:open>
@@ -141,8 +138,8 @@
 								<Select.Value placeholder="Select a floor plan" />
 							</Select.Trigger>
 							<Select.Content class="font-inter ">
-								<Select.Item value="2 BED 2 BATH" label="2 BED 2 BATH" />
-								<Select.Item value="3 BED 3 BATH" label="3 BED 3 BATH" />
+								<Select.Item value="2 BED 2 BATH" label="2 BED 2 BATH" class="cursor-pointer" />
+								<Select.Item value="3 BED 3 BATH" label="3 BED 3 BATH" class="cursor-pointer" />
 							</Select.Content>
 						</Select.Root>
 						<input
@@ -164,10 +161,12 @@
 				</Dialog.Close>
 			</div>
 
-			<!-- Debugging 
+			<!-- 
+			Debugging 
 			{#if browser}
 				<SuperDebug data={$formData} />
-			{/if} -->
+			{/if} 
+			-->
 		</form>
 	</Dialog.Content>
 </Dialog.Root>
