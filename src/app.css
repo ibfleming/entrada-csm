@@ -84,10 +84,12 @@
 	.button-focus-visible {
 		@apply outline-none transition-all focus:outline-none focus-visible:border-inherit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-opacity-50 focus-visible:ring-offset-1;
 	}
+
 	.loader {
-		width: 36px;
-		height: 36px;
-		border: 5px solid hsl(var(--primary));
+		@apply border-b-transparent;
+		width: 48px;
+		height: 48px;
+		border: 5px solid #fff;
 		border-bottom-color: transparent;
 		border-radius: 50%;
 		display: inline-block;

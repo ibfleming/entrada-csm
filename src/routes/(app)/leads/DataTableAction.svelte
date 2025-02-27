@@ -4,7 +4,7 @@
 	import { MenuIcon, CopyIcon, Trash2Icon, HousePlusIcon } from 'lucide-svelte';
 	import type { Lead, Resident } from '$lib/types';
 	import type { Writable } from 'svelte/store';
-	import { addResident, leadsStore, removeLead, residentsStore } from '$lib/stores';
+	import { addResident, removeLead } from '$lib/stores';
 
 	export let lead: Lead;
 	export let fullName: string;
